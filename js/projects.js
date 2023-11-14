@@ -51,7 +51,7 @@ function mapProjectsData() {
             "type": "Studio de developpement",
             "labels": [
                 {
-                    "title": "None",
+                    "title": "Momentanement Indisponible",
                     "link": ""
                 }
             ]
