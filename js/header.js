@@ -36,6 +36,10 @@ function mapSocialLinksData() {
         {
             "icon": "fa fa-twitter",
             "value": "https://twitter.com/leklaynight"
+        },
+        {
+            "icon": "fa fa-link",
+            "value": "https://links.klaynight.studio"
         }
     ];
 
