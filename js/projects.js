@@ -47,7 +47,7 @@ function mapProjectsData() {
         },
         {
             "title": "Klaynight Studio",
-            "image": "images/projects/_87b425f9-9e40-4e9e-b57c-306568f6a672-removebg-preview.png",
+            "image": "images/projects/klaynightstudio.png",
             "type": "Studio de developpement",
             "labels": [
                 {
