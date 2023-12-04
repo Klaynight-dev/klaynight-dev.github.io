@@ -55,6 +55,21 @@ function mapProjectsData() {
                     "link": ""
                 }
             ]
+        },
+        {
+            "title": "Jobi",
+            "image": "images/projects/Jobi.png",
+            "type": "Application",
+            "labels": [
+                {
+                    "title": "GitHub",
+                    "link": "https://github.com/klaynight-dev/stock_gestion_library"
+                },
+                {
+                    "title": "Web",
+                    "link": "https://Jobi.klaynight.studio"
+                }
+            ]
         }
     ];
 
