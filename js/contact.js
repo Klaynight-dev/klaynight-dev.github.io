@@ -12,8 +12,8 @@ function mapContactDetails() {
         },
         {
             "icon": "fa fa-envelope",
-            "label": "night.psr@gmail.com",
-            "link": "mailto:night.psr@gmail.com"
+            "label": "contact@klaynight.studio",
+            "link": "mailto:contact@klaynight.studio"
         }
     ];
 
