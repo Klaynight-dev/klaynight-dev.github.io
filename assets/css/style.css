@@ -1954,3 +1954,10 @@ textarea.form-input::-webkit-resizer { display: none; }
 .project-img img {
   max-height: 140px;
 }
+
+.about-text a {
+  color: var(--bittersweet-shimmer);
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
