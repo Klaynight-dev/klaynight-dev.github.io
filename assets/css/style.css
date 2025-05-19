@@ -89,7 +89,7 @@
    * transition
    */
 
-  --transition-1: 0.25s ease;
+  --transition-1: 0.2s ease;
   --transition-2: 0.5s ease-in-out;
 
 }
@@ -198,6 +198,36 @@ article.active {
   animation: fade 0.5s ease backwards;
 }
 
+.sidebar.active {
+  width: 100%;
+  height: 100%;
+  margin-inline: auto;
+  padding: 30px;
+  animation: fade 0.5s ease backwards;
+  animation-delay: 0.2s;
+  animation-fill-mode: forwards;
+  animation-name: fade;
+  animation-duration: 0.5s;
+  animation-timing-function: ease;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--orange-yellow-crayola) var(--onyx);
+}
+
+.sidebar.active .social-list {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: var(--bg-gradient-yellow-1);
+  padding: 15px;
+  border-radius: 14px;
+  border: solid 1px var(--jet);
+}
+
+.sidebar.active .service-item {
+  margin-top: 20px;
+}
+
 @keyframes fade {
   0% { opacity: 0; }
   100% { opacity: 1; }
@@ -299,12 +329,11 @@ main {
 
 .sidebar {
   margin-bottom: 15px;
-  max-height: 112px;
   overflow: hidden;
   transition: var(--transition-2);
 }
 
-.sidebar.active { max-height: 405px; }
+
 
 .sidebar-info {
   position: relative;
@@ -429,8 +458,41 @@ main {
 
 .social-item .social-link:hover { color: var(--light-gray); }
 
+.showMore-btn {
+    position: absolute;
+    bottom: -30px;
+    right: -30px;
+    border-radius: 15px 0;
+    font-size: 13px;
+    color: var(--orange-yellow-crayola);
+    background: var(--border-gradient-onyx);
+    padding: 10px;
+    box-shadow: var(--shadow-2);
+    transition: var(--transition-1);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .showMore-btn::before {
+    content: "";
+    inset: 1px;
+    border-radius: inherit;
+    background: var(--bg-gradient-jet);
+    transition: var(--transition-1);
+    z-index: -1;
+  }
 
+  .showMore-btn:hover,
+  .showMore-btn:focus {
+    background: var(--bg-gradient-yellow-1);
+  }
 
+  .showMore-btn:hover::before,
+  .showMore-btn:focus::before {
+    background: var(--bg-gradient-yellow-2);
+  }
 
 
 /*-----------------------------------*\
@@ -1210,6 +1272,7 @@ textarea.form-input::-webkit-resizer { display: none; }
   #RESPONSIVE
 \*-----------------------------------*/
 
+
 /**
  * responsive larger than 450px screen
  */
@@ -1233,7 +1296,16 @@ textarea.form-input::-webkit-resizer { display: none; }
 
 }
 
+@media (max-width: 550px) {
+  .showMore-btn {
+    display: inline-flex;
+    left: 50%;
+    align-self: center;
+    position: initial;
+  }
+}
 
+  
 
 
 
@@ -1348,6 +1420,12 @@ textarea.form-input::-webkit-resizer { display: none; }
     width: calc(100% - 64px);
   }
 
+  .showMore-btn {
+    bottom: -30px;
+    right: -33px;
+  }
+
+  
 
 
   /**
@@ -1857,6 +1935,20 @@ textarea.form-input::-webkit-resizer { display: none; }
     opacity: 0;
   }
 
+  .showMore-btn {
+    bottom: -30px;
+    border-radius: 15px;
+    width: 50%;
+    justify-content: center;
+    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .info-content {
+    margin-bottom: 20px;
+  }
+
   .social-list { justify-content: center; }
 
 
@@ -1959,4 +2051,56 @@ textarea.form-input::-webkit-resizer { display: none; }
   text-decoration: none;
   display: inline-block;
   transition: all 0.3s ease;
+}
+@media (max-width: 1199px) {
+  .sidebar.active .contacts-list {
+    display: block;
+  }
+  .sidebar.active .contact-item,
+  .sidebar.active .service-item {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .sidebar.active .contacts-list {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: repeat(4, auto); 
+    gap: 20px;
+    align-items: start;
+  }
+  .sidebar.active .contact-item {
+    grid-column: 1 / 2;
+  }
+  .sidebar.active .service-item {
+    grid-column: 2 / 3;
+    grid-row: 1 / -1; 
+    align-self: stretch;
+    max-height: fit-content;
+  }
+
+  /* Pour mobile : une seule colonne */
+  .contacts-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    gap: 16px;
+  }
+  .contact-item {
+    grid-column: 1 / 2;
+  }
+  .service-item {
+    grid-column: 1 / 2;
+    grid-row: auto;
+    align-self: stretch;
+  }
+  .sidebar {
+    height: 100vh;
+    max-height: 100vh;
+  }
 }

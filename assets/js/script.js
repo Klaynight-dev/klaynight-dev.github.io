@@ -157,3 +157,42 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
   });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const mainContent = document.querySelector(".main-content");
+  const showMoreBtn = document.querySelector(".showMore-btn");
+  const marginInfoContent = document.querySelector(".info-content");
+  const info_more_btn = document.querySelector(".info-more-btn");
+  const service_item = document.querySelector(".sidebar .service-item");
+    if (mainContent) {
+      mainContent.style.display = "none";
+    }
+
+  if (showMoreBtn) {
+    // Set sidebar active at the start
+    sidebar.classList.add("active");
+
+    showMoreBtn.addEventListener("click", () => {
+      if (mainContent) {
+      mainContent.style.display = "block";
+      showMoreBtn.style.display = "none";
+      
+      if (marginInfoContent) {
+        marginInfoContent.style.marginBottom = "0";
+      }
+      // Remove active from sidebar when showMoreBtn is clicked
+      sidebar.classList.remove("active");
+      }
+
+      if (service_item.style.display != "none") {
+        service_item.style.display = "none";
+      }
+
+      if (showMoreBtn.style.display != "none") {
+        sidebar.classList.add("active");
+        info_more_btn.style.display = "none";
+      }
+    });
+  }
+});
+
