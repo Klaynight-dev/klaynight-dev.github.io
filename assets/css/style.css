@@ -1787,14 +1787,18 @@ textarea.form-input::-webkit-resizer { display: none; }
   .service-list {
     grid-template-columns: 1fr 1fr;
     grid-template-areas: 
-    "item-1 item-2"
-    "item-3 item-3";
+      "item-1 item-2"
+      "item-3 item-4"
+      "item-5 item-6";
     gap: 20px 25px;
   }
 
   .service-list .service-item:nth-child(1) { grid-area: item-1; }
   .service-list .service-item:nth-child(2) { grid-area: item-2; }
   .service-list .service-item:nth-child(3) { grid-area: item-3; }
+  .service-list .service-item:nth-child(4) { grid-area: item-4; }
+  .service-list .service-item:nth-child(5) { grid-area: item-5; }
+  .service-list .service-item:nth-child(6) { grid-area: item-6; }
 
   /* testimonials */
 
@@ -2067,17 +2071,17 @@ textarea.form-input::-webkit-resizer { display: none; }
 }
 
 @media (min-width: 1200px) {
-  .sidebar.active .contacts-list {
+  main:not([style*="display: none"]) .sidebar.active .contacts-list  {
     display: grid;
     grid-template-columns: 1fr 2fr;
     grid-template-rows: repeat(4, auto); 
     gap: 20px;
     align-items: start;
   }
-  .sidebar.active .contact-item {
+  main:not([style*="display: none"]) .sidebar.active .contact-item {
     grid-column: 1 / 2;
   }
-  .sidebar.active .service-item {
+  main:not([style*="display: none"]) .sidebar.active .service-item {
     grid-column: 2 / 3;
     grid-row: 1 / -1; 
     align-self: stretch;
@@ -2085,21 +2089,21 @@ textarea.form-input::-webkit-resizer { display: none; }
   }
 
   /* Pour mobile : une seule colonne */
-  .contacts-list {
+  main:not([style*="display: none"]) .contacts-list {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: none;
     gap: 16px;
   }
-  .contact-item {
+  main:not([style*="display: none"]) .contact-item {
     grid-column: 1 / 2;
   }
-  .service-item {
+  main:not([style*="display: none"]) .service-item {
     grid-column: 1 / 2;
     grid-row: auto;
     align-self: stretch;
   }
-  .sidebar {
+  main:not([style*="display: none"]) .sidebar {
     height: 100vh;
     max-height: 100vh;
   }

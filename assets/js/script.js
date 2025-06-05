@@ -164,35 +164,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const marginInfoContent = document.querySelector(".info-content");
   const info_more_btn = document.querySelector(".info-more-btn");
   const service_item = document.querySelector(".sidebar .service-item");
-    if (mainContent) {
-      mainContent.style.display = "none";
-    }
+
+  // Affiche la sidebar au chargement
+  sidebar.classList.add("active");
+  if (mainContent) mainContent.style.display = "none";
+  if (info_more_btn) info_more_btn.style.display = "none";
+  if (info_more_btn) info_more_btn.classList.remove("active");
 
   if (showMoreBtn) {
-    // Set sidebar active at the start
-    sidebar.classList.add("active");
-
     showMoreBtn.addEventListener("click", () => {
-      if (mainContent) {
-      mainContent.style.display = "block";
-      showMoreBtn.style.display = "none";
-      
-      if (marginInfoContent) {
-        marginInfoContent.style.marginBottom = "0";
-      }
-      // Remove active from sidebar when showMoreBtn is clicked
+      // Affiche le contenu principal et masque la sidebar
+      if (mainContent) mainContent.style.display = "block";
+      if (showMoreBtn) showMoreBtn.style.display = "none";
+      if (info_more_btn) info_more_btn.style.display = "block";
+      if (marginInfoContent) marginInfoContent.style.marginBottom = "0";
       sidebar.classList.remove("active");
-      }
-
-      if (service_item.style.display != "none") {
-        service_item.style.display = "none";
-      }
-
-      if (showMoreBtn.style.display != "none") {
-        sidebar.classList.add("active");
-        info_more_btn.style.display = "none";
-      }
+      if (service_item) service_item.style.display = "none";
     });
   }
 });
+
 
