@@ -1,0 +1,28 @@
+# Node/Bun dependencies
+node_modules/
+bun.lockb
+.npm/
+
+# Compile build outputs
+dist/
+dist-ssr/
+*.local
+
+# Svelte compile / Svelte check logs
+.svelte-kit/
+.svelte/
+svelte-check.log
+build_error.log
+
+# IDEs and editors configs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
