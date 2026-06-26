@@ -101,7 +101,7 @@
 <!-- Main container holding sidebar, content, and the marker tray -->
 <div class="min-h-screen bg-whiteboard text-slate-800 flex flex-col items-center py-6 px-4 md:py-10 relative">
   
-  <div class="w-full max-w-6xl flex flex-col lg:flex-row gap-6 items-stretch relative">
+  <div class="w-full max-w-7xl flex flex-col lg:flex-row gap-6 items-stretch relative">
     
     <!-- Toast Notification -->
     {#if showToast}
@@ -184,7 +184,6 @@
                     <Papicon icon="graduation-hat" size={20} />
                   </span>
                   <h3 class="text-lg font-hand font-bold text-slate-800 flex items-center gap-2">
-                    <span class="rature-marker text-slate-400 font-normal">Études</span> 
                     <span>Parcours Scolaire</span>
                   </h3>
                 </div>
@@ -194,10 +193,10 @@
                     {@const dotColor = dotColors[i % dotColors.length]}
                     <div class="relative py-1">
                       <div class="absolute w-3.5 h-3.5 rounded-full {dotColor} -left-[31px] top-2.5 border-2 border-white"></div>
-                      <span class="text-xs font-hand font-bold text-[var(--marker-color)] uppercase tracking-wider">{item.date}</span>
-                      <h4 class="text-sm font-hand font-bold text-slate-900 mt-1">{item.title}</h4>
-                      <p class="text-xs text-slate-500 font-marker mt-0.5">{item.subtitle}</p>
-                      <p class="text-xs text-slate-655 mt-2 leading-relaxed font-sans">{item.description}</p>
+                      <span class="text-sm font-hand font-bold text-[var(--marker-color)] uppercase tracking-wider">{item.date}</span>
+                      <h4 class="text-base font-hand font-bold text-slate-900 mt-1">{item.title}</h4>
+                      <p class="text-sm text-slate-500 font-marker mt-0.5">{item.subtitle}</p>
+                      <p class="text-sm text-slate-655 mt-2 leading-relaxed font-sans">{item.description}</p>
                     </div>
                   {/each}
                 </div>
@@ -210,7 +209,6 @@
                     <Papicon icon="briefcase" size={20} />
                   </span>
                   <h3 class="text-lg font-hand font-bold text-slate-800 flex items-center gap-2">
-                    <span class="rature-marker-double text-slate-400 font-normal">Job</span> 
                     <span>Expériences</span>
                   </h3>
                 </div>
@@ -220,12 +218,12 @@
                     {@const dotColor = dotColors[i % dotColors.length]}
                     <div class="relative py-1">
                       <div class="absolute w-3.5 h-3.5 rounded-full {dotColor} -left-[31px] top-2.5 border-2 border-white"></div>
-                      <span class="text-xs font-hand font-bold text-[var(--marker-color)] uppercase tracking-wider">{item.date}</span>
-                      <h4 class="text-sm font-hand font-bold text-slate-900 mt-1">{item.title}</h4>
-                      <p class="text-xs text-slate-500 font-marker mt-0.5">{item.subtitle}</p>
-                      <p class="text-xs text-slate-655 mt-2 leading-relaxed font-sans">{item.description}</p>
+                      <span class="text-sm font-hand font-bold text-[var(--marker-color)] uppercase tracking-wider">{item.date}</span>
+                      <h4 class="text-base font-hand font-bold text-slate-900 mt-1">{item.title}</h4>
+                      <p class="text-sm text-slate-500 font-marker mt-0.5">{item.subtitle}</p>
+                      <p class="text-sm text-slate-655 mt-2 leading-relaxed font-sans">{item.description}</p>
                       {#if item.url}
-                        <a href={item.url} target="_blank" rel="noopener noreferrer" class="text-xs text-[var(--marker-color)] font-bold hover:underline mt-2 inline-block font-hand">
+                        <a href={item.url} target="_blank" rel="noopener noreferrer" class="text-sm text-[var(--marker-color)] font-bold hover:underline mt-2 inline-block font-hand">
                           {item.urlLabel || "Lien"} →
                         </a>
                       {/if}
@@ -237,7 +235,6 @@
               <!-- 6 competencies as colored sticky notes -->
               <div>
                 <h3 class="text-lg font-hand font-bold text-slate-800 mb-4 flex items-center gap-2">
-                  <span class="rature-marker text-slate-400 font-normal">Compétences</span>
                   <span>Compétences Clés</span>
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -250,11 +247,11 @@
                     <div class="post-it post-it-{color} {rotation} rounded-xl p-4 flex flex-col gap-2 relative">
                       <div class="tape-torn tape-{tapeColor} absolute top-[-9px] left-[35%] w-16 h-5 opacity-70"></div>
                       
-                      <h4 class="text-xs font-hand font-bold text-slate-800">{competence.title}</h4>
+                      <h4 class="text-sm font-hand font-bold text-slate-800">{competence.title}</h4>
                       <div class="flex flex-wrap gap-2 mt-2">
                         {#each competence.links as link}
                           <a href={link.url} target="_blank" rel="noopener noreferrer" 
-                             class="text-[10px] px-2 py-0.5 bg-white/70 hover:bg-white border-2 border-slate-700 text-slate-800 rounded font-marker transition-all transform hover:scale-105 inline-flex items-center gap-1">
+                             class="text-xs px-2 py-0.5 bg-white/70 hover:bg-white border-2 border-slate-700 text-slate-800 rounded font-marker transition-all transform hover:scale-105 inline-flex items-center gap-1">
                             <span class="text-slate-500"><Papicon icon="link" size={10} /></span> {link.label}
                           </a>
                         {/each}
@@ -272,7 +269,6 @@
                   <Papicon icon="grid" size={20} />
                 </span>
                 <h3 class="text-lg font-hand font-bold text-slate-800 flex items-center gap-2">
-                  <span class="rature-marker text-slate-400 font-normal">Projets Pro</span>
                   <span>Tous mes projets</span>
                 </h3>
               </div>
@@ -328,18 +324,18 @@
                     </div>
 
                     <div class="p-5 flex flex-col gap-3 flex-1">
-                      <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-white/60 text-slate-700 w-fit rounded font-hand">
+                      <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 bg-white/60 text-slate-700 w-fit rounded font-hand">
                         {project.category}
                       </span>
-                      <h4 class="text-base font-hand font-bold text-slate-900 group-hover:text-[var(--marker-color)] transition-colors">
+                      <h4 class="text-lg font-hand font-bold text-slate-900 group-hover:text-[var(--marker-color)] transition-colors">
                         {project.title}
                       </h4>
-                      <p class="text-xs text-slate-700 leading-relaxed flex-1 font-marker">
+                      <p class="text-sm text-slate-700 leading-relaxed flex-1 font-marker">
                         {project.description}
                       </p>
                       <div class="flex flex-wrap gap-1 mt-2">
                         {#each project.tags as tag}
-                          <span class="text-[9px] px-1.5 py-0.5 bg-white/40 text-slate-650 rounded border border-slate-300 font-hand">
+                          <span class="text-xs px-1.5 py-0.5 bg-white/40 text-slate-650 rounded border border-slate-300 font-hand">
                             #{tag}
                           </span>
                         {/each}
@@ -367,7 +363,6 @@
                   <Papicon icon="mail" size={20} />
                 </span>
                 <h3 class="text-lg font-hand font-bold text-slate-800 flex items-center gap-2">
-                  <span class="rature-marker-double text-slate-400 font-normal">Contactez-moi</span>
                   <span>Formulaire de contact</span>
                 </h3>
               </div>
@@ -376,45 +371,45 @@
                 <!-- Form -->
                 <form onsubmit={handleMockSubmit} class="flex flex-col gap-4">
                   <div class="flex flex-col gap-1.5">
-                    <label for="fullname" class="text-xs text-slate-700 font-hand font-bold">Nom complet</label>
+                    <label for="fullname" class="text-sm text-slate-700 font-hand font-bold">Nom complet</label>
                     <input 
                       type="text" 
                       id="fullname" 
                       bind:value={fullname}
                       required
                       placeholder="Ex: John Doe" 
-                      class="px-4 py-2.5 bg-white border-2 border-slate-700 focus:border-[var(--marker-color)] rounded-xl text-sm text-slate-800 outline-none transition-colors border-sketch font-hand"
+                      class="px-4 py-2.5 bg-white border-2 border-slate-700 focus:border-[var(--marker-color)] rounded-xl text-base text-slate-800 outline-none transition-colors border-sketch font-hand"
                     />
                   </div>
 
                   <div class="flex flex-col gap-1.5">
-                    <label for="email" class="text-xs text-slate-700 font-hand font-bold">Adresse Email</label>
+                    <label for="email" class="text-sm text-slate-700 font-hand font-bold">Adresse Email</label>
                     <input 
                       type="email" 
                       id="email" 
                       bind:value={email}
                       required
                       placeholder="Ex: john@example.com" 
-                      class="px-4 py-2.5 bg-white border-2 border-slate-700 focus:border-[var(--marker-color)] rounded-xl text-sm text-slate-800 outline-none transition-colors border-sketch font-hand"
+                      class="px-4 py-2.5 bg-white border-2 border-slate-700 focus:border-[var(--marker-color)] rounded-xl text-base text-slate-800 outline-none transition-colors border-sketch font-hand"
                     />
                   </div>
 
                   <div class="flex flex-col gap-1.5">
-                    <label for="message" class="text-xs text-slate-700 font-hand font-bold">Votre message</label>
+                    <label for="message" class="text-sm text-slate-700 font-hand font-bold">Votre message</label>
                     <textarea 
                       id="message" 
                       bind:value={message}
                       required
                       rows="4" 
                       placeholder="Écrivez votre message ici..." 
-                      class="px-4 py-2.5 bg-white border-2 border-slate-700 focus:border-[var(--marker-color)] rounded-xl text-sm text-slate-800 outline-none resize-none transition-colors border-sketch font-hand"
+                      class="px-4 py-2.5 bg-white border-2 border-slate-700 focus:border-[var(--marker-color)] rounded-xl text-base text-slate-800 outline-none resize-none transition-colors border-sketch font-hand"
                     ></textarea>
                   </div>
 
                   <button 
                     type="submit" 
                     disabled={isSending}
-                    class="btn-sketch self-end font-hand py-2 px-5 cursor-pointer text-xs flex items-center gap-1.5"
+                    class="btn-sketch self-end font-hand py-2 px-5 cursor-pointer text-sm flex items-center gap-1.5"
                   >
                     {isSending ? "Envoi en cours..." : "Envoyer le message"}
                     {#if !isSending}
@@ -439,11 +434,11 @@
                     
                     <div class="pl-8">
                       <div class="text-[var(--marker-color)]"><Mail size={20} /></div>
-                      <h4 class="text-sm font-hand font-bold text-slate-800 mt-2">Contact direct</h4>
-                      <p class="text-xs text-slate-650 leading-relaxed mt-2 font-marker">
+                      <h4 class="text-base font-hand font-bold text-slate-800 mt-2">Contact direct</h4>
+                      <p class="text-sm text-slate-650 leading-relaxed mt-2 font-marker">
                         Le formulaire de contact ci-contre simule une soumission locale. Pour toute demande professionnelle, vous pouvez me contacter directement par mail à :
                       </p>
-                      <a href="mailto:{personalInfo.email}" class="text-sm text-[var(--marker-color)] hover:underline font-bold mt-2 block font-hand">
+                      <a href="mailto:{personalInfo.email}" class="text-base text-[var(--marker-color)] hover:underline font-bold mt-2 block font-hand">
                         {personalInfo.email}
                       </a>
                     </div>
@@ -470,7 +465,7 @@
       </div>
       
       <!-- Footer details -->
-      <footer class="text-[10px] text-slate-500 font-hand text-center py-2 shrink-0">
+      <footer class="text-xs text-slate-500 font-hand text-center py-2 shrink-0">
         © {new Date().getFullYear()} {personalInfo.name}. Conçu avec Svelte 5 & Bun. UI Tableau Blanc.
       </footer>
     </main>

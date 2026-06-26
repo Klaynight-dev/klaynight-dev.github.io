@@ -99,13 +99,13 @@ export const testimonials = [
 
 export const education: TimelineItem[] = [
   {
-    title: "Institut Universitaire Technologique de Lannion",
+    title: "Institut Universitaire de Technologie",
     subtitle: "BUT Informatique (Parcours A : Dével. Web/Mobile)",
     date: "2024 - Aujourd'hui",
     description: "Bachelor Universitaire de Technologie en Informatique, axé sur l'apprentissage pratique du développement web et mobile, des structures de données, et de l'architecture logicielle."
   },
   {
-    title: "Lycée Eugène Freyssinet de Saint Brieuc",
+    title: "Lycée Eugène Freyssinet",
     subtitle: "Baccalauréat Spécialité NSI & SES",
     date: "2021 - 2024",
     description: "Baccalauréat général obtenu avec mention. Options choisies : Numérique et Sciences de l'Informatique (NSI) et Sciences Économiques et Sociales (SES)."

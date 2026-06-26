@@ -2,13 +2,9 @@
   import Papicon from "./Papicon.svelte";
   import myAvatar from "../../../assets/images/my-avatar.png";
   import { personalInfo } from "../data/resume";
-
-  // Calculate age dynamically from config date
-  const birthDate = new Date(personalInfo.birthDate);
-  const age = new Date().getFullYear() - birthDate.getFullYear();
 </script>
 
-<aside class="notebook-sheet w-full lg:w-80 rounded-2xl p-6 pl-10 flex flex-col gap-6 lg:sticky lg:top-6 self-start animate-fade-in relative">
+<aside class="notebook-sheet w-full lg:w-80 rounded-2xl p-6 pl-12 flex flex-col gap-6 lg:sticky lg:top-6 self-start animate-fade-in relative">
   <!-- Notebook metallic spiral holes on the left side -->
   <div class="notebook-spiral-holes-left select-none">
     <div class="notebook-spiral-hole-left"></div>
@@ -36,13 +32,13 @@
     <div class="flex flex-col gap-1 items-start lg:items-center">
       <h1 class="text-xl lg:text-2xl font-hand font-bold text-slate-900 tracking-tight">{personalInfo.name}</h1>
       {#if personalInfo.nickname}
-        <span class="text-xs px-3 py-0.5 bg-slate-100 border border-slate-400 text-slate-650 rounded-full font-hand font-bold mt-1">
+        <span class="text-sm px-3 py-0.5 bg-slate-100 border border-slate-400 text-slate-650 rounded-full font-hand font-bold mt-1">
           {personalInfo.nickname}
         </span>
       {/if}
       <div class="flex flex-wrap gap-1 mt-2 justify-center">
         {#each personalInfo.roles as role, idx}
-          <span class="text-[10px] uppercase font-hand font-bold tracking-wider px-2 py-0.5 rounded shadow-sm
+          <span class="text-xs uppercase font-hand font-bold tracking-wider px-2 py-0.5 rounded shadow-sm
                        {idx % 2 === 0 ? 'bg-yellow-100/90 border border-yellow-400/80 rotate-1' : 'bg-sky-100/90 border border-sky-400/80 rotate--1'}">
             {role}
           </span>
@@ -55,51 +51,17 @@
 
   <!-- Contacts info - Directly visible -->
   <div class="flex flex-col gap-4">
-    <h3 class="text-xs font-hand font-bold uppercase tracking-wider text-slate-600">Coordonnées</h3>
+    <h3 class="text-sm font-hand font-bold uppercase tracking-wider text-slate-600">Coordonnées</h3>
     
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 rounded-lg bg-white border-2 border-slate-700 flex items-center justify-center text-[var(--marker-color)] shrink-0 border-sketch">
         <Papicon icon="mail" size={16} />
       </div>
       <div class="min-w-0 flex-1">
-        <p class="text-[9px] font-hand uppercase text-slate-500 font-bold">Email</p>
-        <a href="mailto:{personalInfo.email}" class="text-sm font-hand text-slate-800 hover:text-[var(--marker-color)] hover:underline transition-colors block truncate">
+        <p class="text-xs font-hand uppercase text-slate-500 font-bold">Email</p>
+        <a href="mailto:{personalInfo.email}" class="text-base font-hand text-slate-800 hover:text-[var(--marker-color)] hover:underline transition-colors block truncate">
           {personalInfo.email}
         </a>
-      </div>
-    </div>
-
-    <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-lg bg-white border-2 border-slate-700 flex items-center justify-center text-[var(--marker-color)] shrink-0 border-sketch">
-        <Papicon icon="phone" size={16} />
-      </div>
-      <div class="min-w-0 flex-1">
-        <p class="text-[9px] font-hand uppercase text-slate-500 font-bold">Téléphone</p>
-        <a href="tel:{personalInfo.phone.replace(/\s+/g, '')}" class="text-sm font-hand text-slate-800 hover:text-[var(--marker-color)] hover:underline transition-colors block">
-          {personalInfo.phone}
-        </a>
-      </div>
-    </div>
-
-    <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-lg bg-white border-2 border-slate-700 flex items-center justify-center text-[var(--marker-color)] shrink-0 border-sketch">
-        <Papicon icon="calendar" size={16} />
-      </div>
-      <div class="min-w-0 flex-1">
-        <p class="text-[9px] font-hand uppercase text-slate-500 font-bold">Anniversaire</p>
-        <p class="text-sm font-hand text-slate-800">
-          {new Date(personalInfo.birthDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} ({age} ans)
-        </p>
-      </div>
-    </div>
-
-    <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-lg bg-white border-2 border-slate-700 flex items-center justify-center text-[var(--marker-color)] shrink-0 border-sketch">
-        <Papicon icon="map-pin" size={16} />
-      </div>
-      <div class="min-w-0 flex-1">
-        <p class="text-[9px] font-hand uppercase text-slate-500 font-bold">Localisation</p>
-        <p class="text-sm font-hand text-slate-800">{personalInfo.location}</p>
       </div>
     </div>
   </div>
@@ -114,8 +76,8 @@
         <Papicon icon="briefcase" size={16} />
       </div>
       <div class="flex-1 min-w-0 z-10 font-hand">
-        <h4 class="text-xs font-bold text-slate-900 leading-tight">{personalInfo.alternance.title}</h4>
-        <p class="text-[10px] text-slate-700 mt-1 leading-relaxed font-marker">
+        <h4 class="text-sm font-bold text-slate-900 leading-tight">{personalInfo.alternance.title}</h4>
+        <p class="text-xs text-slate-700 mt-1 leading-relaxed font-marker">
           {personalInfo.alternance.description}
         </p>
       </div>

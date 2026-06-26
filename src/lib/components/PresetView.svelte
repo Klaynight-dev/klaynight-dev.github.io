@@ -55,7 +55,7 @@
       À propos de moi
     </h2>
     
-    <div class="text-slate-700 leading-relaxed space-y-4 text-sm font-sans pl-1">
+    <div class="text-slate-700 leading-relaxed space-y-4 text-base font-sans pl-1">
       {#each biography as paragraph}
         <p>
           {@html paragraph}
@@ -82,8 +82,8 @@
           <div class="text-slate-850">
             <Sparkles size={20} />
           </div>
-          <h3 class="font-hand font-bold text-slate-900 text-base">{service.title}</h3>
-          <p class="text-xs text-slate-700 leading-relaxed font-marker">
+          <h3 class="font-hand font-bold text-slate-900 text-lg">{service.title}</h3>
+          <p class="text-sm text-slate-700 leading-relaxed font-marker">
             {service.description}
           </p>
         </div>
@@ -117,29 +117,29 @@
 
           <div class="p-5 flex flex-col gap-3 flex-1 mt-1">
             <div class="flex items-center justify-between">
-              <span class="text-[9px] font-hand font-bold tracking-wider uppercase px-2 py-0.5 bg-slate-100 border border-slate-300 text-slate-700 rounded-md">
+              <span class="text-xs font-hand font-bold tracking-wider uppercase px-2 py-0.5 bg-slate-100 border border-slate-300 text-slate-700 rounded-md">
                 {project.category}
               </span>
             </div>
             
-            <h3 class="text-base font-hand font-bold text-slate-900 group-hover:text-[var(--marker-color)] transition-colors">
-              {project.title}
+            <h3 class="text-lg font-hand font-bold text-slate-900 group-hover:text-[var(--marker-color)] transition-colors">
+               {project.title}
             </h3>
             
-            <p class="text-xs text-slate-600 leading-relaxed flex-1 font-marker">
+            <p class="text-sm text-slate-600 leading-relaxed flex-1 font-marker">
               {project.description}
             </p>
 
             <div class="flex flex-wrap gap-1 mt-2">
               {#each project.tags as tag}
-                <span class="text-[9px] px-1.5 py-0.5 bg-slate-50 text-slate-500 rounded border border-slate-200 font-hand">
+                <span class="text-xs px-1.5 py-0.5 bg-slate-50 text-slate-500 rounded border border-slate-200 font-hand">
                   #{tag}
                 </span>
               {/each}
             </div>
           </div>
 
-          <div class="px-5 py-3 bg-slate-50/80 border-t border-slate-250 rounded-b-2xl flex items-center justify-between font-hand font-bold text-xs">
+          <div class="px-5 py-3 bg-slate-50/80 border-t border-slate-250 rounded-b-2xl flex items-center justify-between font-hand font-bold text-sm">
             <a href={project.url} target="_blank" rel="noopener noreferrer" 
                class="text-slate-700 hover:text-[var(--marker-color)] flex items-center gap-1.5 transition-colors">
               <Eye size={13} /> Voir le site
@@ -178,11 +178,11 @@
             <div class="notebook-spiral-hole-left"></div>
           </div>
 
-          <h3 class="text-xs font-hand font-bold text-slate-800 uppercase tracking-wider pl-1">{category.name}</h3>
+          <h3 class="text-sm font-hand font-bold text-slate-800 uppercase tracking-wider pl-1">{category.name}</h3>
           
           <div class="flex flex-wrap gap-2 mt-1 pl-1">
             {#each category.skills as skill}
-              <div class="inline-flex items-center gap-2 px-2.5 py-1.5 bg-white border border-slate-350 rounded-lg text-xs text-slate-850 hover:border-slate-500 transition-colors font-sans shadow-sm hover:scale-102">
+              <div class="inline-flex items-center gap-2 px-2.5 py-1.5 bg-white border border-slate-350 rounded-lg text-sm text-slate-850 hover:border-slate-500 transition-colors font-sans shadow-sm hover:scale-102">
                 {#if skill.type === 'img' && skill.icon && logoMap[skill.icon]}
                   <img src={logoMap[skill.icon]} alt={skill.name} class="w-4 h-4 object-contain shrink-0" />
                 {:else if skill.type === 'cdn' && skill.icon}
@@ -220,7 +220,7 @@
             <Quote size={28} />
           </div>
           
-          <p class="text-xs text-slate-700 leading-relaxed italic flex-1 z-10 font-marker pt-2">
+          <p class="text-sm text-slate-700 leading-relaxed italic flex-1 z-10 font-marker pt-2">
             "{item.text}"
           </p>
 
@@ -235,8 +235,8 @@
               </div>
             {/if}
             <div class="min-w-0">
-              <h4 class="text-xs font-hand font-bold text-slate-850 truncate">{item.name}</h4>
-              <p class="text-[9px] text-slate-500 font-marker truncate leading-none mt-1">{item.role}</p>
+              <h4 class="text-sm font-hand font-bold text-slate-850 truncate">{item.name}</h4>
+              <p class="text-xs text-slate-500 font-marker truncate leading-none mt-1">{item.role}</p>
             </div>
           </div>
         </div>
