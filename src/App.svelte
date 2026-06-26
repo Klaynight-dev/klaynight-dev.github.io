@@ -469,7 +469,7 @@
                       <div class="text-[var(--marker-color)]"><Mail size={20} /></div>
                       <h4 class="text-base font-hand font-bold text-slate-800 mt-2">Contact direct</h4>
                       <p class="text-sm text-slate-650 leading-relaxed mt-2 font-marker">
-                        Le formulaire de contact ci-contre simule une soumission locale. Pour toute demande professionnelle, vous pouvez me contacter directement par mail à :
+                        Pour toute demande professionnelle, vous pouvez utiliser le formulaire ci-contre ou me contacter directement par mail à :
                       </p>
                       <a href="mailto:{personalInfo.email}" class="text-base text-[var(--marker-color)] hover:underline font-bold mt-2 block font-hand">
                         {personalInfo.email}
