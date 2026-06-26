@@ -498,44 +498,44 @@
       </div>
       
       <!-- Footer details -->
-      <footer class="text-xs text-slate-500 font-hand text-center py-2 shrink-0 mb-16 md:mb-2">
+      <footer class="text-xs text-slate-500 font-hand text-center py-2 shrink-0 mb-20 md:mb-2">
         © {new Date().getFullYear()} {personalInfo.name}. Conçu avec Svelte 5 & Bun. UI Tableau Blanc.
       </footer>
     </main>
 
-    <!-- Mobile Floating Bottom Navbar -->
-    <div class="md:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-white/95 backdrop-blur-md border-2 border-slate-800 rounded-2xl px-3 py-2 flex items-center gap-1.5 shadow-xl border-sketch font-hand text-sm select-none">
+    <!-- Mobile Docked Bottom Navbar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t-2 border-slate-800 flex items-center justify-around pt-2.5 pb-4 px-2 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] font-hand text-sm select-none">
       <button 
         onclick={() => activeTab = "about"}
-        class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all duration-150 cursor-pointer
-               {activeTab === 'about' ? 'text-slate-900 font-bold bg-yellow-100 border border-yellow-400 rotate-1' : 'text-slate-500 hover:text-slate-850 hover:bg-slate-50'}"
+        class="flex flex-col items-center gap-1 py-1 rounded-xl transition-all duration-150 cursor-pointer flex-1 text-center
+               {activeTab === 'about' ? 'text-slate-900 font-bold bg-yellow-100/90 scale-102 border-b-2 border-yellow-400/80' : 'text-slate-500 hover:text-slate-850'}"
       >
-        <Papicon icon="paper" size={16} />
-        {#if activeTab === "about"}<span class="text-xs">Bio</span>{/if}
+        <Papicon icon="paper" size={18} />
+        <span class="text-xs tracking-tight">Bio</span>
       </button>
       <button 
         onclick={() => activeTab = "resume"}
-        class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all duration-150 cursor-pointer
-               {activeTab === 'resume' ? 'text-slate-900 font-bold bg-pink-100 border border-pink-400 rotate--1' : 'text-slate-500 hover:text-slate-850 hover:bg-slate-50'}"
+        class="flex flex-col items-center gap-1 py-1 rounded-xl transition-all duration-150 cursor-pointer flex-1 text-center
+               {activeTab === 'resume' ? 'text-slate-900 font-bold bg-pink-100/90 scale-102 border-b-2 border-pink-400/80' : 'text-slate-500 hover:text-slate-850'}"
       >
-        <Papicon icon="graduation-hat" size={16} />
-        {#if activeTab === "resume"}<span class="text-xs">Parcours</span>{/if}
+        <Papicon icon="graduation-hat" size={18} />
+        <span class="text-xs tracking-tight">Parcours</span>
       </button>
       <button 
         onclick={() => activeTab = "portfolio"}
-        class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all duration-150 cursor-pointer
-               {activeTab === 'portfolio' ? 'text-slate-900 font-bold bg-blue-100 border border-blue-400 rotate-1' : 'text-slate-500 hover:text-slate-850 hover:bg-slate-50'}"
+        class="flex flex-col items-center gap-1 py-1 rounded-xl transition-all duration-150 cursor-pointer flex-1 text-center
+               {activeTab === 'portfolio' ? 'text-slate-900 font-bold bg-blue-100/90 scale-102 border-b-2 border-blue-400/80' : 'text-slate-500 hover:text-slate-850'}"
       >
-        <Papicon icon="grid" size={16} />
-        {#if activeTab === "portfolio"}<span class="text-xs">Projets</span>{/if}
+        <Papicon icon="grid" size={18} />
+        <span class="text-xs tracking-tight">Projets</span>
       </button>
       <button 
         onclick={() => activeTab = "contact"}
-        class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all duration-150 cursor-pointer
-               {activeTab === 'contact' ? 'text-slate-900 font-bold bg-green-100 border border-green-400 rotate--1' : 'text-slate-500 hover:text-slate-850 hover:bg-slate-50'}"
+        class="flex flex-col items-center gap-1 py-1 rounded-xl transition-all duration-150 cursor-pointer flex-1 text-center
+               {activeTab === 'contact' ? 'text-slate-900 font-bold bg-green-100/90 scale-102 border-b-2 border-green-400/80' : 'text-slate-500 hover:text-slate-850'}"
       >
-        <Papicon icon="mail" size={16} />
-        {#if activeTab === "contact"}<span class="text-xs">Contact</span>{/if}
+        <Papicon icon="mail" size={18} />
+        <span class="text-xs tracking-tight">Contact</span>
       </button>
     </div>
 
