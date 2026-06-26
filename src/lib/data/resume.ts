@@ -39,7 +39,7 @@ export const personalInfo = {
   roles: ["Dev Web", "Dev App"],
   boardSubtitle: "Tableau Blanc de Dev",
   birthDate: "2006-06-30",
-  email: "night.psr@gmail.com",
+  email: "elouanpassereau@gmail.com",
   phone: "+33 7 69 36 67 22",
   location: "Bretagne, France",
   mapIframeUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1364720.3214410418!2d-4.397523376645492!3d48.08188428416249!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4811ca61ae7e8eaf%3A0x10ca5cd36df24b0!2sBretagne!5e0!3m2!1sfr!2sfr!4v1744028849710!5m2!1sfr!2sfr",

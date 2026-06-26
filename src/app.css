@@ -55,6 +55,16 @@
   --color-accent-primary: var(--marker-color);
   --color-accent-secondary: var(--marker-color);
   --color-accent-purple: var(--marker-color);
+
+  /* Scale up default Tailwind text sizes globally for better readability */
+  --text-xs: 0.875rem; /* 14px */
+  --text-sm: 1rem;     /* 16px */
+  --text-base: 1.125rem; /* 18px */
+  --text-lg: 1.25rem;  /* 20px */
+  --text-xl: 1.5rem;   /* 24px */
+  --text-2xl: 1.875rem; /* 30px */
+  --text-3xl: 2.25rem; /* 36px */
+  --text-4xl: 3rem;    /* 48px */
 }
 
 @layer base {
