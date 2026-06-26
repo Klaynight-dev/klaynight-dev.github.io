@@ -161,7 +161,7 @@
 
         <div class="flex flex-col gap-6">
           <!-- Whiteboard Tabs Navbar (Handdrawn tape and marker style with highlighter colors) -->
-          <div class="flex border-b-2 border-dashed border-slate-350 pb-3 overflow-x-auto gap-4 shrink-0 font-hand text-base md:text-lg">
+          <div class="hidden md:flex border-b-2 border-dashed border-slate-350 pb-3 overflow-x-auto gap-4 shrink-0 font-hand text-base md:text-lg">
             <button 
               onclick={() => activeTab = "about"}
               class="px-3 py-1.5 rounded-lg relative transition-all duration-150 whitespace-nowrap cursor-pointer
@@ -498,11 +498,48 @@
       </div>
       
       <!-- Footer details -->
-      <footer class="text-xs text-slate-500 font-hand text-center py-2 shrink-0">
+      <footer class="text-xs text-slate-500 font-hand text-center py-2 shrink-0 mb-16 md:mb-2">
         © {new Date().getFullYear()} {personalInfo.name}. Conçu avec Svelte 5 & Bun. UI Tableau Blanc.
       </footer>
     </main>
 
+    <!-- Mobile Floating Bottom Navbar -->
+    <div class="md:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-white/95 backdrop-blur-md border-2 border-slate-800 rounded-2xl px-3 py-2 flex items-center gap-1.5 shadow-xl border-sketch font-hand text-sm select-none">
+      <button 
+        onclick={() => activeTab = "about"}
+        class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all duration-150 cursor-pointer
+               {activeTab === 'about' ? 'text-slate-900 font-bold bg-yellow-100 border border-yellow-400 rotate-1' : 'text-slate-500 hover:text-slate-850 hover:bg-slate-50'}"
+      >
+        <Papicon icon="paper" size={16} />
+        {#if activeTab === "about"}<span class="text-xs">Bio</span>{/if}
+      </button>
+      <button 
+        onclick={() => activeTab = "resume"}
+        class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all duration-150 cursor-pointer
+               {activeTab === 'resume' ? 'text-slate-900 font-bold bg-pink-100 border border-pink-400 rotate--1' : 'text-slate-500 hover:text-slate-850 hover:bg-slate-50'}"
+      >
+        <Papicon icon="graduation-hat" size={16} />
+        {#if activeTab === "resume"}<span class="text-xs">Parcours</span>{/if}
+      </button>
+      <button 
+        onclick={() => activeTab = "portfolio"}
+        class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all duration-150 cursor-pointer
+               {activeTab === 'portfolio' ? 'text-slate-900 font-bold bg-blue-100 border border-blue-400 rotate-1' : 'text-slate-500 hover:text-slate-850 hover:bg-slate-50'}"
+      >
+        <Papicon icon="grid" size={16} />
+        {#if activeTab === "portfolio"}<span class="text-xs">Projets</span>{/if}
+      </button>
+      <button 
+        onclick={() => activeTab = "contact"}
+        class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all duration-150 cursor-pointer
+               {activeTab === 'contact' ? 'text-slate-900 font-bold bg-green-100 border border-green-400 rotate--1' : 'text-slate-500 hover:text-slate-850 hover:bg-slate-50'}"
+      >
+        <Papicon icon="mail" size={16} />
+        {#if activeTab === "contact"}<span class="text-xs">Contact</span>{/if}
+      </button>
+    </div>
+
   </div>
 
 </div>
+
