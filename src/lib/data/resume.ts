@@ -256,6 +256,16 @@ export const projects: Project[] = [
     featured: false
   },
   {
+    id: "sae-cobrec-design",
+    title: "SAE Cobrec (Design UI/UX)",
+    category: "Web Design",
+    description: "Conception graphique et UI/UX sur Figma de la marketplace 'Alizon' pour le projet universitaire SAE Cobrec. Création de chartes graphiques et maquettes interactives pour les espaces clients, producteurs et administrateurs.",
+    url: "https://www.figma.com/design/oRhwvXX8hZrHIdutk3YQZt/MarketPlace?node-id=0-1&t=0vrF8PrjS2lurRae-1",
+    image: "icon-design.svg",
+    tags: ["Figma", "UI/UX", "Design System", "SAE Cobrec"],
+    featured: false
+  },
+  {
     id: "plinkk-fr",
     title: "Plinkk.fr",
     category: "Web Development",
@@ -274,6 +284,16 @@ export const projects: Project[] = [
     url: "https://www.figma.com/design/xjPgRmLmqtR16vWkyuXaon/Untitled?node-id=0-1&p=f&t=AeEWavMzmH3kWmqO-0",
     image: "icon-design.svg",
     tags: ["Figma", "UI/UX", "Design System", "Iconography"],
+    featured: false
+  },
+  {
+    id: "affiches-design",
+    title: "Création d'Affiches",
+    category: "Web Design",
+    description: "Conception visuelle et design d'affiches thématiques sur Figma, notamment pour expliquer des concepts techniques comme le fonctionnement des systèmes d'exploitation (OS).",
+    url: "https://www.figma.com/design/8Ssy1x4r895uqdRB88IJgQ/C-est-quoi-un-os-affiche?node-id=0-1&t=Us7LhQsjuHm2UcWO-1",
+    image: "icon-design.svg",
+    tags: ["Figma", "Design Visuel", "Poster", "OS"],
     featured: false
   },
   {
@@ -322,7 +342,7 @@ export const projects: Project[] = [
   {
     id: "jo-surf",
     title: "Site JO de Surf",
-    category: "Web Development",
+    category: "Web Design",
     description: "Conception UI/UX sur Figma puis développement d'un site web interactif dédié aux épreuves de surf des Jeux Olympiques de Paris.",
     url: "https://klaynight.fr/JO_Website_project/",
     github: "https://github.com/klaynight-dev/JO_Website_project/",
