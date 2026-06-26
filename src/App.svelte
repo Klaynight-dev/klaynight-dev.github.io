@@ -75,26 +75,58 @@
     projectFilter === "all" ? projects : projects.filter(p => p.category === projectFilter)
   );
 
-  // Contact Form Mocking
+  // Contact Form Submission
   let fullname = $state("");
   let email = $state("");
   let message = $state("");
   let isSending = $state(false);
   let showToast = $state(false);
+  let toastMessage = $state("Message envoyé avec succès !");
+  let toastError = $state(false);
 
-  function handleMockSubmit(e: SubmitEvent) {
+  async function handleFormSubmit(e: SubmitEvent) {
     e.preventDefault();
     isSending = true;
-    setTimeout(() => {
-      isSending = false;
+    toastError = false;
+
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${personalInfo.email}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          name: fullname,
+          email: email,
+          message: message,
+          _subject: `Nouveau message Portfolio de ${fullname}`
+        })
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success === "true") {
+        toastMessage = "Message envoyé avec succès !";
+        toastError = false;
+        showToast = true;
+        fullname = "";
+        email = "";
+        message = "";
+      } else {
+        throw new Error(result.message || "Erreur de service");
+      }
+    } catch (err) {
+      console.error(err);
+      toastMessage = "Une erreur est survenue lors de l'envoi.";
+      toastError = true;
       showToast = true;
-      fullname = "";
-      email = "";
-      message = "";
+    } finally {
+      isSending = false;
       setTimeout(() => {
         showToast = false;
       }, 5000);
-    }, 1500);
+    }
   }
 </script>
 
@@ -105,9 +137,10 @@
     
     <!-- Toast Notification -->
     {#if showToast}
-      <div class="fixed top-5 right-5 bg-white border-2 border-green-600 text-green-700 px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 z-[9999] border-sketch font-hand animate-fade-in">
-        <div class="w-2.5 h-2.5 rounded-full bg-green-600"></div>
-        <p class="text-xs font-semibold">Message envoyé avec succès ! (Simulation locale)</p>
+      <div class="fixed top-5 right-5 bg-white border-2 px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 z-[9999] border-sketch font-hand animate-fade-in
+                  {toastError ? 'border-red-600 text-red-700' : 'border-green-600 text-green-700'}">
+        <div class="w-2.5 h-2.5 rounded-full {toastError ? 'bg-red-600' : 'bg-green-600'}"></div>
+        <p class="text-xs font-semibold">{toastMessage}</p>
       </div>
     {/if}
 
@@ -369,7 +402,7 @@
               
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Form -->
-                <form onsubmit={handleMockSubmit} class="flex flex-col gap-4">
+                <form onsubmit={handleFormSubmit} class="flex flex-col gap-4">
                   <div class="flex flex-col gap-1.5">
                     <label for="fullname" class="text-sm text-slate-700 font-hand font-bold">Nom complet</label>
                     <input 
