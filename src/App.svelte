@@ -101,20 +101,6 @@
 <!-- Main container holding sidebar, content, and the marker tray -->
 <div class="min-h-screen bg-whiteboard text-slate-800 flex flex-col items-center py-6 px-4 md:py-10 relative">
   
-  <!-- Decorative Hand-drawn Whiteboard Header -->
-  <div class="w-full max-w-6xl mb-6 flex flex-col items-center text-center relative pointer-events-none">
-    <!-- Sketch board header -->
-    <h1 class="text-3xl md:text-4xl font-hand font-bold text-slate-900 flex flex-col md:flex-row items-center gap-2">
-      <span>{personalInfo.name}</span>
-      <span class="text-xs px-2 py-0.5 border-2 border-slate-700 rounded rotate-2 bg-yellow-100/80 text-slate-700 pointer-events-auto border-sketch flex items-center gap-1">
-        <Papicon icon="terminal" size={12} /> {personalInfo.boardSubtitle}
-      </span>
-    </h1>
-    <p class="text-xs text-slate-500 mt-2 font-marker max-w-md">
-      Design tactile : feutres de couleur, scotch, feuilles volantes et post-its. Modifiez la couleur avec le porte-feutres !
-    </p>
-  </div>
-
   <div class="w-full max-w-6xl flex flex-col lg:flex-row gap-6 items-stretch relative">
     
     <!-- Toast Notification -->
