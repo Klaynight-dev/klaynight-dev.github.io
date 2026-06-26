@@ -105,7 +105,7 @@ export const education: TimelineItem[] = [
     description: "Bachelor Universitaire de Technologie en Informatique, axé sur l'apprentissage pratique du développement web et mobile, des structures de données, et de l'architecture logicielle."
   },
   {
-    title: "Lycée Eugène Freyssinet",
+    title: "Lycée Général",
     subtitle: "Baccalauréat Spécialité NSI & SES",
     date: "2021 - 2024",
     description: "Baccalauréat général obtenu avec mention. Options choisies : Numérique et Sciences de l'Informatique (NSI) et Sciences Économiques et Sociales (SES)."
