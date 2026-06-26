@@ -208,35 +208,35 @@
       Recommandations
     </h2>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-1">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-3">
       {#each testimonials as item, i}
         {@const magnetColor = ["red", "blue", "green"][i % 3]}
         {@const rotation = (i % 2 === 0 ? "rotate-1.5" : "rotate--1.5")}
-        <div class="glass-panel border-2 border-slate-800 rounded-2xl p-5 flex flex-col gap-4 relative {rotation} border-sketch bg-white shadow-sm">
-          <!-- Magnet details -->
-          <div class="magnet magnet-{magnetColor} top-2.5 left-2.5"></div>
+        <div class="glass-panel border-2 border-slate-800 rounded-2xl p-6 flex flex-col gap-4 relative {rotation} border-sketch bg-white shadow-md hover:shadow-lg transition-shadow duration-200">
+          <!-- Centered Magnet pinning the recommendation -->
+          <div class="magnet magnet-{magnetColor} absolute -top-3 left-1/2 -translate-x-1/2 w-5.5 h-5.5 shadow-md"></div>
           
-          <div class="text-slate-300 absolute right-4 top-4">
-            <Quote size={28} />
+          <div class="text-slate-200 absolute right-4 top-4">
+            <Quote size={36} />
           </div>
           
-          <p class="text-sm text-slate-700 leading-relaxed italic flex-1 z-10 font-marker pt-2">
+          <p class="text-lg md:text-xl text-slate-850 leading-relaxed font-cursive flex-1 z-10 pt-3">
             "{item.text}"
           </p>
 
-          <div class="flex items-center gap-3 border-t border-dashed border-slate-350 pt-4 mt-2">
+          <div class="flex items-center gap-3.5 border-t border-dashed border-slate-300 pt-4 mt-2">
             {#if item.avatar.startsWith('http')}
-              <div class="w-10 h-10 rounded-lg overflow-hidden bg-white border border-slate-300 flex items-center justify-center p-1 shadow-sm">
+              <div class="w-12 h-12 rounded-xl overflow-hidden bg-white border-2 border-slate-700 flex items-center justify-center p-1 shadow-sm border-sketch">
                 <img src={item.avatar} alt={item.name} class="w-full h-full object-contain" />
               </div>
             {:else}
-              <div class="w-10 h-10 rounded-lg bg-slate-100 border border-slate-300 flex items-center justify-center text-[var(--marker-color)] font-hand font-bold text-sm shadow-sm">
+              <div class="w-12 h-12 rounded-xl bg-slate-100 border-2 border-slate-700 flex items-center justify-center text-[var(--marker-color)] font-hand font-bold text-base shadow-sm border-sketch">
                 {item.name[0]}
               </div>
             {/if}
             <div class="min-w-0">
-              <h4 class="text-sm font-hand font-bold text-slate-850 truncate">{item.name}</h4>
-              <p class="text-xs text-slate-500 font-marker truncate leading-none mt-1">{item.role}</p>
+              <h4 class="text-base font-hand font-bold text-slate-900 truncate">{item.name}</h4>
+              <p class="text-sm text-slate-600 font-marker truncate leading-none mt-1.5">{item.role}</p>
             </div>
           </div>
         </div>
