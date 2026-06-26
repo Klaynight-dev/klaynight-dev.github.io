@@ -1,8 +1,10 @@
 <script lang="ts">
-  let { category = "" }: { category?: string } = $props();
+  let { category = "", image = "" }: { category?: string; image?: string } = $props();
 </script>
 
-{#if category === "Web Development"}
+{#if image}
+  <img src={image} alt="Aperçu du projet" class="w-full h-full object-cover" />
+{:else if category === "Web Development"}
   <!-- Whiteboard Browser Mockup SVG -->
   <svg viewBox="0 0 200 120" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
     <!-- Outer window border -->

@@ -148,7 +148,7 @@ export const skillCategories: SkillCategory[] = [
       { name: "Angular", icon: "angular", type: "cdn" },
       { name: "Next.js", icon: "nextdotjs", type: "cdn" },
       { name: "HTML5", icon: "html5", type: "cdn" },
-      { name: "CSS3", icon: "css3", type: "cdn" },
+      { name: "CSS3", icon: "css", type: "cdn" },
       { name: "JavaScript", icon: "javascript", type: "cdn" },
       { name: "TailwindCSS", icon: "tailwindcss", type: "cdn" },
       { name: "Bootstrap", icon: "bootstrap", type: "cdn" }
@@ -193,9 +193,9 @@ export const skillCategories: SkillCategory[] = [
     name: "Design & Outils",
     skills: [
       { name: "Figma", icon: "figma", type: "cdn" },
-      { name: "Canva", icon: "canva", type: "cdn" },
+      { name: "Canva", icon: "https://cdn.jsdelivr.net/npm/simple-icons@14.0.0/icons/canva.svg", type: "cdn" },
       { name: "GlooMaps", icon: "map-pin", type: "lucide" },
-      { name: "Suite Microsoft Office", icon: "microsoft", type: "cdn" },
+      { name: "Suite Microsoft Office", icon: "https://cdn.jsdelivr.net/npm/simple-icons@11.0.0/icons/microsoft.svg", type: "cdn" },
       { name: "Scene Builder", icon: "layout", type: "lucide" },
       { name: "Visual Paradigm", icon: "layers", type: "lucide" },
       { name: "Git", icon: "git", type: "cdn" }

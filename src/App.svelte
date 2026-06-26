@@ -58,6 +58,13 @@
   const getProjectImage = (imageName: string) => {
     return projectImageMap[imageName] || defaultMetaImg;
   };
+
+  const screenshotMap: Record<string, string> = {
+    "plinkk.png": plinkkImg,
+    "HubGames.jpeg": hubgamesImg,
+    "Jobi.png": jobiImg,
+    "DA Site JO.png": joSurfImg
+  };
   
   // Tab state (only active in Preset mode)
   let activeTab = $state("about"); // 'about', 'resume', 'portfolio', 'contact'
@@ -330,7 +337,7 @@
                     <div class="px-3 pt-3 pb-6 bg-white border border-slate-250 shadow-md rotate-[-1deg] mx-4 mt-5 mb-1 relative border-sketch z-10">
                       <div class="tape-torn tape-{tapes[(i + 2) % tapes.length]} absolute top-[-8px] left-[25%] w-14 h-4.5 rotate-[-2deg] opacity-75"></div>
                       <div class="w-full h-32 md:h-36 overflow-hidden bg-slate-50 border border-slate-200">
-                        <ProjectMockup category={project.category} />
+                        <ProjectMockup category={project.category} image={screenshotMap[project.image]} />
                       </div>
                     </div>
 

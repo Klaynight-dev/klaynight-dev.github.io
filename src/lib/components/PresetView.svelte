@@ -17,6 +17,12 @@
   import bootstrapLogo from "../../../assets/images/Bootstrap.svg";
   import tailwindLogo from "../../../assets/images/Tailwind.svg.png";
 
+  // Import project screenshots for Vite static bundling
+  import plinkkImg from "../../../assets/images/plinkk.png";
+  import hubgamesImg from "../../../assets/images/HubGames.jpeg";
+  import jobiImg from "../../../assets/images/Jobi.png";
+  import joSurfImg from "../../../assets/images/DA Site JO.png";
+
   const logoMap: Record<string, string> = {
     "Postgresql_elephant.png": pgLogo,
     "MySQL.svg": mySqlLogo,
@@ -28,6 +34,13 @@
     "c.png": cLogo,
     "Bootstrap.svg": bootstrapLogo,
     "Tailwind.svg.png": tailwindLogo
+  };
+
+  const screenshotMap: Record<string, string> = {
+    "plinkk.png": plinkkImg,
+    "HubGames.jpeg": hubgamesImg,
+    "Jobi.png": jobiImg,
+    "DA Site JO.png": joSurfImg
   };
 
   // Filter featured projects for preset view
@@ -98,7 +111,7 @@
           <div class="px-2.5 pt-2.5 pb-5 bg-white border border-slate-200 shadow-md rotate-[1.5deg] mx-4 mt-5 mb-1 relative border-sketch z-10">
             <div class="tape-torn {['tape-pink', 'tape-green', 'tape-orange'][i % 3]} absolute top-[-8px] left-[30%] w-12 h-4 rotate-[1deg] opacity-75"></div>
             <div class="w-full h-28 overflow-hidden bg-slate-50 border border-slate-200">
-              <ProjectMockup category={project.category} />
+              <ProjectMockup category={project.category} image={screenshotMap[project.image]} />
             </div>
           </div>
 
@@ -173,7 +186,7 @@
                 {#if skill.type === 'img' && skill.icon && logoMap[skill.icon]}
                   <img src={logoMap[skill.icon]} alt={skill.name} class="w-4 h-4 object-contain shrink-0" />
                 {:else if skill.type === 'cdn' && skill.icon}
-                  <img src="https://cdn.simpleicons.org/{skill.icon}" alt={skill.name} class="w-4 h-4 object-contain shrink-0" />
+                  <img src={skill.icon.startsWith('http') ? skill.icon : `https://cdn.simpleicons.org/${skill.icon}`} alt={skill.name} class="w-4 h-4 object-contain shrink-0" />
                 {:else}
                   <span class="text-[var(--marker-color)] shrink-0 flex items-center justify-center">
                     <Papicon icon={skill.icon || 'code'} size={13} />
