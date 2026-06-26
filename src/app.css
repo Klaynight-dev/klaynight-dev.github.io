@@ -361,3 +361,179 @@
 .animate-fade-in {
   animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ==========================================================================
+   Tableau Noir (Chalkboard) - Dark Mode Style
+   ========================================================================== */
+html.dark {
+  --marker-color: #f8fafc;
+  --marker-color-rgb: 248, 250, 252;
+  
+  --marker-red: #fb7185; /* Soft neon rose */
+  --marker-red-rgb: 251, 113, 133;
+  --marker-blue: #38bdf8; /* Soft neon sky blue */
+  --marker-blue-rgb: 56, 189, 248;
+  --marker-green: #4ade80; /* Soft neon light green */
+  
+  --whiteboard-bg: #141416; /* Dark slate chalkboard background */
+  --whiteboard-grid: rgba(255, 255, 255, 0.045);
+}
+
+/* Base text overrides for Dark Mode */
+html.dark body {
+  color: #cbd5e1;
+}
+
+html.dark .text-slate-800,
+html.dark .text-slate-900,
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4 {
+  color: #f8fafc !important;
+}
+
+html.dark .text-slate-700,
+html.dark .text-slate-655,
+html.dark .text-slate-650 {
+  color: #e2e8f0 !important;
+}
+
+html.dark .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* Panels and sheets */
+html.dark .glass-panel {
+  background-color: #1e1e21 !important;
+  border-color: #3f3f46 !important;
+  color: #e2e8f0 !important;
+  box-shadow: 4px 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+html.dark .notebook-sheet {
+  background-color: #1a1a1d !important;
+  background-image: 
+    linear-gradient(90deg, transparent 44px, rgba(244, 63, 94, 0.2) 44px, rgba(244, 63, 94, 0.2) 46px, transparent 46px),
+    linear-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px) !important;
+  border-color: #3f3f46 !important;
+  color: #e2e8f0 !important;
+  box-shadow: 4px 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .notebook-spiral-hole-left {
+  background-color: #141416 !important;
+}
+
+/* Cards */
+html.dark .premium-card {
+  background-color: #1e1e21 !important;
+  border-color: #3f3f46 !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark .premium-card:hover {
+  border-color: var(--marker-color) !important;
+  box-shadow: 4px 8px 20px rgba(255, 255, 255, 0.04) !important;
+}
+
+html.dark .premium-card .bg-slate-50\/80 {
+  background-color: rgba(30, 30, 33, 0.8) !important;
+  border-color: #3f3f46 !important;
+}
+
+/* Forms */
+html.dark input,
+html.dark textarea {
+  background-color: #151518 !important;
+  border-color: #3f3f46 !important;
+  color: #f8fafc !important;
+}
+
+html.dark input:focus,
+html.dark textarea:focus {
+  border-color: var(--marker-color) !important;
+}
+
+html.dark .btn-sketch {
+  border-color: var(--marker-color) !important;
+  color: var(--marker-color) !important;
+}
+
+html.dark .btn-sketch:hover {
+  background-color: rgba(var(--marker-color-rgb), 0.08) !important;
+}
+
+/* Sidebar Specifics */
+html.dark aside .bg-slate-100 {
+  background-color: #27272a !important;
+  border-color: #52525b !important;
+}
+
+html.dark aside .text-slate-650 {
+  color: #cbd5e1 !important;
+}
+
+html.dark aside hr {
+  border-color: #3f3f46 !important;
+}
+
+html.dark aside .w-9.h-9.bg-white,
+html.dark aside .w-10.h-10.bg-white {
+  background-color: #1e1e21 !important;
+  border-color: #3f3f46 !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark aside .w-10.h-10.bg-white:hover {
+  border-color: var(--marker-color) !important;
+  color: var(--marker-color) !important;
+}
+
+/* Tab bar border */
+html.dark .border-dashed.border-slate-350 {
+  border-color: #3f3f46 !important;
+}
+
+/* Keep sticky notes (post-it) text dark and legible */
+html.dark .post-it {
+  color: #1e293b !important;
+}
+
+html.dark .post-it h3,
+html.dark .post-it h4,
+html.dark .post-it p,
+html.dark .post-it span,
+html.dark .post-it a {
+  color: #1e293b !important;
+}
+
+html.dark .post-it a {
+  border-color: #1e293b !important;
+}
+
+/* Mobile dock navbar */
+html.dark .md\:hidden.fixed.bottom-0 {
+  background-color: rgba(26, 26, 29, 0.95) !important;
+  border-color: #3f3f46 !important;
+}
+
+html.dark .md\:hidden.fixed.bottom-0 button.text-slate-900 {
+  color: #f8fafc !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark .md\:hidden.fixed.bottom-0 button.text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* Custom Scrollbar for Dark Mode */
+html.dark ::-webkit-scrollbar-track {
+  background: #1e1e21;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-color: #1e1e21;
+}
+

@@ -6,68 +6,28 @@
   import ProjectMockup from "./lib/components/ProjectMockup.svelte";
   import { projects } from "./lib/data/projects";
   import { education, experiences, keyCompetences, skillCategories, personalInfo } from "./lib/data/resume";
-  import { Mail, Eye, Github } from "lucide-svelte";
+  import { Mail, Eye, Github, Sun, Moon } from "lucide-svelte";
   
-  // Import skill logos for Vite static bundling
-  import pgLogo from "../assets/images/Postgresql_elephant.png";
-  import mySqlLogo from "../assets/images/MySQL.svg";
-  import sqlLogo from "../assets/images/sql.png";
-  import phpLogo from "../assets/images/PHP.png";
-  import phpMyAdminLogo from "../assets/images/phpmyadmin.png";
-  import javaLogo from "../assets/images/java.png";
-  import pythonLogo from "../assets/images/Python.png";
-  import cLogo from "../assets/images/c.png";
-  import bootstrapLogo from "../assets/images/Bootstrap.svg";
-  import tailwindLogo from "../assets/images/Tailwind.svg.png";
-
-  // Import project screenshots and fallbacks
-  import plinkkImg from "../assets/images/plinkk.png";
-  import hubgamesImg from "../assets/images/HubGames.jpeg";
-  import jobiImg from "../assets/images/Jobi.png";
-  import joSurfImg from "../assets/images/DA Site JO.png";
-  import defaultMetaImg from "../assets/images/my-avatar.png";
-  import iconAppImg from "../assets/images/icon-app.svg";
-  import iconDesignImg from "../assets/images/icon-design.svg";
-  import iconDevImg from "../assets/images/icon-dev.svg";
-
-  const logoMap: Record<string, string> = {
-    "Postgresql_elephant.png": pgLogo,
-    "MySQL.svg": mySqlLogo,
-    "sql.png": sqlLogo,
-    "PHP.png": phpLogo,
-    "phpmyadmin.png": phpMyAdminLogo,
-    "java.png": javaLogo,
-    "Python.png": pythonLogo,
-    "c.png": cLogo,
-    "Bootstrap.svg": bootstrapLogo,
-    "Tailwind.svg.png": tailwindLogo
-  };
-
-  const projectImageMap: Record<string, string> = {
-    "icon-app.svg": iconAppImg,
-    "plinkk.png": plinkkImg,
-    "icon-design.svg": iconDesignImg,
-    "MySQL.svg": mySqlLogo,
-    "HubGames.jpeg": hubgamesImg,
-    "Jobi.png": jobiImg,
-    "DA Site JO.png": joSurfImg,
-    "my-avatar.png": defaultMetaImg,
-    "icon-dev.svg": iconDevImg
-  };
-
-  const getProjectImage = (imageName: string) => {
-    return projectImageMap[imageName] || defaultMetaImg;
-  };
-
-  const screenshotMap: Record<string, string> = {
-    "plinkk.png": plinkkImg,
-    "HubGames.jpeg": hubgamesImg,
-    "Jobi.png": jobiImg,
-    "DA Site JO.png": joSurfImg
-  };
+  import { projectImageMap, screenshotMap, defaultMetaImg } from "./lib/data/assets";
   
   // Tab state (only active in Preset mode)
   let activeTab = $state("about"); // 'about', 'resume', 'portfolio', 'contact'
+  
+  // Theme state for Blackboard/Whiteboard
+  let isDarkMode = $state(false);
+
+  onMount(() => {
+    isDarkMode = document.documentElement.classList.contains("dark");
+  });
+
+  function toggleTheme() {
+    isDarkMode = !isDarkMode;
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }
 
   // Project filtering state
   let projectFilter = $state("all"); // 'all', 'Web Development', 'Web Design', 'Applications'
@@ -128,6 +88,16 @@
       }, 5000);
     }
   }
+
+  // Template layout helper functions to avoid template-level @const declarations
+  const getEducationDotColor = (i: number) => ["bg-[var(--marker-red)]", "bg-[var(--marker-blue)]", "bg-[var(--marker-green)]"][i % 3];
+  const getExperienceDotColor = (i: number) => ["bg-[var(--marker-blue)]", "bg-[var(--marker-red)]", "bg-[var(--marker-green)]"][i % 3];
+  const getCompetenceColor = (i: number) => ["yellow", "pink", "blue", "green", "orange"][i % 5];
+  const getCompetenceTape = (i: number) => ["pink", "green", "orange", "purple", "blue", "yellow"][i % 6];
+  const getCompetenceRotation = (i: number) => (i % 2 === 0 ? "rotate-1" : "rotate--1");
+  const getProjectColor = (i: number) => ["yellow", "pink", "blue", "green", "orange"][i % 5];
+  const getProjectTape = (i: number) => ["blue", "purple", "green", "orange", "pink", "yellow"][i % 6];
+  const getProjectRotation = (i: number) => (i % 2 === 0 ? "rotate-1.5" : "rotate--1.5");
 </script>
 
 <!-- Main container holding sidebar, content, and the marker tray -->
@@ -158,6 +128,19 @@
         
         <!-- Red round magnet at top right -->
         <div class="magnet magnet-red top-3 right-3"></div>
+
+        <!-- Theme Toggle (Chalkboard Eraser / Handdrawn style) -->
+        <button 
+          onclick={toggleTheme}
+          class="absolute top-2.5 right-10 w-9 h-9 rounded-full bg-white dark:bg-zinc-800 border-2 border-slate-800 text-slate-800 dark:text-slate-100 flex items-center justify-center cursor-pointer border-sketch shadow-sm hover:scale-105 transition-transform z-30"
+          title={isDarkMode ? "Passer au Tableau Blanc" : "Passer au Tableau Noir"}
+        >
+          {#if isDarkMode}
+            <Sun size={15} />
+          {:else}
+            <Moon size={15} />
+          {/if}
+        </button>
 
         <div class="flex flex-col gap-6">
           <!-- Whiteboard Tabs Navbar (Handdrawn tape and marker style with highlighter colors) -->
@@ -222,10 +205,8 @@
                 </div>
                 <div class="border-l-2 border-dashed border-[var(--marker-color)] ml-4 pl-6 flex flex-col gap-6 relative">
                   {#each education as item, i}
-                    {@const dotColors = ["bg-[var(--marker-red)]", "bg-[var(--marker-blue)]", "bg-[var(--marker-green)]"]}
-                    {@const dotColor = dotColors[i % dotColors.length]}
                     <div class="relative py-1">
-                      <div class="absolute w-3.5 h-3.5 rounded-full {dotColor} -left-[31px] top-2.5 border-2 border-white"></div>
+                      <div class="absolute w-3.5 h-3.5 rounded-full {getEducationDotColor(i)} -left-[31px] top-2.5 border-2 border-white"></div>
                       <span class="text-sm font-hand font-bold text-[var(--marker-color)] uppercase tracking-wider">{item.date}</span>
                       <h4 class="text-base font-hand font-bold text-slate-900 mt-1">{item.title}</h4>
                       <p class="text-sm text-slate-500 font-marker mt-0.5">{item.subtitle}</p>
@@ -247,10 +228,8 @@
                 </div>
                 <div class="border-l-2 border-dashed border-[var(--marker-color)] ml-4 pl-6 flex flex-col gap-6 relative">
                   {#each experiences as item, i}
-                    {@const dotColors = ["bg-[var(--marker-blue)]", "bg-[var(--marker-red)]", "bg-[var(--marker-green)]"]}
-                    {@const dotColor = dotColors[i % dotColors.length]}
                     <div class="relative py-1">
-                      <div class="absolute w-3.5 h-3.5 rounded-full {dotColor} -left-[31px] top-2.5 border-2 border-white"></div>
+                      <div class="absolute w-3.5 h-3.5 rounded-full {getExperienceDotColor(i)} -left-[31px] top-2.5 border-2 border-white"></div>
                       <span class="text-sm font-hand font-bold text-[var(--marker-color)] uppercase tracking-wider">{item.date}</span>
                       <h4 class="text-base font-hand font-bold text-slate-900 mt-1">{item.title}</h4>
                       <p class="text-sm text-slate-500 font-marker mt-0.5">{item.subtitle}</p>
@@ -272,13 +251,8 @@
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {#each keyCompetences as competence, i}
-                    {@const colors = ["yellow", "pink", "blue", "green", "orange"]}
-                    {@const tapes = ["pink", "green", "orange", "purple", "blue", "yellow"]}
-                    {@const color = colors[i % colors.length]}
-                    {@const tapeColor = tapes[i % tapes.length]}
-                    {@const rotation = (i % 2 === 0 ? "rotate-1" : "rotate--1")}
-                    <div class="post-it post-it-{color} {rotation} rounded-xl p-4 flex flex-col gap-2 relative">
-                      <div class="tape-torn tape-{tapeColor} absolute top-[-9px] left-[35%] w-16 h-5 opacity-70"></div>
+                    <div class="post-it post-it-{getCompetenceColor(i)} {getCompetenceRotation(i)} rounded-xl p-4 flex flex-col gap-2 relative">
+                      <div class="tape-torn tape-{getCompetenceTape(i)} absolute top-[-9px] left-[35%] w-16 h-5 opacity-70"></div>
                       
                       <h4 class="text-sm font-hand font-bold text-slate-800">{competence.title}</h4>
                       <div class="flex flex-wrap gap-2 mt-2">
@@ -340,17 +314,12 @@
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
                 {#each filteredProjects as project, i}
-                  {@const colors = ["yellow", "pink", "blue", "green", "orange"]}
-                  {@const tapes = ["blue", "purple", "green", "orange", "pink", "yellow"]}
-                  {@const color = colors[i % colors.length]}
-                  {@const tapeColor = tapes[i % tapes.length]}
-                  {@const rotation = (i % 2 === 0 ? "rotate-1.5" : "rotate--1.5")}
-                  <div class="post-it post-it-{color} {rotation} rounded-2xl flex flex-col h-full group">
-                    <div class="tape-torn tape-{tapeColor} absolute top-[-12px] left-[35%] w-20 h-6 opacity-80"></div>
+                  <div class="post-it post-it-{getProjectColor(i)} {getProjectRotation(i)} rounded-2xl flex flex-col h-full group">
+                    <div class="tape-torn tape-{getProjectTape(i)} absolute top-[-12px] left-[35%] w-20 h-6 opacity-80"></div>
                     
                     <!-- Polaroid photo container -->
                     <div class="px-3 pt-3 pb-6 bg-white border border-slate-250 shadow-md rotate-[-1deg] mx-4 mt-5 mb-1 relative border-sketch z-10">
-                      <div class="tape-torn tape-{tapes[(i + 2) % tapes.length]} absolute top-[-8px] left-[25%] w-14 h-4.5 rotate-[-2deg] opacity-75"></div>
+                      <div class="tape-torn tape-{getProjectTape(i + 2)} absolute top-[-8px] left-[25%] w-14 h-4.5 rotate-[-2deg] opacity-75"></div>
                       <div class="w-full h-32 md:h-36 overflow-hidden bg-slate-50 border border-slate-200">
                         <ProjectMockup category={project.category} image={screenshotMap[project.image]} />
                       </div>

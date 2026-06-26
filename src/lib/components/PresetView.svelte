@@ -1,50 +1,23 @@
 <script lang="ts">
   import { Sparkles, Eye, Github, Quote } from "lucide-svelte";
   import { projects } from "../data/projects";
-  import { skillCategories, education, experiences, biography, services, testimonials, personalInfo } from "../data/resume";
+  import { skillCategories, biography, services, testimonials } from "../data/resume";
   import Papicon from "./Papicon.svelte";
   import ProjectMockup from "./ProjectMockup.svelte";
   
-  // Import skill logos so Vite bundles and hashes them correctly
-  import pgLogo from "../../../assets/images/Postgresql_elephant.png";
-  import mySqlLogo from "../../../assets/images/MySQL.svg";
-  import sqlLogo from "../../../assets/images/sql.png";
-  import phpLogo from "../../../assets/images/PHP.png";
-  import phpMyAdminLogo from "../../../assets/images/phpmyadmin.png";
-  import javaLogo from "../../../assets/images/java.png";
-  import pythonLogo from "../../../assets/images/Python.png";
-  import cLogo from "../../../assets/images/c.png";
-  import bootstrapLogo from "../../../assets/images/Bootstrap.svg";
-  import tailwindLogo from "../../../assets/images/Tailwind.svg.png";
-
-  // Import project screenshots for Vite static bundling
-  import plinkkImg from "../../../assets/images/plinkk.png";
-  import hubgamesImg from "../../../assets/images/HubGames.jpeg";
-  import jobiImg from "../../../assets/images/Jobi.png";
-  import joSurfImg from "../../../assets/images/DA Site JO.png";
-
-  const logoMap: Record<string, string> = {
-    "Postgresql_elephant.png": pgLogo,
-    "MySQL.svg": mySqlLogo,
-    "sql.png": sqlLogo,
-    "PHP.png": phpLogo,
-    "phpmyadmin.png": phpMyAdminLogo,
-    "java.png": javaLogo,
-    "Python.png": pythonLogo,
-    "c.png": cLogo,
-    "Bootstrap.svg": bootstrapLogo,
-    "Tailwind.svg.png": tailwindLogo
-  };
-
-  const screenshotMap: Record<string, string> = {
-    "plinkk.png": plinkkImg,
-    "HubGames.jpeg": hubgamesImg,
-    "Jobi.png": jobiImg,
-    "DA Site JO.png": joSurfImg
-  };
+  import { logoMap, screenshotMap } from "../data/assets";
 
   // Filter featured projects for preset view
   const featuredProjects = projects.filter(p => p.featured);
+
+  // Template layout helper functions to avoid template-level @const declarations
+  const getPostItColor = (i: number) => ["yellow", "pink", "blue", "green", "orange"][i % 5];
+  const getRotationClass = (i: number) => (i % 2 === 0 ? "rotate-1" : "rotate--1.5");
+  const getFeaturedRotation = (i: number) => (i % 2 === 0 ? "rotate-1.5" : "rotate--1");
+  const getTapeColor = (i: number) => ["tape-blue", "tape-yellow", "tape-purple"][i % 3];
+  const getMagnetColor4 = (i: number) => ["red", "blue", "green", "yellow"][i % 4];
+  const getMagnetColor3 = (i: number) => ["red", "blue", "green"][i % 3];
+  const getTestimonialRotation = (i: number) => (i % 2 === 0 ? "rotate-1.5" : "rotate--1.5");
 </script>
 
 <div class="flex flex-col gap-10 animate-fade-in text-slate-800">
@@ -73,10 +46,7 @@
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
       {#each services as service, i}
-        {@const colors = ["yellow", "pink", "blue", "green", "orange"]}
-        {@const color = colors[i % colors.length]}
-        {@const rotation = (i % 2 === 0 ? "rotate-1" : "rotate--1.5")}
-        <div class="post-it post-it-{color} rounded-xl p-5 flex flex-col gap-3 {rotation} shadow-md border-sketch">
+        <div class="post-it post-it-{getPostItColor(i)} rounded-xl p-5 flex flex-col gap-3 {getRotationClass(i)} shadow-md border-sketch">
           <!-- Tape at the top -->
           <div class="tape-torn {service.tapeColor || 'tape-pink'} absolute top-[-9px] left-[32%] w-16 h-5 opacity-70"></div>
           <div class="text-slate-850">
@@ -100,12 +70,9 @@
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-3">
       {#each featuredProjects as project, i}
-        {@const rotation = (i % 2 === 0 ? "rotate-1.5" : "rotate--1")}
-        {@const tapes = ["tape-blue", "tape-yellow", "tape-purple"]}
-        {@const tapeColor = tapes[i % tapes.length]}
-        <div class="premium-card rounded-2xl flex flex-col h-full group relative {rotation} border-sketch bg-white shadow-sm">
+        <div class="premium-card rounded-2xl flex flex-col h-full group relative {getFeaturedRotation(i)} border-sketch bg-white shadow-sm">
           <!-- Tape angled top-left -->
-          <div class="tape-torn {tapeColor} absolute top-[-10px] left-[-6px] w-14 h-4.5 rotate-[-25deg] opacity-75"></div>
+          <div class="tape-torn {getTapeColor(i)} absolute top-[-10px] left-[-6px] w-14 h-4.5 rotate-[-25deg] opacity-75"></div>
           
           <!-- Polaroid photo container -->
           <div class="px-2.5 pt-2.5 pb-5 bg-white border border-slate-200 shadow-md rotate-[1.5deg] mx-4 mt-5 mb-1 relative border-sketch z-10">
@@ -166,10 +133,9 @@
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       {#each skillCategories as category, i}
-        {@const magnetColor = ["red", "blue", "green", "yellow"][i % 4]}
         <div class="notebook-sheet border-2 border-slate-800 rounded-xl p-5 flex flex-col gap-3 relative pt-6 pl-9 shadow-sm">
           <!-- Magnet pins -->
-          <div class="magnet magnet-{magnetColor} top-2 right-2"></div>
+          <div class="magnet magnet-{getMagnetColor4(i)} top-2 right-2"></div>
           
           <!-- Notebook binder lines on the left -->
           <div class="notebook-spiral-holes-left">
@@ -210,11 +176,9 @@
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-3">
       {#each testimonials as item, i}
-        {@const magnetColor = ["red", "blue", "green"][i % 3]}
-        {@const rotation = (i % 2 === 0 ? "rotate-1.5" : "rotate--1.5")}
-        <div class="glass-panel border-2 border-slate-800 rounded-2xl p-6 flex flex-col gap-4 relative {rotation} border-sketch bg-white shadow-md hover:shadow-lg transition-shadow duration-200">
+        <div class="glass-panel border-2 border-slate-800 rounded-2xl p-6 flex flex-col gap-4 relative {getTestimonialRotation(i)} border-sketch bg-white shadow-md hover:shadow-lg transition-shadow duration-200">
           <!-- Centered Magnet pinning the recommendation -->
-          <div class="magnet magnet-{magnetColor} absolute -top-3 left-1/2 -translate-x-1/2 w-5.5 h-5.5 shadow-md"></div>
+          <div class="magnet magnet-{getMagnetColor3(i)} absolute -top-3 left-1/2 -translate-x-1/2 w-5.5 h-5.5 shadow-md"></div>
           
           <div class="text-slate-200 absolute right-4 top-4">
             <Quote size={36} />
