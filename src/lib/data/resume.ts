@@ -253,7 +253,7 @@ export const projects: Project[] = [
     github: "https://github.com/SAE-COBREC/main",
     image: "icon-app.svg",
     tags: ["PHP", "JavaScript", "SQL", "BUT Informatique"],
-    featured: true
+    featured: false
   },
   {
     id: "plinkk-fr",
@@ -274,7 +274,7 @@ export const projects: Project[] = [
     url: "https://www.figma.com/design/xjPgRmLmqtR16vWkyuXaon/Untitled?node-id=0-1&p=f&t=AeEWavMzmH3kWmqO-0",
     image: "icon-design.svg",
     tags: ["Figma", "UI/UX", "Design System", "Iconography"],
-    featured: true
+    featured: false
   },
   {
     id: "synapsejs",

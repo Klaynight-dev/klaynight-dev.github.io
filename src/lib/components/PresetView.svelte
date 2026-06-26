@@ -98,7 +98,7 @@
       Projets Phares
     </h2>
     
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-3">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-3">
       {#each featuredProjects as project, i}
         {@const rotation = (i % 2 === 0 ? "rotate-1.5" : "rotate--1")}
         {@const tapes = ["tape-blue", "tape-yellow", "tape-purple"]}
@@ -110,7 +110,7 @@
           <!-- Polaroid photo container -->
           <div class="px-2.5 pt-2.5 pb-5 bg-white border border-slate-200 shadow-md rotate-[1.5deg] mx-4 mt-5 mb-1 relative border-sketch z-10">
             <div class="tape-torn {['tape-pink', 'tape-green', 'tape-orange'][i % 3]} absolute top-[-8px] left-[30%] w-12 h-4 rotate-[1deg] opacity-75"></div>
-            <div class="w-full h-28 overflow-hidden bg-slate-50 border border-slate-200">
+            <div class="w-full h-36 md:h-40 overflow-hidden bg-slate-50 border border-slate-200">
               <ProjectMockup category={project.category} image={screenshotMap[project.image]} />
             </div>
           </div>
@@ -208,7 +208,7 @@
       Recommandations
     </h2>
     
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-1">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-1">
       {#each testimonials as item, i}
         {@const magnetColor = ["red", "blue", "green"][i % 3]}
         {@const rotation = (i % 2 === 0 ? "rotate-1.5" : "rotate--1.5")}
