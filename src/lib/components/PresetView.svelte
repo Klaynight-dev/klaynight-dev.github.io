@@ -1,10 +1,20 @@
 <script lang="ts">
-  import { Sparkles, Eye, Github, Quote } from "lucide-svelte";
-  import { projects } from "../data/projects";
-  import { skillCategories, education, experiences, biography, services, testimonials, personalInfo } from "../data/resume";
+  import { PenTool, Code, AppWindow, Quote, ArrowRight } from "lucide-svelte";
+  import { projects, type Project } from "../data/projects";
+  import { skillCategories, biography, services, testimonials, personalInfo } from "../data/resume";
+  import { domainColors } from "../data/domains";
   import Papicon from "./Papicon.svelte";
-  import ProjectMockup from "./ProjectMockup.svelte";
-  
+  import ProjectGallery from "./ProjectGallery.svelte";
+  import { reveal } from "../actions/reveal";
+
+  let {
+    onViewPortfolio,
+    onSelectProject
+  }: {
+    onViewPortfolio?: () => void;
+    onSelectProject?: (project: Project) => void;
+  } = $props();
+
   // Import skill logos so Vite bundles and hashes them correctly
   import pgLogo from "../../../assets/images/Postgresql_elephant.png";
   import mySqlLogo from "../../../assets/images/MySQL.svg";
@@ -21,7 +31,9 @@
   import plinkkImg from "../../../assets/images/plinkk.png";
   import hubgamesImg from "../../../assets/images/HubGames.jpeg";
   import jobiImg from "../../../assets/images/Jobi.png";
-  import joSurfImg from "../../../assets/images/DA Site JO.png";
+  import joSurfImg from "../../../assets/images/jo-surf-pages.png";
+  import openformsImg from "../../../assets/images/openforms-builder.png";
+  import papiconsSheet from "../../../assets/images/papicons-sheet.svg";
 
   const logoMap: Record<string, string> = {
     "Postgresql_elephant.png": pgLogo,
@@ -40,50 +52,80 @@
     "plinkk.png": plinkkImg,
     "HubGames.jpeg": hubgamesImg,
     "Jobi.png": jobiImg,
-    "DA Site JO.png": joSurfImg
+    "jo-surf-pages.png": joSurfImg,
+    "openforms-builder.png": openformsImg,
+    "papicons-sheet.svg": papiconsSheet
   };
+
+  // Icons relevant to each service's real subject (design tool, web code, app window)
+  const serviceIcons = [PenTool, Code, AppWindow];
 
   // Filter featured projects for preset view
   const featuredProjects = projects.filter(p => p.featured);
+
+  // Stagger delay for cards inside a grid, capped so a long list doesn't
+  // drag the last items in for a full second.
+  const staggerDelay = (i: number) => Math.min(i, 6) * 60;
+
+  // Section index: reused as anchors for the jump-nav and the eyebrow labels below
+  const sections = [
+    { id: "profil", number: "01", label: "Profil" },
+    { id: "savoir-faire", number: "02", label: "Savoir-faire" },
+    { id: "selection", number: "03", label: "Sélection" },
+    { id: "stack", number: "04", label: "Stack" },
+    { id: "recommandations", number: "05", label: "Recommandations" }
+  ];
 </script>
 
-<div class="flex flex-col gap-10 animate-fade-in text-slate-800">
+<div class="flex flex-col gap-12 animate-fade-in">
+  <!-- Section jump-nav: quick way to skip a long page, smooth-scrolled -->
+  <nav class="flex flex-wrap gap-2" aria-label="Sections de la page">
+    {#each sections as section}
+      <a href="#{section.id}" class="pill pill-neutral px-3.5 py-1.5 text-xs">
+        {section.label}
+      </a>
+    {/each}
+  </nav>
+
   <!-- Bio Section -->
-  <section class="flex flex-col gap-4 relative">
-    <h2 class="text-xl font-hand font-bold text-slate-900 flex items-center gap-2">
-      <span class="w-2 h-6 bg-[var(--marker-color)] rounded-full"></span>
-      À propos de moi
+  <section id="profil" class="flex flex-col gap-4 scroll-mt-6" use:reveal>
+    <div class="flex items-center gap-2">
+      <span class="eyebrow">{sections[0].number} · {sections[0].label}</span>
+    </div>
+    <h2 class="text-3xl md:text-4xl font-display font-semibold text-ink leading-tight max-w-2xl">
+      Enchanté, moi c'est <span style="color: var(--accent);">Elouan</span> : je développe des
+      applications web et mobiles pensées jusque dans les détails.
     </h2>
-    
-    <div class="text-slate-700 leading-relaxed space-y-4 text-base font-sans pl-1">
+
+    <div class="text-ink-muted leading-relaxed space-y-4 text-base max-w-2xl">
       {#each biography as paragraph}
-        <p>
-          {@html paragraph}
-        </p>
+        <p>{paragraph}</p>
       {/each}
     </div>
   </section>
 
-  <!-- Core Services as yellow, pink, blue post-its -->
-  <section class="flex flex-col gap-4">
-    <h2 class="text-xl font-hand font-bold text-slate-900 flex items-center gap-2">
-      <span class="w-2 h-6 bg-[var(--marker-color)] rounded-full"></span>
-      Ce que je fais
-    </h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+  <!-- Core Services -->
+  <section id="savoir-faire" class="flex flex-col gap-4 scroll-mt-6" use:reveal>
+    <span class="eyebrow">{sections[1].number} · {sections[1].label}</span>
+    <h2 class="text-2xl md:text-3xl font-display font-semibold text-ink">Ce que je fais</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
       {#each services as service, i}
-        {@const colors = ["yellow", "pink", "blue", "green", "orange"]}
-        {@const color = colors[i % colors.length]}
-        {@const rotation = (i % 2 === 0 ? "rotate-1" : "rotate--1.5")}
-        <div class="post-it post-it-{color} rounded-xl p-5 flex flex-col gap-3 {rotation} shadow-md border-sketch">
-          <!-- Tape at the top -->
-          <div class="tape-torn {service.tapeColor || 'tape-pink'} absolute top-[-9px] left-[32%] w-16 h-5 opacity-70"></div>
-          <div class="text-slate-850">
-            <Sparkles size={20} />
-          </div>
-          <h3 class="font-hand font-bold text-slate-900 text-lg">{service.title}</h3>
-          <p class="text-sm text-slate-700 leading-relaxed font-marker">
+        {@const Icon = serviceIcons[i % serviceIcons.length]}
+        {@const domain = domainColors[service.domain]}
+        <div
+          class="card card-interactive group p-5 flex flex-col gap-3"
+          style="--card-accent: {domain.hue};"
+          use:reveal={{ delay: staggerDelay(i) }}
+        >
+          <span
+            class="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 ease-out group-hover:scale-105 group-hover:rotate-3"
+            style="background: {domain.bg}; color: {domain.text};"
+          >
+            <Icon size={19} />
+          </span>
+          <h3 class="font-display font-semibold text-ink text-lg">{service.title}</h3>
+          <p class="text-sm text-ink-muted leading-relaxed">
             {service.description}
           </p>
         </div>
@@ -91,108 +133,57 @@
     </div>
   </section>
 
-  <!-- Featured Projects held by masking tapes -->
-  <section class="flex flex-col gap-4">
-    <h2 class="text-xl font-hand font-bold text-slate-900 flex items-center gap-2">
-      <span class="w-2 h-6 bg-[var(--marker-color)] rounded-full"></span>
-      Projets Phares
-    </h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-3">
-      {#each featuredProjects as project, i}
-        {@const rotation = (i % 2 === 0 ? "rotate-1.5" : "rotate--1")}
-        {@const tapes = ["tape-blue", "tape-yellow", "tape-purple"]}
-        {@const tapeColor = tapes[i % tapes.length]}
-        <div class="premium-card rounded-2xl flex flex-col h-full group relative {rotation} border-sketch bg-white shadow-sm">
-          <!-- Tape angled top-left -->
-          <div class="tape-torn {tapeColor} absolute top-[-10px] left-[-6px] w-14 h-4.5 rotate-[-25deg] opacity-75"></div>
-          
-          <!-- Polaroid photo container -->
-          <div class="px-2.5 pt-2.5 pb-5 bg-white border border-slate-200 shadow-md rotate-[1.5deg] mx-4 mt-5 mb-1 relative border-sketch z-10">
-            <div class="tape-torn {['tape-pink', 'tape-green', 'tape-orange'][i % 3]} absolute top-[-8px] left-[30%] w-12 h-4 rotate-[1deg] opacity-75"></div>
-            <div class="w-full h-36 md:h-40 overflow-hidden bg-slate-50 border border-slate-200">
-              <ProjectMockup category={project.category} image={screenshotMap[project.image]} />
-            </div>
-          </div>
+  <!-- Featured Projects -->
+  <section id="selection" class="flex flex-col gap-4 scroll-mt-6" use:reveal>
+    <span class="eyebrow">{sections[2].number} · {sections[2].label}</span>
+    <h2 class="text-2xl md:text-3xl font-display font-semibold text-ink">Projets phares</h2>
 
-          <div class="p-5 flex flex-col gap-3 flex-1 mt-1">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-hand font-bold tracking-wider uppercase px-2 py-0.5 bg-slate-100 border border-slate-300 text-slate-700 rounded-md">
-                {project.category}
-              </span>
-            </div>
-            
-            <h3 class="text-lg font-hand font-bold text-slate-900 group-hover:text-[var(--marker-color)] transition-colors">
-               {project.title}
-            </h3>
-            
-            <p class="text-sm text-slate-600 leading-relaxed flex-1 font-marker">
-              {project.description}
-            </p>
-
-            <div class="flex flex-wrap gap-1 mt-2">
-              {#each project.tags as tag}
-                <span class="text-xs px-1.5 py-0.5 bg-slate-50 text-slate-500 rounded border border-slate-200 font-hand">
-                  #{tag}
-                </span>
-              {/each}
-            </div>
-          </div>
-
-          <div class="px-5 py-3 bg-slate-50/80 border-t border-slate-250 rounded-b-2xl flex items-center justify-between font-hand font-bold text-sm">
-            <a href={project.url} target="_blank" rel="noopener noreferrer" 
-               class="text-slate-700 hover:text-[var(--marker-color)] flex items-center gap-1.5 transition-colors">
-              <Eye size={13} /> Voir le site
-            </a>
-            {#if project.github}
-              <a href={project.github} target="_blank" rel="noopener noreferrer" 
-                 class="text-slate-500 hover:text-[var(--marker-color)] transition-colors"
-                 title="Code Source">
-                <Github size={15} />
-              </a>
-            {/if}
-          </div>
-        </div>
-      {/each}
+    <div class="pt-1">
+      <ProjectGallery
+        items={featuredProjects}
+        screenshots={screenshotMap}
+        visitLabel="Voir le site"
+        onSelect={onSelectProject}
+      />
     </div>
+
+    {#if onViewPortfolio}
+      <div class="flex justify-end">
+        <button type="button" onclick={onViewPortfolio} class="pill pill-neutral px-4 py-2 text-xs">
+          Voir tout le portfolio <ArrowRight size={12} />
+        </button>
+      </div>
+    {/if}
   </section>
 
-  <!-- Skills Category summary as notebook binder inserts held by magnets -->
-  <section class="flex flex-col gap-4">
-    <h2 class="text-xl font-hand font-bold text-slate-900 flex items-center gap-2">
-      <span class="w-2 h-6 bg-[var(--marker-color)] rounded-full"></span>
-      Mes Compétences
-    </h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {#each skillCategories as category, i}
-        {@const magnetColor = ["red", "blue", "green", "yellow"][i % 4]}
-        <div class="notebook-sheet border-2 border-slate-800 rounded-xl p-5 flex flex-col gap-3 relative pt-6 pl-9 shadow-sm">
-          <!-- Magnet pins -->
-          <div class="magnet magnet-{magnetColor} top-2 right-2"></div>
-          
-          <!-- Notebook binder lines on the left -->
-          <div class="notebook-spiral-holes-left">
-            <div class="notebook-spiral-hole-left"></div>
-            <div class="notebook-spiral-hole-left"></div>
-            <div class="notebook-spiral-hole-left"></div>
-          </div>
+  <!-- Skills -->
+  <section id="stack" class="flex flex-col gap-4 scroll-mt-6" use:reveal>
+    <span class="eyebrow">{sections[3].number} · {sections[3].label}</span>
+    <h2 class="text-2xl md:text-3xl font-display font-semibold text-ink">Mes compétences</h2>
 
-          <h3 class="text-sm font-hand font-bold text-slate-800 uppercase tracking-wider pl-1">{category.name}</h3>
-          
-          <div class="flex flex-wrap gap-2 mt-1 pl-1">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
+      {#each skillCategories as category, i}
+        {@const domain = domainColors[category.domain]}
+        <div
+          class="card p-5 flex flex-col gap-3 border-t-[3px]"
+          style="border-top-color: {domain.hue};"
+          use:reveal={{ delay: staggerDelay(i) }}
+        >
+          <h3 class="text-sm font-semibold uppercase tracking-wide" style="color: {domain.text};">{category.name}</h3>
+
+          <div class="flex flex-wrap gap-2">
             {#each category.skills as skill}
-              <div class="inline-flex items-center gap-2 px-2.5 py-1.5 bg-white border border-slate-350 rounded-lg text-sm text-slate-850 hover:border-slate-500 transition-colors font-sans shadow-sm hover:scale-102">
+              <div class="pill pill-neutral px-3 py-1.5 text-xs">
                 {#if skill.type === 'img' && skill.icon && logoMap[skill.icon]}
-                  <img src={logoMap[skill.icon]} alt={skill.name} class="w-4 h-4 object-contain shrink-0" />
+                  <img src={logoMap[skill.icon]} alt="" class="w-3.5 h-3.5 object-contain shrink-0" />
                 {:else if skill.type === 'cdn' && skill.icon}
-                  <img src={skill.icon.startsWith('http') ? skill.icon : `https://cdn.simpleicons.org/${skill.icon}`} alt={skill.name} class="w-4 h-4 object-contain shrink-0" />
+                  <img src={skill.icon.startsWith('http') ? skill.icon : `https://cdn.simpleicons.org/${skill.icon}`} alt="" class="w-3.5 h-3.5 object-contain shrink-0" />
                 {:else}
-                  <span class="text-[var(--marker-color)] shrink-0 flex items-center justify-center">
-                    <Papicon icon={skill.icon || 'code'} size={13} />
+                  <span class="shrink-0 flex items-center justify-center" style="color: var(--accent);">
+                    <Papicon icon={skill.icon || 'code'} size={12} />
                   </span>
                 {/if}
-                <span class="font-medium text-slate-800">{skill.name}</span>
+                <span>{skill.name}</span>
               </div>
             {/each}
           </div>
@@ -201,42 +192,35 @@
     </div>
   </section>
 
-  <!-- Testimonials Grid with board magnets -->
-  <section class="flex flex-col gap-4">
-    <h2 class="text-xl font-hand font-bold text-slate-900 flex items-center gap-2">
-      <span class="w-2 h-6 bg-[var(--marker-color)] rounded-full"></span>
-      Recommandations
-    </h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-3">
+  <!-- Testimonials -->
+  <section id="recommandations" class="flex flex-col gap-4 scroll-mt-6" use:reveal>
+    <span class="eyebrow">{sections[4].number} · {sections[4].label}</span>
+    <h2 class="text-2xl md:text-3xl font-display font-semibold text-ink">Ce qu'on dit de moi</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
       {#each testimonials as item, i}
-        {@const magnetColor = ["red", "blue", "green"][i % 3]}
-        {@const rotation = (i % 2 === 0 ? "rotate-1.5" : "rotate--1.5")}
-        <div class="glass-panel border-2 border-slate-800 rounded-2xl p-6 flex flex-col gap-4 relative {rotation} border-sketch bg-white shadow-md hover:shadow-lg transition-shadow duration-200">
-          <!-- Centered Magnet pinning the recommendation -->
-          <div class="magnet magnet-{magnetColor} absolute -top-3 left-1/2 -translate-x-1/2 w-5.5 h-5.5 shadow-md"></div>
-          
-          <div class="text-slate-200 absolute right-4 top-4">
-            <Quote size={36} />
-          </div>
-          
-          <p class="text-lg md:text-xl text-slate-850 leading-relaxed font-cursive flex-1 z-10 pt-3">
-            "{item.text}"
+        <div class="card p-6 flex flex-col gap-4 relative" use:reveal={{ delay: staggerDelay(i) }}>
+          <span class="absolute right-5 top-5" style="color: var(--accent-soft);">
+            <Quote size={32} />
+          </span>
+
+          <p class="font-display text-lg text-ink leading-relaxed flex-1 z-10 pr-6">
+            {item.text}
           </p>
 
-          <div class="flex items-center gap-3.5 border-t border-dashed border-slate-300 pt-4 mt-2">
+          <div class="flex items-center gap-3.5 border-t border-border pt-4">
             {#if item.avatar.startsWith('http')}
-              <div class="w-12 h-12 rounded-xl overflow-hidden bg-white border-2 border-slate-700 flex items-center justify-center p-1 shadow-sm border-sketch">
+              <div class="w-11 h-11 rounded-xl overflow-hidden bg-surface-muted border border-border flex items-center justify-center p-1 shrink-0">
                 <img src={item.avatar} alt={item.name} class="w-full h-full object-contain" />
               </div>
             {:else}
-              <div class="w-12 h-12 rounded-xl bg-slate-100 border-2 border-slate-700 flex items-center justify-center text-[var(--marker-color)] font-hand font-bold text-base shadow-sm border-sketch">
+              <div class="w-11 h-11 rounded-xl bg-surface-muted border border-border flex items-center justify-center font-display font-semibold text-sm shrink-0" style="color: var(--accent);">
                 {item.name[0]}
               </div>
             {/if}
             <div class="min-w-0">
-              <h4 class="text-base font-hand font-bold text-slate-900 truncate">{item.name}</h4>
-              <p class="text-sm text-slate-600 font-marker truncate leading-none mt-1.5">{item.role}</p>
+              <h4 class="text-sm font-semibold text-ink truncate">{item.name}</h4>
+              <p class="text-xs text-ink-muted truncate mt-0.5">{item.role}</p>
             </div>
           </div>
         </div>

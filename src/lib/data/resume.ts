@@ -9,6 +9,8 @@ export interface TimelineItem {
 
 export interface SkillCategory {
   name: string;
+  /** Domaine de couleur (voir domains.ts) — associe la carte à sa teinte dans la palette. */
+  domain: import('./domains').Domain;
   skills: { name: string; icon?: string; type: 'ion' | 'img' | 'lucide' | 'cdn' }[];
 }
 
@@ -25,9 +27,18 @@ export interface Project {
   description: string;
   url: string;
   github?: string;
+  /** Nom de fichier d'un visuel reel, chaine vide si le projet n'en a pas encore. */
   image: string;
+  /** Alternative textuelle du visuel, obligatoire des que `image` est renseigne. */
+  imageAlt?: string;
   tags: string[];
   featured?: boolean;
+  /**
+   * Format de tuile dans la galerie. Decoule du contenu a montrer :
+   * `wide` pour les projets qui ont une interface large a lire,
+   * `tall` pour les pieces graphiques au format portrait.
+   */
+  tile?: 'wide' | 'tall';
 }
 
 // ==========================================
@@ -58,21 +69,21 @@ export const biography = [
   "En 2024, j'ai rejoint l'IUT de Lannion en BUT Informatique pour consolider mes bases théoriques et pratiques dans le développement d'applications web et mobiles complexes. J'administre également mon propre nom de domaine klaynight.fr que j'utilise pour déployer et tester mes projets personnels."
 ];
 
-export const services = [
+export const services: { title: string; description: string; domain: import('./domains').Domain }[] = [
   {
     title: "Design Web",
     description: "Création de maquettes interactives et d'interfaces utilisateur modernes et engageantes sur Figma.",
-    tapeColor: "tape-pink"
+    domain: "design"
   },
   {
     title: "Développement Web",
     description: "Intégration d'applications web modernes réactives en utilisant les frameworks actuels (Svelte, Vite).",
-    tapeColor: "tape-green"
+    domain: "webdev"
   },
   {
     title: "Développement App",
     description: "Développement d'outils et de logiciels de gestion performants avec interface graphique en Java/C/Python.",
-    tapeColor: "tape-orange"
+    domain: "apps"
   }
 ];
 
@@ -114,9 +125,27 @@ export const education: TimelineItem[] = [
 
 export const experiences: TimelineItem[] = [
   {
+    title: "Ingénieur Full Stack",
+    subtitle: "Labocéa · Stage puis CDD · Ploufragan",
+    date: "Avr. 2026 - Août 2026",
+    description: "Développement de MyData en ingénierie de production : remise en état de plus de 60 % du code déprécié, site 10 à 24 fois plus rapide et base de code allégée de 4 Mo à 1,3 Mo. Optimisation de l'application mobile, intégration de nouvelles technologies et mise en place de tests automatisés. Stage prolongé en CDD à l'issue de la mission."
+  },
+  {
+    title: "Livreur",
+    subtitle: "Amazon",
+    date: "Juin 2025 - Août 2025",
+    description: "Mission saisonnière de trois mois en livraison de colis."
+  },
+  {
+    title: "Responsable de labyrinthe",
+    subtitle: "La ferme de Sous la Ville · CDD · Lantic",
+    date: "Juin 2024 - Août 2024",
+    description: "Entretien du site, vente des entrées, animation et gestion des ventes annexes. Création d'animations ludiques pour les visiteurs, gestion des stocks et entretien des espaces de jeu ainsi que de l'escape game."
+  },
+  {
     title: "plinkk.fr",
     subtitle: "Créateur & Développeur Principal",
-    date: "2025 — Aujourd'hui",
+    date: "2025 - Aujourd'hui",
     description: "Conception, développement et maintenance d'un service d'agrégation de liens thémable en temps réel, déployé avec Bun, EJS et TypeScript.",
     url: "https://github.com/Klaynight-dev/links_website_template",
     urlLabel: "Repository GitHub"
@@ -124,7 +153,7 @@ export const experiences: TimelineItem[] = [
   {
     title: "Chef de Projet HubGames",
     subtitle: "Gestion de projet & Développement",
-    date: "2020 — Aujourd'hui",
+    date: "2020 - Aujourd'hui",
     description: "Regroupement et développement d'une suite de jeux web et d'applications utilitaires en équipe.",
     url: "https://hubgames.klaynight.fr",
     urlLabel: "Visiter HubGames"
@@ -142,6 +171,7 @@ export const experiences: TimelineItem[] = [
 export const skillCategories: SkillCategory[] = [
   {
     name: "Frameworks & Langages Web",
+    domain: "webdev",
     skills: [
       { name: "Svelte / SvelteKit", icon: "svelte", type: "cdn" },
       { name: "TypeScript", icon: "typescript", type: "cdn" },
@@ -156,6 +186,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     name: "Backend & Bases de Données",
+    domain: "backend",
     skills: [
       { name: "Bun", icon: "bun", type: "cdn" },
       { name: "Prisma ORM", icon: "prisma", type: "cdn" },
@@ -170,6 +201,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     name: "Cloud, DevOps & Réseaux",
+    domain: "cloud",
     skills: [
       { name: "Cloudflare", icon: "cloudflare", type: "cdn" },
       { name: "Docker", icon: "docker", type: "cdn" },
@@ -182,6 +214,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     name: "Langages Applicatifs",
+    domain: "apps",
     skills: [
       { name: "Java", icon: "java.png", type: "img" },
       { name: "Python", icon: "Python.png", type: "img" },
@@ -191,6 +224,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     name: "Design & Outils",
+    domain: "design",
     skills: [
       { name: "Figma", icon: "figma", type: "cdn" },
       { name: "Canva", icon: "https://cdn.jsdelivr.net/npm/simple-icons@14.0.0/icons/canva.svg", type: "cdn" },
@@ -245,120 +279,142 @@ export const keyCompetences: KeyCompetence[] = [
 
 export const projects: Project[] = [
   {
-    id: "sae-cobrec",
-    title: "SAE Cobrec",
+    id: "openforms",
+    title: "OpenForms",
     category: "Web Development",
-    description: "Projet universitaire collaboratif pour la SAE Cobrec. Une entreprise fictive qui commande un site nommé 'Alizon' qui est une marketplace qui met en relation des producteurs locaux Bretons avec des consommateurs. Devleloppement du Front Office et du Back Office avec gestion de base de données et outils de visualisation de données.",
-    url: "https://github.com/SAE-COBREC/main",
-    github: "https://github.com/SAE-COBREC/main",
-    image: "icon-app.svg",
-    tags: ["PHP", "JavaScript", "SQL", "BUT Informatique"],
-    featured: false
+    description: "Alternative auto-hébergeable à Google Forms, développée pour l'association Humanitour. Constructeur de formulaires par glisser-déposer (onze types de champs, validation par regex et bornes), tableur d'administration maison avec formules SUM, AVG, MEDIAN et import/export xlsx, consentement RGPD explicite et chiffrement AES-256-GCM des réponses en base.",
+    url: "https://forms.humanitour.fr/",
+    github: "https://github.com/Klaynight-dev/Openforms",
+    image: "openforms-builder.png",
+    imageAlt: "Éditeur de formulaire OpenForms : palette de champs à gauche, formulaire au centre, panneau de configuration du champ à droite.",
+    tags: ["SvelteKit", "ElysiaJS", "Prisma", "PostgreSQL", "Bun", "Docker"],
+    featured: true,
+    tile: "wide"
   },
   {
-    id: "sae-cobrec-design",
-    title: "SAE Cobrec (Design UI/UX)",
-    category: "Web Design",
-    description: "Conception graphique et UI/UX sur Figma de la marketplace 'Alizon' pour le projet universitaire SAE Cobrec. Création de chartes graphiques et maquettes interactives pour les espaces clients, producteurs et administrateurs.",
-    url: "https://www.figma.com/design/oRhwvXX8hZrHIdutk3YQZt/MarketPlace?node-id=0-1&t=0vrF8PrjS2lurRae-1",
-    image: "icon-design.svg",
-    tags: ["Figma", "UI/UX", "Design System", "SAE Cobrec"],
-    featured: false
+    id: "aellyel",
+    title: "Aellyel",
+    category: "Web Development",
+    description: "Hub de découverte de jeux indépendants rangés par humeur plutôt que par genre : bulle cozy, récit poétique, exploration calme, pixel nostalgie. Tirage au sort d'un jeu, notes et commentaires, favoris, liste de souhaits, suggestions de joueurs modérées depuis un back-office.",
+    url: "https://aellyel.klaynight.fr/",
+    image: "",
+    tags: ["SvelteKit", "ElysiaJS", "Prisma", "PostgreSQL", "Redis", "Bun"],
+    featured: true
   },
   {
     id: "plinkk-fr",
     title: "Plinkk.fr",
     category: "Web Development",
-    description: "Service de centralisation de liens personnalisé et hébergé en France, offrant des thèmes et des animations avancées.",
+    description: "Service d'agrégation de liens hébergé en France : chaque profil est une page personnalisable en temps réel, avec bibliothèque de thèmes, animations et éditeur visuel.",
     url: "https://plinkk.fr",
     github: "https://github.com/Klaynight-dev/links_website_template",
-    image: "plinkk.png",
+    image: "",
     tags: ["EJS", "Bun", "TypeScript", "Tailwind"],
-    featured: true
-  },
-  {
-    id: "papicon-design",
-    title: "Design Icônes Papicon",
-    category: "Web Design",
-    description: "Création et design de la bibliothèque d'icônes personnalisées 'Papicon' réalisée sur Figma pour le projet Papillon.",
-    url: "https://www.figma.com/design/xjPgRmLmqtR16vWkyuXaon/Untitled?node-id=0-1&p=f&t=AeEWavMzmH3kWmqO-0",
-    image: "icon-design.svg",
-    tags: ["Figma", "UI/UX", "Design System", "Iconography"],
-    featured: false
-  },
-  {
-    id: "affiches-design",
-    title: "Création d'Affiches",
-    category: "Web Design",
-    description: "Conception visuelle et design d'affiches thématiques sur Figma, notamment pour expliquer des concepts techniques comme le fonctionnement des systèmes d'exploitation (OS).",
-    url: "https://www.figma.com/design/8Ssy1x4r895uqdRB88IJgQ/C-est-quoi-un-os-affiche?node-id=0-1&t=Us7LhQsjuHm2UcWO-1",
-    image: "icon-design.svg",
-    tags: ["Figma", "Design Visuel", "Poster", "OS"],
-    featured: false
-  },
-  {
-    id: "synapsejs",
-    title: "SynapseJS",
-    category: "Web Development",
-    description: "Framework JavaScript performant et orienté événements pour la création rapide d'applications web et bots Discord.",
-    url: "https://synapsejs.klaynight.fr",
-    github: "https://github.com/Klaynight-dev/SynapseJS",
-    image: "MySQL.svg",
-    tags: ["TypeScript", "Node.js", "WebSocket", "Framework"],
     featured: true
   },
   {
     id: "kotbo-fr",
     title: "kotbo.fr",
     category: "Web Development",
-    description: "Site officiel et centre de contrôle complet pour Kotbo, le bot de gestion de communauté Discord.",
+    description: "Site et tableau de bord de Kotbo, un bot de gestion de communauté Discord : configuration des modules, modération, économie et statistiques de serveur depuis le navigateur.",
     url: "https://kotbo.fr",
-    image: "icon-app.svg",
+    github: "https://github.com/Kotbo-Bot",
+    image: "",
     tags: ["Svelte", "TailwindCSS", "Bun", "Vite"],
     featured: true
+  },
+  {
+    id: "synapsejs",
+    title: "SynapseJS",
+    category: "Web Development",
+    description: "Framework JavaScript orienté événements pour monter rapidement une application web ou un bot Discord sur une même base de routage et d'écouteurs.",
+    url: "https://synapsejs.klaynight.fr",
+    github: "https://github.com/Klaynight-dev/SynapseJS",
+    image: "",
+    tags: ["TypeScript", "Node.js", "WebSocket", "Framework"],
+    featured: true
+  },
+  {
+    id: "sae-cobrec",
+    title: "SAE Cobrec",
+    category: "Web Development",
+    description: "Projet universitaire en équipe : Alizon, une marketplace qui met en relation des producteurs locaux bretons et des consommateurs. Développement du front office et du back office, modélisation de la base de données et restitution des données de vente.",
+    url: "https://github.com/SAE-COBREC/main",
+    github: "https://github.com/SAE-COBREC/main",
+    image: "",
+    tags: ["PHP", "JavaScript", "SQL", "BUT Informatique"]
+  },
+  {
+    id: "sae-cobrec-design",
+    title: "SAE Cobrec (design UI/UX)",
+    category: "Web Design",
+    description: "Direction artistique de la marketplace Alizon sur Figma : charte graphique, composants réutilisables et maquettes interactives pour les trois espaces du produit (client, producteur, administrateur).",
+    url: "https://www.figma.com/design/oRhwvXX8hZrHIdutk3YQZt/MarketPlace?node-id=0-1&t=0vrF8PrjS2lurRae-1",
+    image: "",
+    tags: ["Figma", "UI/UX", "Design System", "SAE Cobrec"]
+  },
+  {
+    id: "papicon-design",
+    title: "Icônes Papicons",
+    category: "Web Design",
+    description: "Dessin d'icônes pour Papicons, la bibliothèque d'icônes de l'application Papillon : construction sur grille 24 px, contours pleins, et déclinaison des variantes d'un même signe (panneau ouvert ou fermé, horloge simple ou historique).",
+    url: "https://www.figma.com/design/xjPgRmLmqtR16vWkyuXaon/Untitled?node-id=0-1&p=f&t=AeEWavMzmH3kWmqO-0",
+    image: "papicons-sheet.svg",
+    imageAlt: "Planche de douze icônes Papicons : panneaux latéraux, horloge d'historique, bulle de texte, ajout, utilisateur, réglages, document, tâches, flèche, étoile.",
+    tags: ["Figma", "Iconographie", "Design System", "Papillon"]
+  },
+  {
+    id: "affiches-design",
+    title: "Affiche « C'est quoi un OS ? »",
+    category: "Web Design",
+    description: "Affiche pédagogique co-signée avec Guéwen Maréchal : le système d'exploitation expliqué comme un chef d'orchestre, où les programmes sont les musiciens, le matériel les instruments et vos clics la partition.",
+    url: "https://www.figma.com/design/8Ssy1x4r895uqdRB88IJgQ/C-est-quoi-un-os-affiche?node-id=0-1&t=Us7LhQsjuHm2UcWO-1",
+    image: "",
+    tags: ["Figma", "Affiche", "Vulgarisation", "Typographie"],
+    tile: "tall"
+  },
+  {
+    id: "jo-surf",
+    title: "Site JO de surf",
+    category: "Web Design",
+    description: "Maquettage sur Figma puis intégration d'un site consacré aux épreuves de surf des Jeux Olympiques de Paris, du choix typographique jusqu'au responsive.",
+    url: "https://klaynight.fr/JO_Website_project/",
+    github: "https://github.com/klaynight-dev/JO_Website_project/",
+    image: "jo-surf-pages.png",
+    imageAlt: "Deux pages finies du site JO de surf : la fiche du champion français et l'épreuve de Teahupo'o.",
+    tags: ["HTML", "CSS", "JavaScript", "Figma", "Responsive"]
   },
   {
     id: "hubgames",
     title: "HubGames",
     category: "Web Development",
-    description: "Projet personnel regroupant divers jeux et applications développés pour le web (Mini-jeux, outils).",
+    description: "Portail qui regroupe les mini-jeux et les petits outils web développés en équipe depuis 2020, avec une base commune de comptes et de scores.",
     url: "https://hubgames.klaynight.fr",
     github: "https://github.com/TheHubGames/hub_games",
     image: "HubGames.jpeg",
-    tags: ["JavaScript", "HTML5", "CSS3", "PHP"],
-    featured: false
+    imageAlt: "Page d'accueil de HubGames listant les mini-jeux disponibles.",
+    tags: ["JavaScript", "HTML5", "CSS3", "PHP"]
   },
   {
     id: "jobi",
     title: "Jobi",
     category: "Applications",
-    description: "Application de gestion de stock, de clients et d'emprunts natifs pour les librairies.",
+    description: "Application de bureau Java pour les librairies : gestion du stock, fiches clients et suivi des emprunts, avec une base SQL et une interface Swing.",
     url: "https://github.com/Klaynight-dev/stock_gestion_library",
     github: "https://github.com/Klaynight-dev/stock_gestion_library",
     image: "Jobi.png",
-    tags: ["Java", "SQL", "Swing", "Database"],
-    featured: false
-  },
-  {
-    id: "jo-surf",
-    title: "Site JO de Surf",
-    category: "Web Design",
-    description: "Conception UI/UX sur Figma puis développement d'un site web interactif dédié aux épreuves de surf des Jeux Olympiques de Paris.",
-    url: "https://klaynight.fr/JO_Website_project/",
-    github: "https://github.com/klaynight-dev/JO_Website_project/",
-    image: "DA Site JO.png",
-    tags: ["HTML", "CSS", "JavaScript", "Figma", "Responsive"],
-    featured: false
+    imageAlt: "Fenêtre Jobi affichant la table de gestion du stock.",
+    tags: ["Java", "SQL", "Swing", "Database"]
   },
   {
     id: "plinkk-os",
-    title: "Plinkk (Open Source)",
+    title: "Plinkk (open source)",
     category: "Web Development",
-    description: "Modèle de page de profil personnalisé open-source, ancêtre de plinkk.fr.",
+    description: "Modèle de page de profil à personnaliser puis héberger soi-même, point de départ open source qui a donné naissance à plinkk.fr.",
     url: "https://github.com/Klaynight-dev/links_website_template",
     github: "https://github.com/Klaynight-dev/links_website_template",
     image: "plinkk.png",
-    tags: ["HTML", "CSS", "JavaScript"],
-    featured: false
+    imageAlt: "Page de profil générée à partir du modèle open source Plinkk.",
+    tags: ["HTML", "CSS", "JavaScript"]
   }
 ];

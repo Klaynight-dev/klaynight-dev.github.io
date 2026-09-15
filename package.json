@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "@getpapillon/papicons": "^0.2.3",
+    "blobity": "^0.2.3",
+    "lenis": "^1.3.26",
     "lucide-svelte": "^0.468.0",
     "react": "^19.2.7"
   }

@@ -1,356 +1,232 @@
 @import "tailwindcss";
 
 :root {
-  --marker-color: #1e293b;
-  --marker-color-rgb: 30, 41, 59;
-  
-  --marker-red: #dc2626;
-  --marker-red-rgb: 220, 38, 38;
-  --marker-blue: #1d4ed8;
-  --marker-blue-rgb: 29, 78, 216;
-  --marker-green: #15803d;
-  
-  --whiteboard-bg: #f9f9f6;
-  --whiteboard-grid: rgba(0, 0, 0, 0.05);
-}
-
-/* Tape colors */
-.tape-blue { background: rgba(56, 189, 248, 0.7) !important; }
-.tape-pink { background: rgba(244, 63, 94, 0.65) !important; }
-.tape-green { background: rgba(34, 197, 94, 0.65) !important; }
-.tape-orange { background: rgba(249, 115, 22, 0.65) !important; }
-.tape-purple { background: rgba(168, 85, 247, 0.65) !important; }
-.tape-yellow { background: rgba(234, 179, 8, 0.65) !important; }
-
-/* Marker Highlighters */
-.highlight-yellow {
-  background: linear-gradient(100deg, rgba(234, 179, 8, 0.18) 0%, rgba(234, 179, 8, 0.06) 100%) !important;
-  border-bottom: 2.5px dashed rgba(234, 179, 8, 0.7) !important;
-}
-.highlight-pink {
-  background: linear-gradient(100deg, rgba(236, 72, 153, 0.16) 0%, rgba(236, 72, 153, 0.05) 100%) !important;
-  border-bottom: 2.5px dashed rgba(236, 72, 153, 0.6) !important;
-}
-.highlight-blue {
-  background: linear-gradient(100deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%) !important;
-  border-bottom: 2.5px dashed rgba(59, 130, 246, 0.6) !important;
-}
-.highlight-green {
-  background: linear-gradient(100deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%) !important;
-  border-bottom: 2.5px dashed rgba(34, 197, 94, 0.6) !important;
+  --bg: #f6f4ef;
+  --surface: #ffffff;
+  --surface-muted: #efece4;
+  --border: #e4e0d6;
+  --ink: #17151d;
+  --ink-muted: #6d6a76;
+  /* --ink-muted sur --surface-muted tombe a 4.48:1 : cette variante repasse AA. */
+  --ink-muted-strong: #615e6a;
+  --accent: #8a55ae;
+  --accent-ink: #ffffff;
+  --accent-soft: #efe7f4;
+  --accent-rgb: 138, 85, 174;
 }
 
 @theme {
-  --font-sans: "Poppins", "Inter", system-ui, -apple-system, sans-serif;
-  --font-hand: "Patrick Hand", "Poppins", sans-serif;
-  --font-cursive: "Caveat", cursive;
-  --font-marker: "Patrick Hand", sans-serif;
-  
-  --color-zinc-950: #1c1c1f;
-  --color-zinc-900: #f4f4f5;
-  --color-zinc-800: #e4e4e7;
-  --color-zinc-700: #d4d4d8;
-  --color-zinc-400: #52525b;
-  
-  --color-accent-primary: var(--marker-color);
-  --color-accent-secondary: var(--marker-color);
-  --color-accent-purple: var(--marker-color);
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 
-  /* Scale up default Tailwind text sizes globally for better readability */
-  --text-xs: 0.875rem; /* 14px */
-  --text-sm: 1rem;     /* 16px */
-  --text-base: 1.125rem; /* 18px */
-  --text-lg: 1.25rem;  /* 20px */
-  --text-xl: 1.5rem;   /* 24px */
-  --text-2xl: 1.875rem; /* 30px */
-  --text-3xl: 2.25rem; /* 36px */
-  --text-4xl: 3rem;    /* 48px */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @layer base {
   body {
-    background-color: var(--whiteboard-bg);
-    color: #1e293b;
+    background-color: var(--bg);
+    color: var(--ink);
     font-family: var(--font-sans);
     overflow-x: hidden;
   }
 
-  /* Custom scrollbar */
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  /* Visible focus ring everywhere, never removed without replacement (R-32) */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: #f1f1f0;
+    background: var(--bg);
   }
   ::-webkit-scrollbar-thumb {
-    background: #d4d4d0;
+    background: var(--border);
     border-radius: 5px;
-    border: 2px solid #f1f1f0;
+    border: 2px solid var(--bg);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--marker-color);
+    background: var(--ink-muted);
   }
 }
 
-/* Whiteboard Canvas background grid */
-.bg-whiteboard {
-  background-color: var(--whiteboard-bg);
-  background-image: 
-    radial-gradient(var(--whiteboard-grid) 1.5px, transparent 0),
-    radial-gradient(var(--whiteboard-grid) 1.5px, transparent 0);
-  background-size: 24px 24px;
-  background-position: 0 0, 12px 12px;
-}
+/* ==========================================================
+   Pills — the site's identity motif (YouTube-style pill buttons)
+   ========================================================== */
 
-/* Redefined panel classes to resemble paper sheets */
-.glass-panel {
-  background: #ffffff;
-  border: 2px solid #27272a;
-  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; /* Sketchy hand-drawn border */
-  box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.06);
-  color: #1e293b;
-}
-
-/* Notebook paper sheet */
-.notebook-sheet {
-  background-color: #ffffff;
-  background-image: 
-    linear-gradient(90deg, transparent 44px, #fca5a5 44px, #fca5a5 46px, transparent 46px), /* Red line margin */
-    linear-gradient(rgba(224, 242, 254, 0.75) 1px, transparent 1px); /* Blue lines */
-  background-size: 100% 100%, 100% 24px;
-  background-position: 0 0, 0 8px;
-  border: 2px solid #27272a;
-  box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.08);
-  position: relative;
-  padding-left: 52px !important;
-}
-
-/* Notebook spirals on the left */
-.notebook-spiral-holes-left {
-  position: absolute;
-  left: 12px;
-  top: 24px;
-  bottom: 24px;
-  width: 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  pointer-events: none;
-  z-index: 10;
-}
-.notebook-spiral-hole-left {
-  width: 8px;
-  height: 8px;
-  background-color: var(--whiteboard-bg);
-  border-radius: 50%;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
-  position: relative;
-}
-.notebook-spiral-hole-left::after {
-  content: "";
-  position: absolute;
-  left: -8px;
-  top: -2px;
-  width: 14px;
-  height: 12px;
-  border: 2px solid #94a3b8;
-  border-radius: 50% 0 0 50%;
-  border-right: none;
-  transform: rotate(-10deg);
-}
-
-/* Magnets holding notes with simple appearance animation */
-.magnet {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  box-shadow: 
-    0 2px 4px rgba(0,0,0,0.25), 
-    inset 0 -2px 3px rgba(0,0,0,0.3),
-    inset 0 2px 3px rgba(255,255,255,0.7);
-  position: absolute;
-  z-index: 20;
-  transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.magnet-red { background: #ef4444; }
-.magnet-blue { background: #3b82f6; }
-.magnet-green { background: #22c55e; }
-.magnet-yellow { background: #eab308; }
-
-/* Sticky tape torn */
-.tape-torn {
-  background: rgba(254, 252, 232, 0.65); /* adhesive beige color */
-  backdrop-filter: blur(0.5px);
-  border-left: 1px dashed rgba(0, 0, 0, 0.1);
-  border-right: 1px dashed rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  z-index: 20;
-  pointer-events: none;
-  clip-path: polygon(
-    0% 4%, 5% 0%, 10% 5%, 15% 1%, 20% 4%, 25% 0%, 30% 6%, 35% 2%, 40% 5%, 45% 1%, 50% 4%, 55% 0%, 60% 5%, 65% 1%, 70% 4%, 75% 0%, 80% 5%, 85% 1%, 90% 4%, 95% 0%, 100% 5%,
-    99% 95%, 95% 100%, 90% 96%, 85% 99%, 80% 95%, 75% 100%, 70% 96%, 65% 99%, 60% 95%, 55% 100%, 50% 96%, 45% 99%, 40% 95%, 35% 100%, 30% 96%, 25% 99%, 20% 95%, 15% 100%, 10% 96%, 5% 99%, 0% 95%
-  );
-}
-
-/* Rotations with custom properties */
-.rotate-1 { transform: rotate(1deg); }
-.rotate--1 { transform: rotate(-1deg); }
-.rotate-1\.5 { transform: rotate(1.5deg); }
-.rotate--1\.5 { transform: rotate(-1.5deg); }
-.rotate-2 { transform: rotate(2deg); }
-.rotate--2 { transform: rotate(-2deg); }
-
-/* Post-it Notes styles with simple hover transition */
-.post-it {
-  position: relative;
-  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.2s ease;
-  border: 1px solid rgba(0,0,0,0.06);
-  color: #1e293b;
-  box-shadow: 1px 3px 6px rgba(0,0,0,0.08);
-}
-.post-it::after {
-  content: "";
-  position: absolute;
-  bottom: 2px;
-  right: 6px;
-  width: 92%;
-  height: 12px;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.12);
-  transform: skew(3deg) rotate(2deg);
-  z-index: -1;
-  transition: all 0.2s ease;
-}
-.post-it:hover {
-  transform: translateY(-4px) rotate(0deg) !important;
-  box-shadow: 2px 10px 18px rgba(0, 0, 0, 0.14) !important;
-}
-.post-it:hover::after {
-  box-shadow: 0 10px 14px rgba(0, 0, 0, 0.16);
-  bottom: 3px;
-  right: 8px;
-}
-
-/* Post-it Colors */
-.post-it-yellow { background-color: #fef08a; border-color: #fde047; }
-.post-it-pink { background-color: #fbcfe8; border-color: #f9a8d4; }
-.post-it-blue { background-color: #bae6fd; border-color: #7dd3fc; }
-.post-it-green { background-color: #bbf7d0; border-color: #86efac; }
-.post-it-orange { background-color: #fed7aa; border-color: #fdba74; }
-
-/* Scribbles and Cross-outs (Ratures) in red corrector marker */
-.rature-marker {
-  position: relative;
-}
-.rature-marker::after {
-  content: "";
-  position: absolute;
-  top: 45%;
-  left: -4px;
-  right: -4px;
-  height: 5px;
-  background-color: var(--marker-red);
-  transform: rotate(-1.5deg);
-  opacity: 0.75;
-  border-radius: 3px;
-  pointer-events: none;
-}
-
-.rature-marker-double {
-  position: relative;
-}
-.rature-marker-double::before {
-  content: "";
-  position: absolute;
-  top: 35%;
-  left: -4px;
-  right: -4px;
-  height: 4px;
-  background-color: var(--marker-red);
-  transform: rotate(-2.5deg);
-  opacity: 0.7;
-  border-radius: 3px;
-  pointer-events: none;
-}
-.rature-marker-double::after {
-  content: "";
-  position: absolute;
-  top: 55%;
-  left: -6px;
-  right: -6px;
-  height: 4px;
-  background-color: var(--marker-red);
-  transform: rotate(1deg);
-  opacity: 0.7;
-  border-radius: 3px;
-  pointer-events: none;
-}
-
-/* Dynamic Marker Highlighter */
-.marker-highlight {
-  background: linear-gradient(100deg, rgba(var(--marker-color-rgb), 0.12) 0%, rgba(var(--marker-color-rgb), 0.04) 100%);
-  border-bottom: 2px dashed rgba(var(--marker-color-rgb), 0.45);
-}
-
-/* Handdrawn sketch details with simple hover transition */
-.premium-card {
-  background: #ffffff;
-  border: 2px solid #27272a;
-  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.2s ease, border-color 0.2s ease;
-  position: relative;
-  overflow: hidden;
-  color: #1e293b;
-}
-
-.premium-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(130deg, rgba(var(--marker-color-rgb), 0.05) 0%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.25s ease;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.premium-card:hover {
-  transform: translateY(-3px) rotate(0deg) !important;
-  border-color: var(--marker-color);
-  box-shadow: 4px 8px 16px rgba(var(--marker-color-rgb), 0.1);
-}
-
-.premium-card:hover::before {
-  opacity: 1;
-}
-
-/* Sketch Buttons */
-.btn-sketch {
-  border: 2px solid var(--marker-color);
-  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-  background: transparent;
-  font-family: var(--font-hand);
-  padding: 0.5rem 1rem;
-  font-weight: bold;
-  color: var(--marker-color);
-  transition: all 0.15s ease-in-out;
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   cursor: pointer;
-  box-shadow: 1px 2px 4px rgba(0,0,0,0.05);
+  border: none;
+  line-height: 1;
 }
-.btn-sketch:hover {
-  transform: scale(1.03) rotate(-1deg);
-  background: rgba(var(--marker-color-rgb), 0.06);
-  box-shadow: 2px 4px 8px rgba(var(--marker-color-rgb), 0.12);
+
+.pill-primary {
+  background: var(--ink);
+  color: #ffffff;
+}
+.pill-primary:hover {
+  background: var(--accent);
+}
+.pill-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pill-neutral {
+  background: var(--surface-muted);
+  color: var(--ink);
+}
+.pill-neutral:hover {
+  background: var(--border);
+}
+
+.pill-active {
+  background: var(--ink);
+  color: #ffffff;
+}
+
+.pill-ghost {
+  background: transparent;
+  color: var(--ink-muted);
+}
+.pill-ghost:hover {
+  background: var(--surface-muted);
+  color: var(--ink);
+}
+
+.pill-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.pill-icon:hover {
+  background: var(--ink);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================
+   Cards
+   ========================================================== */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+
+.card-interactive {
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-interactive:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(23, 21, 29, 0.08);
+  /* --card-accent lets a card tint its own hover border to its domain
+     color (see domains.ts); cards with no domain fall back to ink-muted. */
+  border-color: var(--card-accent, var(--ink-muted));
+}
+
+.field {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.field::placeholder {
+  color: var(--ink-muted);
+}
+.field:focus {
+  border-color: var(--accent);
+}
+
+/* Section eyebrow label */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  color: var(--ink-muted-strong);
+}
+
+/* Timeline (resume) */
+.timeline-rail {
+  border-left: 2px solid var(--border);
+}
+.timeline-dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: var(--accent);
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 2px var(--border);
 }
 
 /* Animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -359,5 +235,42 @@
 }
 
 .animate-fade-in {
-  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Scroll-reveal — realizes the MOTION 2 dial (see DESIGN.md): a one-shot
+   fade-up per section/card as it enters the viewport, no scroll choreography. */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation: none;
+  }
+  .card-interactive,
+  .pill,
+  .pill-icon {
+    transition: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ==========================================================
+   Blob cursor — Blobity draws it on a canvas, so the native
+   cursor has to go (fine pointers only, class set by CustomCursor)
+   ========================================================== */
+
+html.custom-cursor-on * {
+  cursor: none;
 }

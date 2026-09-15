@@ -42,6 +42,8 @@ declare module "lucide-svelte" {
   export const Briefcase: any;
   export const ArrowRight: any;
   export const ArrowLeft: any;
+  export const ArrowUp: any;
+  export const X: any;
   export const ChevronDown: any;
   export const ChevronUp: any;
   export const ChevronRight: any;
@@ -65,5 +67,13 @@ declare module "lucide-svelte" {
   export const Moon: any;
   export const Sun: any;
   export const HelpCircle: any;
+  export const PenTool: any;
+  export const AppWindow: any;
+  export const GraduationCap: any;
+  export const LayoutGrid: any;
+  export const Link2: any;
+  export const Check: any;
+  export const CircleAlert: any;
+  export const Code: any;
 }
 

@@ -1,79 +1,70 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import Sidebar from "./lib/components/Sidebar.svelte";
   import PresetView from "./lib/components/PresetView.svelte";
-  import Papicon from "./lib/components/Papicon.svelte";
-  import ProjectMockup from "./lib/components/ProjectMockup.svelte";
-  import { projects } from "./lib/data/projects";
-  import { education, experiences, keyCompetences, skillCategories, personalInfo } from "./lib/data/resume";
-  import { Mail, Eye, Github } from "lucide-svelte";
-  
-  // Import skill logos for Vite static bundling
-  import pgLogo from "../assets/images/Postgresql_elephant.png";
-  import mySqlLogo from "../assets/images/MySQL.svg";
-  import sqlLogo from "../assets/images/sql.png";
-  import phpLogo from "../assets/images/PHP.png";
-  import phpMyAdminLogo from "../assets/images/phpmyadmin.png";
-  import javaLogo from "../assets/images/java.png";
-  import pythonLogo from "../assets/images/Python.png";
-  import cLogo from "../assets/images/c.png";
-  import bootstrapLogo from "../assets/images/Bootstrap.svg";
-  import tailwindLogo from "../assets/images/Tailwind.svg.png";
+  import ProjectGallery from "./lib/components/ProjectGallery.svelte";
+  import CustomCursor from "./lib/components/CustomCursor.svelte";
+  import SmoothScroll from "./lib/components/SmoothScroll.svelte";
+  import ScrollToTop from "./lib/components/ScrollToTop.svelte";
+  import ProjectModal from "./lib/components/ProjectModal.svelte";
+  import { reveal } from "./lib/actions/reveal";
+  import { projects, type Project } from "./lib/data/projects";
+  import { education, experiences, keyCompetences, personalInfo } from "./lib/data/resume";
+  import { domainColors, projectCategoryDomain } from "./lib/data/domains";
+  import { Mail, User, GraduationCap, LayoutGrid, Link2, Check, CircleAlert, ArrowRight } from "lucide-svelte";
 
   // Import project screenshots and fallbacks
   import plinkkImg from "../assets/images/plinkk.png";
   import hubgamesImg from "../assets/images/HubGames.jpeg";
   import jobiImg from "../assets/images/Jobi.png";
-  import joSurfImg from "../assets/images/DA Site JO.png";
-  import defaultMetaImg from "../assets/images/my-avatar.png";
-  import iconAppImg from "../assets/images/icon-app.svg";
-  import iconDesignImg from "../assets/images/icon-design.svg";
-  import iconDevImg from "../assets/images/icon-dev.svg";
-
-  const logoMap: Record<string, string> = {
-    "Postgresql_elephant.png": pgLogo,
-    "MySQL.svg": mySqlLogo,
-    "sql.png": sqlLogo,
-    "PHP.png": phpLogo,
-    "phpmyadmin.png": phpMyAdminLogo,
-    "java.png": javaLogo,
-    "Python.png": pythonLogo,
-    "c.png": cLogo,
-    "Bootstrap.svg": bootstrapLogo,
-    "Tailwind.svg.png": tailwindLogo
-  };
-
-  const projectImageMap: Record<string, string> = {
-    "icon-app.svg": iconAppImg,
-    "plinkk.png": plinkkImg,
-    "icon-design.svg": iconDesignImg,
-    "MySQL.svg": mySqlLogo,
-    "HubGames.jpeg": hubgamesImg,
-    "Jobi.png": jobiImg,
-    "DA Site JO.png": joSurfImg,
-    "my-avatar.png": defaultMetaImg,
-    "icon-dev.svg": iconDevImg
-  };
-
-  const getProjectImage = (imageName: string) => {
-    return projectImageMap[imageName] || defaultMetaImg;
-  };
+  import joSurfImg from "../assets/images/jo-surf-pages.png";
+  import openformsImg from "../assets/images/openforms-builder.png";
+  import papiconsSheet from "../assets/images/papicons-sheet.svg";
 
   const screenshotMap: Record<string, string> = {
     "plinkk.png": plinkkImg,
     "HubGames.jpeg": hubgamesImg,
     "Jobi.png": jobiImg,
-    "DA Site JO.png": joSurfImg
+    "jo-surf-pages.png": joSurfImg,
+    "openforms-builder.png": openformsImg,
+    "papicons-sheet.svg": papiconsSheet
   };
-  
+
+  const tabs = [
+    { id: "about", label: "À propos", icon: User },
+    { id: "resume", label: "Parcours", icon: GraduationCap },
+    { id: "portfolio", label: "Portfolio", icon: LayoutGrid },
+    { id: "contact", label: "Contact", icon: Mail }
+  ] as const;
+
+  const filters = [
+    { id: "all", label: "Tout" },
+    { id: "Web Development", label: "Développement Web" },
+    { id: "Web Design", label: "Design Web" },
+    { id: "Applications", label: "Applications" }
+  ] as const;
+
+  // Stagger delay for timeline/competence cards, capped so a long list
+  // doesn't drag the last items in for a full second.
+  const staggerDelay = (i: number) => Math.min(i, 6) * 60;
+
   // Tab state (only active in Preset mode)
   let activeTab = $state("about"); // 'about', 'resume', 'portfolio', 'contact'
 
   // Project filtering state
-  let projectFilter = $state("all"); // 'all', 'Web Development', 'Web Design', 'Applications'
+  let projectFilter = $state("all");
   const filteredProjects = $derived(
     projectFilter === "all" ? projects : projects.filter(p => p.category === projectFilter)
   );
+
+  // Project detail modal, shared between the Portfolio tab's full gallery
+  // and the featured-projects gallery in PresetView.
+  let selectedProject = $state<Project | null>(null);
+  function openProject(project: Project) {
+    selectedProject = project;
+  }
+  function closeProject() {
+    selectedProject = null;
+  }
 
   // Contact Form Submission
   let fullname = $state("");
@@ -130,17 +121,33 @@
   }
 </script>
 
-<!-- Main container holding sidebar, content, and the marker tray -->
-<div class="min-h-screen bg-whiteboard text-slate-800 flex flex-col items-center py-6 px-4 md:py-10 relative">
-  
+<CustomCursor />
+<SmoothScroll />
+<ScrollToTop />
+<ProjectModal
+  project={selectedProject}
+  image={selectedProject ? screenshotMap[selectedProject.image] : undefined}
+  onClose={closeProject}
+/>
+
+<div class="min-h-screen bg-bg text-ink flex flex-col items-center py-6 px-4 md:py-10 relative">
+
   <div class="w-full max-w-7xl flex flex-col lg:flex-row gap-6 items-stretch relative">
-    
+
     <!-- Toast Notification -->
     {#if showToast}
-      <div class="fixed top-5 right-5 bg-white border-2 px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 z-[9999] border-sketch font-hand animate-fade-in
-                  {toastError ? 'border-red-600 text-red-700' : 'border-green-600 text-green-700'}">
-        <div class="w-2.5 h-2.5 rounded-full {toastError ? 'bg-red-600' : 'bg-green-600'}"></div>
-        <p class="text-xs font-semibold">{toastMessage}</p>
+      <div
+        class="fixed top-5 right-5 left-5 sm:left-auto card px-4 py-3 flex items-center gap-3 z-9999 animate-fade-in"
+        role="status"
+      >
+        <span class="w-7 h-7 rounded-full flex items-center justify-center shrink-0 {toastError ? 'bg-red-100 text-red-600' : ''}" style={toastError ? '' : 'background: var(--accent-soft); color: var(--accent);'}>
+          {#if toastError}
+            <CircleAlert size={15} />
+          {:else}
+            <Check size={15} />
+          {/if}
+        </span>
+        <p class="text-sm font-medium text-ink">{toastMessage}</p>
       </div>
     {/if}
 
@@ -149,397 +156,238 @@
 
     <!-- Main Content Area -->
     <main class="flex-1 flex flex-col gap-6 min-w-0">
-      
-      <!-- VIEW RENDERER (Whiteboard sheet with border sketch) -->
-      <div class="glass-panel rounded-2xl p-6 lg:p-8 flex-1 min-h-[500px] border-sketch relative">
-        
-        <!-- Tape at the top of main content to make it look hung -->
-        <div class="tape-torn absolute top-[-14px] left-[45%] w-24 h-7 opacity-80"></div>
-        
-        <!-- Red round magnet at top right -->
-        <div class="magnet magnet-red top-3 right-3"></div>
 
-        <div class="flex flex-col gap-6">
-          <!-- Whiteboard Tabs Navbar (Handdrawn tape and marker style with highlighter colors) -->
-          <div class="hidden md:flex border-b-2 border-dashed border-slate-350 pb-3 overflow-x-auto gap-4 shrink-0 font-hand text-base md:text-lg">
-            <button 
-              onclick={() => activeTab = "about"}
-              class="px-3 py-1.5 rounded-lg relative transition-all duration-150 whitespace-nowrap cursor-pointer
-                     {activeTab === 'about' ? 'text-slate-900 font-bold highlight-yellow rotate-1 scale-105' : 'text-slate-500 hover:text-slate-800 hover:rotate--1'}"
-            >
-              <span class="inline-flex items-center gap-1.5"><Papicon icon="paper" size={14} /> À propos</span>
-              {#if activeTab === 'about'}
-                <span class="absolute -bottom-1.5 left-0 w-full h-1 bg-yellow-500 rounded"></span>
-              {/if}
-            </button>
-            <button 
-              onclick={() => activeTab = "resume"}
-              class="px-3 py-1.5 rounded-lg relative transition-all duration-150 whitespace-nowrap cursor-pointer
-                     {activeTab === 'resume' ? 'text-slate-900 font-bold highlight-pink rotate--1 scale-105' : 'text-slate-500 hover:text-slate-800 hover:rotate-1'}"
-            >
-              <span class="inline-flex items-center gap-1.5"><Papicon icon="graduation-hat" size={14} /> Parcours</span>
-              {#if activeTab === 'resume'}
-                <span class="absolute -bottom-1.5 left-0 w-full h-1 bg-pink-500 rounded"></span>
-              {/if}
-            </button>
-            <button 
-              onclick={() => activeTab = "portfolio"}
-              class="px-3 py-1.5 rounded-lg relative transition-all duration-150 whitespace-nowrap cursor-pointer
-                     {activeTab === 'portfolio' ? 'text-slate-900 font-bold highlight-blue rotate-1 scale-105' : 'text-slate-500 hover:text-slate-800 hover:rotate--1'}"
-            >
-              <span class="inline-flex items-center gap-1.5"><Papicon icon="grid" size={14} /> Portfolio</span>
-              {#if activeTab === 'portfolio'}
-                <span class="absolute -bottom-1.5 left-0 w-full h-1 bg-blue-500 rounded"></span>
-              {/if}
-            </button>
-            <button 
-              onclick={() => activeTab = "contact"}
-              class="px-3 py-1.5 rounded-lg relative transition-all duration-150 whitespace-nowrap cursor-pointer
-                     {activeTab === 'contact' ? 'text-slate-900 font-bold highlight-green rotate--1 scale-105' : 'text-slate-500 hover:text-slate-800 hover:rotate-1'}"
-            >
-              <span class="inline-flex items-center gap-1.5"><Papicon icon="mail" size={14} /> Contact</span>
-              {#if activeTab === 'contact'}
-                <span class="absolute -bottom-1.5 left-0 w-full h-1 bg-green-500 rounded"></span>
-              {/if}
-            </button>
-          </div>
+      <!-- Pill tab navigation -->
+      <nav class="hidden md:flex flex-wrap gap-2 card p-2 w-fit">
+        {#each tabs as tab}
+          {@const Icon = tab.icon}
+          <button
+            onclick={() => activeTab = tab.id}
+            class="pill px-4 py-2 text-sm {activeTab === tab.id ? 'pill-active' : 'pill-ghost'}"
+          >
+            <Icon size={15} />
+            {tab.label}
+          </button>
+        {/each}
+      </nav>
 
-          <!-- Tab Content Renderer -->
-          {#if activeTab === "about"}
-            <PresetView />
-          {:else if activeTab === "resume"}
-            <!-- Render CV/Timeline -->
-            <div class="flex flex-col gap-8 animate-fade-in">
-              <!-- Scholastic -->
-              <div>
-                <div class="flex items-center gap-2 mb-4">
-                  <span class="text-[var(--marker-color)] flex items-center">
-                    <Papicon icon="graduation-hat" size={20} />
-                  </span>
-                  <h3 class="text-lg font-hand font-bold text-slate-800 flex items-center gap-2">
-                    <span>Parcours Scolaire</span>
-                  </h3>
-                </div>
-                <div class="border-l-2 border-dashed border-[var(--marker-color)] ml-4 pl-6 flex flex-col gap-6 relative">
-                  {#each education as item, i}
-                    {@const dotColors = ["bg-[var(--marker-red)]", "bg-[var(--marker-blue)]", "bg-[var(--marker-green)]"]}
-                    {@const dotColor = dotColors[i % dotColors.length]}
-                    <div class="relative py-1">
-                      <div class="absolute w-3.5 h-3.5 rounded-full {dotColor} -left-[31px] top-2.5 border-2 border-white"></div>
-                      <span class="text-sm font-hand font-bold text-[var(--marker-color)] uppercase tracking-wider">{item.date}</span>
-                      <h4 class="text-base font-hand font-bold text-slate-900 mt-1">{item.title}</h4>
-                      <p class="text-sm text-slate-500 font-marker mt-0.5">{item.subtitle}</p>
-                      <p class="text-sm text-slate-655 mt-2 leading-relaxed font-sans">{item.description}</p>
-                    </div>
-                  {/each}
-                </div>
-              </div>
-
-              <!-- Experience -->
-              <div>
-                <div class="flex items-center gap-2 mb-4">
-                  <span class="text-[var(--marker-color)] flex items-center">
-                    <Papicon icon="briefcase" size={20} />
-                  </span>
-                  <h3 class="text-lg font-hand font-bold text-slate-800 flex items-center gap-2">
-                    <span>Expériences</span>
-                  </h3>
-                </div>
-                <div class="border-l-2 border-dashed border-[var(--marker-color)] ml-4 pl-6 flex flex-col gap-6 relative">
-                  {#each experiences as item, i}
-                    {@const dotColors = ["bg-[var(--marker-blue)]", "bg-[var(--marker-red)]", "bg-[var(--marker-green)]"]}
-                    {@const dotColor = dotColors[i % dotColors.length]}
-                    <div class="relative py-1">
-                      <div class="absolute w-3.5 h-3.5 rounded-full {dotColor} -left-[31px] top-2.5 border-2 border-white"></div>
-                      <span class="text-sm font-hand font-bold text-[var(--marker-color)] uppercase tracking-wider">{item.date}</span>
-                      <h4 class="text-base font-hand font-bold text-slate-900 mt-1">{item.title}</h4>
-                      <p class="text-sm text-slate-500 font-marker mt-0.5">{item.subtitle}</p>
-                      <p class="text-sm text-slate-655 mt-2 leading-relaxed font-sans">{item.description}</p>
-                      {#if item.url}
-                        <a href={item.url} target="_blank" rel="noopener noreferrer" class="text-sm text-[var(--marker-color)] font-bold hover:underline mt-2 inline-block font-hand">
-                          {item.urlLabel || "Lien"} →
-                        </a>
-                      {/if}
-                    </div>
-                  {/each}
-                </div>
-              </div>
-
-              <!-- 6 competencies as colored sticky notes -->
-              <div>
-                <h3 class="text-lg font-hand font-bold text-slate-800 mb-4 flex items-center gap-2">
-                  <span>Compétences Clés</span>
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {#each keyCompetences as competence, i}
-                    {@const colors = ["yellow", "pink", "blue", "green", "orange"]}
-                    {@const tapes = ["pink", "green", "orange", "purple", "blue", "yellow"]}
-                    {@const color = colors[i % colors.length]}
-                    {@const tapeColor = tapes[i % tapes.length]}
-                    {@const rotation = (i % 2 === 0 ? "rotate-1" : "rotate--1")}
-                    <div class="post-it post-it-{color} {rotation} rounded-xl p-4 flex flex-col gap-2 relative">
-                      <div class="tape-torn tape-{tapeColor} absolute top-[-9px] left-[35%] w-16 h-5 opacity-70"></div>
-                      
-                      <h4 class="text-sm font-hand font-bold text-slate-800">{competence.title}</h4>
-                      <div class="flex flex-wrap gap-2 mt-2">
-                        {#each competence.links as link}
-                          <a href={link.url} target="_blank" rel="noopener noreferrer" 
-                             class="text-xs px-2 py-0.5 bg-white/70 hover:bg-white border-2 border-slate-700 text-slate-800 rounded font-marker transition-all transform hover:scale-105 inline-flex items-center gap-1">
-                            <span class="text-slate-500"><Papicon icon="link" size={10} /></span> {link.label}
-                          </a>
-                        {/each}
-                      </div>
-                    </div>
-                  {/each}
-                </div>
+      <!-- View Panel -->
+      <div class="card p-6 lg:p-8 flex-1 min-h-125">
+        {#if activeTab === "about"}
+          <PresetView
+            onViewPortfolio={() => activeTab = "portfolio"}
+            onSelectProject={openProject}
+          />
+        {:else if activeTab === "resume"}
+          <!-- Render CV/Timeline -->
+          <div class="flex flex-col gap-10 animate-fade-in">
+            <!-- Scholastic -->
+            <div class="flex flex-col gap-4">
+              <span class="eyebrow">Parcours scolaire</span>
+              <div class="timeline-rail ml-2 pl-6 flex flex-col gap-7 relative">
+                {#each education as item, i}
+                  <div class="relative py-1" use:reveal={{ delay: staggerDelay(i) }}>
+                    <div class="timeline-dot absolute -left-7.75 top-2"></div>
+                    <span class="eyebrow">{item.date}</span>
+                    <h4 class="text-base font-display font-semibold text-ink mt-1.5">{item.title}</h4>
+                    <p class="text-sm text-ink-muted mt-0.5">{item.subtitle}</p>
+                    <p class="text-sm text-ink-muted mt-2 leading-relaxed">{item.description}</p>
+                  </div>
+                {/each}
               </div>
             </div>
-          {:else if activeTab === "portfolio"}
-            <!-- Render Projects Catalog as sticky notes -->
-            <div class="flex flex-col gap-6 animate-fade-in">
-              <div class="flex items-center gap-2">
-                <span class="text-[var(--marker-color)] flex items-center">
-                  <Papicon icon="grid" size={20} />
-                </span>
-                <h3 class="text-lg font-hand font-bold text-slate-800 flex items-center gap-2">
-                  <span>Tous mes projets</span>
-                </h3>
-              </div>
 
-              <!-- Projects Category Filters -->
-              <div class="flex flex-wrap gap-2 pt-2 pb-1 font-hand select-none">
-                <button 
-                  onclick={() => projectFilter = "all"} 
-                  class="px-3.5 py-1.5 border-2 text-xs font-bold rounded-lg cursor-pointer transition-all border-sketch 
-                         {projectFilter === 'all' ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50'}"
-                >
-                  Tout
-                </button>
-                <button 
-                  onclick={() => projectFilter = "Web Development"} 
-                  class="px-3.5 py-1.5 border-2 text-xs font-bold rounded-lg cursor-pointer transition-all border-sketch 
-                         {projectFilter === 'Web Development' ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50'}"
-                >
-                  Développement Web
-                </button>
-                <button 
-                  onclick={() => projectFilter = "Web Design"} 
-                  class="px-3.5 py-1.5 border-2 text-xs font-bold rounded-lg cursor-pointer transition-all border-sketch 
-                         {projectFilter === 'Web Design' ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50'}"
-                >
-                  Design Web
-                </button>
-                <button 
-                  onclick={() => projectFilter = "Applications"} 
-                  class="px-3.5 py-1.5 border-2 text-xs font-bold rounded-lg cursor-pointer transition-all border-sketch 
-                         {projectFilter === 'Applications' ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50'}"
-                >
-                  Applications
-                </button>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
-                {#each filteredProjects as project, i}
-                  {@const colors = ["yellow", "pink", "blue", "green", "orange"]}
-                  {@const tapes = ["blue", "purple", "green", "orange", "pink", "yellow"]}
-                  {@const color = colors[i % colors.length]}
-                  {@const tapeColor = tapes[i % tapes.length]}
-                  {@const rotation = (i % 2 === 0 ? "rotate-1.5" : "rotate--1.5")}
-                  <div class="post-it post-it-{color} {rotation} rounded-2xl flex flex-col h-full group">
-                    <div class="tape-torn tape-{tapeColor} absolute top-[-12px] left-[35%] w-20 h-6 opacity-80"></div>
-                    
-                    <!-- Polaroid photo container -->
-                    <div class="px-3 pt-3 pb-6 bg-white border border-slate-250 shadow-md rotate-[-1deg] mx-4 mt-5 mb-1 relative border-sketch z-10">
-                      <div class="tape-torn tape-{tapes[(i + 2) % tapes.length]} absolute top-[-8px] left-[25%] w-14 h-4.5 rotate-[-2deg] opacity-75"></div>
-                      <div class="w-full h-32 md:h-36 overflow-hidden bg-slate-50 border border-slate-200">
-                        <ProjectMockup category={project.category} image={screenshotMap[project.image]} />
-                      </div>
-                    </div>
-
-                    <div class="p-5 flex flex-col gap-3 flex-1">
-                      <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 bg-white/60 text-slate-700 w-fit rounded font-hand">
-                        {project.category}
-                      </span>
-                      <h4 class="text-lg font-hand font-bold text-slate-900 group-hover:text-[var(--marker-color)] transition-colors">
-                        {project.title}
-                      </h4>
-                      <p class="text-sm text-slate-700 leading-relaxed flex-1 font-marker">
-                        {project.description}
-                      </p>
-                      <div class="flex flex-wrap gap-1 mt-2">
-                        {#each project.tags as tag}
-                          <span class="text-xs px-1.5 py-0.5 bg-white/40 text-slate-650 rounded border border-slate-300 font-hand">
-                            #{tag}
-                          </span>
-                        {/each}
-                      </div>
-                    </div>
-                    <div class="px-5 py-3 bg-white/40 border-t border-slate-350 rounded-b-2xl flex items-center justify-between font-hand font-bold text-sm">
-                      <a href={project.url} target="_blank" rel="noopener noreferrer" class="text-slate-700 hover:text-[var(--marker-color)] flex items-center gap-1">
-                        <Eye size={12} /> Visiter
+            <!-- Experience -->
+            <div class="flex flex-col gap-4">
+              <span class="eyebrow">Expériences</span>
+              <div class="timeline-rail ml-2 pl-6 flex flex-col gap-7 relative">
+                {#each experiences as item, i}
+                  <div class="relative py-1" use:reveal={{ delay: staggerDelay(i) }}>
+                    <div class="timeline-dot absolute -left-7.75 top-2"></div>
+                    <span class="eyebrow">{item.date}</span>
+                    <h4 class="text-base font-display font-semibold text-ink mt-1.5">{item.title}</h4>
+                    <p class="text-sm text-ink-muted mt-0.5">{item.subtitle}</p>
+                    <p class="text-sm text-ink-muted mt-2 leading-relaxed">{item.description}</p>
+                    {#if item.url}
+                      <a href={item.url} target="_blank" rel="noopener noreferrer" class="pill pill-neutral px-3 py-1.5 text-xs mt-3">
+                        {item.urlLabel || "Lien"} <ArrowRight size={12} />
                       </a>
-                      {#if project.github}
-                        <a href={project.github} target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-[var(--marker-color)]">
-                          <Github size={14} />
+                    {/if}
+                  </div>
+                {/each}
+              </div>
+            </div>
+
+            <!-- Key competencies -->
+            <div class="flex flex-col gap-4">
+              <span class="eyebrow">Compétences clés</span>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {#each keyCompetences as competence, i}
+                  <div class="card p-4 flex flex-col gap-2.5" use:reveal={{ delay: staggerDelay(i) }}>
+                    <h4 class="text-sm font-semibold text-ink">{competence.title}</h4>
+                    <div class="flex flex-wrap gap-2">
+                      {#each competence.links as link}
+                        <a href={link.url} target="_blank" rel="noopener noreferrer" class="pill pill-neutral px-3 py-1 text-xs">
+                          <Link2 size={11} /> {link.label}
                         </a>
-                      {/if}
+                      {/each}
                     </div>
                   </div>
                 {/each}
               </div>
             </div>
-          {:else if activeTab === "contact"}
-            <!-- Render Contact Page -->
-            <div class="flex flex-col gap-6 animate-fade-in">
-              <div class="flex items-center gap-2">
-                <span class="text-[var(--marker-color)] flex items-center">
-                  <Papicon icon="mail" size={20} />
-                </span>
-                <h3 class="text-lg font-hand font-bold text-slate-800 flex items-center gap-2">
-                  <span>Formulaire de contact</span>
-                </h3>
+          </div>
+        {:else if activeTab === "portfolio"}
+          <!-- Render Projects Catalog -->
+          <div class="flex flex-col gap-6 animate-fade-in">
+            <div class="flex flex-col gap-3">
+              <span class="eyebrow">Tous mes projets</span>
+              <h3 class="text-2xl font-display font-semibold text-ink">Portfolio</h3>
+            </div>
+
+            <!-- Category filter pills — the active pill takes its category's
+                 domain color (see domains.ts) so the filter choice is legible
+                 as color, not just weight. "Tout" has no domain: stays ink. -->
+            <div class="flex flex-wrap gap-2">
+              {#each filters as filter}
+                {@const domain = filter.id in projectCategoryDomain ? domainColors[projectCategoryDomain[filter.id as keyof typeof projectCategoryDomain]] : null}
+                <button
+                  onclick={() => projectFilter = filter.id}
+                  class="pill px-4 py-2 text-xs {projectFilter === filter.id ? 'pill-active' : 'pill-neutral'}"
+                  style={projectFilter === filter.id && domain ? `background: ${domain.text}; color: #fff;` : ''}
+                >
+                  {filter.label}
+                </button>
+              {/each}
+            </div>
+
+            {#if filteredProjects.length === 0}
+              <div class="card p-8 flex flex-col items-center gap-3 text-center">
+                <p class="text-sm text-ink-muted">
+                  Rien dans « {filters.find(f => f.id === projectFilter)?.label} » pour l'instant.
+                </p>
+                <button onclick={() => projectFilter = "all"} class="pill pill-neutral px-4 py-2 text-xs">
+                  Revenir à tous les projets
+                </button>
               </div>
-              
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Form -->
-                <form onsubmit={handleFormSubmit} class="flex flex-col gap-4">
-                  <div class="flex flex-col gap-1.5">
-                    <label for="fullname" class="text-sm text-slate-700 font-hand font-bold">Nom complet</label>
-                    <input 
-                      type="text" 
-                      id="fullname" 
-                      bind:value={fullname}
-                      required
-                      placeholder="Ex: John Doe" 
-                      class="px-4 py-2.5 bg-white border-2 border-slate-700 focus:border-[var(--marker-color)] rounded-xl text-base text-slate-800 outline-none transition-colors border-sketch font-hand"
-                    />
-                  </div>
+            {:else}
+              <ProjectGallery items={filteredProjects} screenshots={screenshotMap} onSelect={openProject} />
+            {/if}
+          </div>
+        {:else if activeTab === "contact"}
+          <!-- Render Contact Page -->
+          <div class="flex flex-col gap-6 animate-fade-in">
+            <div class="flex flex-col gap-3">
+              <span class="eyebrow">Me contacter</span>
+              <h3 class="text-2xl font-display font-semibold text-ink">Formulaire de contact</h3>
+            </div>
 
-                  <div class="flex flex-col gap-1.5">
-                    <label for="email" class="text-sm text-slate-700 font-hand font-bold">Adresse Email</label>
-                    <input 
-                      type="email" 
-                      id="email" 
-                      bind:value={email}
-                      required
-                      placeholder="Ex: john@example.com" 
-                      class="px-4 py-2.5 bg-white border-2 border-slate-700 focus:border-[var(--marker-color)] rounded-xl text-base text-slate-800 outline-none transition-colors border-sketch font-hand"
-                    />
-                  </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Form -->
+              <form onsubmit={handleFormSubmit} class="flex flex-col gap-4">
+                <div class="flex flex-col gap-1.5">
+                  <label for="fullname" class="text-sm text-ink font-medium">Nom complet</label>
+                  <input
+                    type="text"
+                    id="fullname"
+                    bind:value={fullname}
+                    required
+                    placeholder="Ex: John Doe"
+                    class="field"
+                  />
+                </div>
 
-                  <div class="flex flex-col gap-1.5">
-                    <label for="message" class="text-sm text-slate-700 font-hand font-bold">Votre message</label>
-                    <textarea 
-                      id="message" 
-                      bind:value={message}
-                      required
-                      rows="4" 
-                      placeholder="Écrivez votre message ici..." 
-                      class="px-4 py-2.5 bg-white border-2 border-slate-700 focus:border-[var(--marker-color)] rounded-xl text-base text-slate-800 outline-none resize-none transition-colors border-sketch font-hand"
-                    ></textarea>
-                  </div>
+                <div class="flex flex-col gap-1.5">
+                  <label for="email" class="text-sm text-ink font-medium">Adresse email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    bind:value={email}
+                    required
+                    placeholder="Ex: john@example.com"
+                    class="field"
+                  />
+                </div>
 
-                  <button 
-                    type="submit" 
-                    disabled={isSending}
-                    class="btn-sketch self-end font-hand py-2 px-5 cursor-pointer text-sm flex items-center gap-1.5"
-                  >
-                    {isSending ? "Envoi en cours..." : "Envoyer le message"}
-                    {#if !isSending}
-                      <Papicon icon="arrow_forward" size={12} />
-                    {/if}
-                  </button>
-                </form>
+                <div class="flex flex-col gap-1.5">
+                  <label for="message" class="text-sm text-ink font-medium">Votre message</label>
+                  <textarea
+                    id="message"
+                    bind:value={message}
+                    required
+                    rows="4"
+                    placeholder="Écrivez votre message ici..."
+                    class="field resize-none"
+                  ></textarea>
+                </div>
 
-                <!-- Info & Map Notebook sheets -->
-                <div class="flex flex-col gap-6 justify-between">
-                  
-                  <!-- Spiral Notebook Card -->
-                  <div class="notebook-sheet rounded-xl p-5 flex flex-col gap-3 relative min-h-[160px]">
-                    <!-- Colored magnets at the top corner -->
-                    <div class="magnet magnet-red -top-2 -left-2"></div>
-                    <div class="notebook-spiral-holes-left">
-                      <div class="notebook-spiral-hole-left"></div>
-                      <div class="notebook-spiral-hole-left"></div>
-                      <div class="notebook-spiral-hole-left"></div>
-                      <div class="notebook-spiral-hole-left"></div>
-                    </div>
-                    
-                    <div class="pl-8">
-                      <div class="text-[var(--marker-color)]"><Mail size={20} /></div>
-                      <h4 class="text-base font-hand font-bold text-slate-800 mt-2">Contact direct</h4>
-                      <p class="text-sm text-slate-650 leading-relaxed mt-2 font-marker">
-                        Pour toute demande professionnelle, vous pouvez utiliser le formulaire ci-contre ou me contacter directement par mail à :
-                      </p>
-                      <a href="mailto:{personalInfo.email}" class="text-base text-[var(--marker-color)] hover:underline font-bold mt-2 block font-hand">
-                        {personalInfo.email}
-                      </a>
-                    </div>
-                  </div>
+                <button
+                  type="submit"
+                  disabled={isSending}
+                  class="pill pill-primary self-end py-2.5 px-5 text-sm"
+                >
+                  {isSending ? "Envoi en cours..." : "Envoyer le message"}
+                  {#if !isSending}
+                    <ArrowRight size={14} />
+                  {/if}
+                </button>
+              </form>
 
-                  <div class="border-2 border-slate-850 rounded-xl overflow-hidden h-48 shadow-md border-sketch relative">
-                    <div class="magnet magnet-blue -top-2 -right-2"></div>
-                    <iframe 
-                      src={personalInfo.mapIframeUrl} 
-                      width="100%" 
-                      height="100%" 
-                      style="border:0;" 
-                      allowfullscreen={true} 
-                      loading="lazy" 
-                      title="Location map"
-                      referrerpolicy="no-referrer-when-downgrade"
-                    ></iframe>
-                  </div>
+              <!-- Info & Map -->
+              <div class="flex flex-col gap-6 justify-between">
+                <div class="card p-5 flex flex-col gap-3">
+                  <span class="pill-icon w-10 h-10" style="color: var(--accent);">
+                    <Mail size={18} />
+                  </span>
+                  <h4 class="text-base font-display font-semibold text-ink">Contact direct</h4>
+                  <p class="text-sm text-ink-muted leading-relaxed">
+                    Pour toute demande professionnelle, vous pouvez utiliser le formulaire ci-contre ou me contacter directement par mail à :
+                  </p>
+                  <a href="mailto:{personalInfo.email}" class="text-sm font-semibold" style="color: var(--accent);">
+                    {personalInfo.email}
+                  </a>
+                </div>
+
+                <div class="card overflow-hidden h-48">
+                  <iframe
+                    src={personalInfo.mapIframeUrl}
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    allowfullscreen={true}
+                    loading="lazy"
+                    title="Localisation"
+                    referrerpolicy="no-referrer-when-downgrade"
+                  ></iframe>
                 </div>
               </div>
             </div>
-          {/if}
-        </div>
+          </div>
+        {/if}
       </div>
-      
+
       <!-- Footer details -->
-      <footer class="text-xs text-slate-500 font-hand text-center py-2 shrink-0 mb-20 md:mb-2">
-        © {new Date().getFullYear()} {personalInfo.name}. Conçu avec Svelte 5 & Bun. UI Tableau Blanc.
+      <footer class="text-xs text-ink-muted text-center py-2 shrink-0 mb-20 md:mb-2">
+        © {new Date().getFullYear()} {personalInfo.name}. Conçu avec Svelte 5 & Bun.
       </footer>
     </main>
 
     <!-- Mobile Docked Bottom Navbar -->
-    <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t-2 border-slate-800 flex items-center justify-around pt-2.5 pb-4 px-2 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] font-hand text-sm select-none">
-      <button 
-        onclick={() => activeTab = "about"}
-        class="flex flex-col items-center gap-1 py-1 rounded-xl transition-all duration-150 cursor-pointer flex-1 text-center
-               {activeTab === 'about' ? 'text-slate-900 font-bold bg-yellow-100/90 scale-102 border-b-2 border-yellow-400/80' : 'text-slate-500 hover:text-slate-850'}"
-      >
-        <Papicon icon="paper" size={18} />
-        <span class="text-xs tracking-tight">Bio</span>
-      </button>
-      <button 
-        onclick={() => activeTab = "resume"}
-        class="flex flex-col items-center gap-1 py-1 rounded-xl transition-all duration-150 cursor-pointer flex-1 text-center
-               {activeTab === 'resume' ? 'text-slate-900 font-bold bg-pink-100/90 scale-102 border-b-2 border-pink-400/80' : 'text-slate-500 hover:text-slate-850'}"
-      >
-        <Papicon icon="graduation-hat" size={18} />
-        <span class="text-xs tracking-tight">Parcours</span>
-      </button>
-      <button 
-        onclick={() => activeTab = "portfolio"}
-        class="flex flex-col items-center gap-1 py-1 rounded-xl transition-all duration-150 cursor-pointer flex-1 text-center
-               {activeTab === 'portfolio' ? 'text-slate-900 font-bold bg-blue-100/90 scale-102 border-b-2 border-blue-400/80' : 'text-slate-500 hover:text-slate-850'}"
-      >
-        <Papicon icon="grid" size={18} />
-        <span class="text-xs tracking-tight">Projets</span>
-      </button>
-      <button 
-        onclick={() => activeTab = "contact"}
-        class="flex flex-col items-center gap-1 py-1 rounded-xl transition-all duration-150 cursor-pointer flex-1 text-center
-               {activeTab === 'contact' ? 'text-slate-900 font-bold bg-green-100/90 scale-102 border-b-2 border-green-400/80' : 'text-slate-500 hover:text-slate-850'}"
-      >
-        <Papicon icon="mail" size={18} />
-        <span class="text-xs tracking-tight">Contact</span>
-      </button>
+    <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-border flex items-center justify-around py-2 px-2">
+      {#each tabs as tab}
+        {@const Icon = tab.icon}
+        <button
+          onclick={() => activeTab = tab.id}
+          class="flex flex-col items-center gap-1 py-1.5 rounded-2xl transition-colors flex-1 text-center {activeTab === tab.id ? 'text-ink' : 'text-ink-muted'}"
+        >
+          <span class="w-9 h-9 rounded-full flex items-center justify-center {activeTab === tab.id ? 'bg-surface-muted' : ''}">
+            <Icon size={17} />
+          </span>
+          <span class="text-[0.65rem] font-medium tracking-tight">{tab.label}</span>
+        </button>
+      {/each}
     </div>
 
   </div>
 
 </div>
-
