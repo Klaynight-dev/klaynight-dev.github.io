@@ -76,23 +76,15 @@ export const biography = [
   "En 2024, j'ai rejoint l'IUT de Lannion en BUT Informatique pour consolider mes bases théoriques et pratiques dans le développement d'applications web et mobiles complexes. J'administre également mon propre nom de domaine klaynight.fr que j'utilise pour déployer et tester mes projets personnels."
 ];
 
-export const services: { title: string; description: string; domain: import('./domains').Domain }[] = [
-  {
-    title: "Design Web",
-    description: "Création de maquettes interactives et d'interfaces utilisateur modernes et engageantes sur Figma.",
-    domain: "design"
-  },
-  {
-    title: "Développement Web",
-    description: "Intégration d'applications web modernes réactives en utilisant les frameworks actuels (Svelte, Vite).",
-    domain: "webdev"
-  },
-  {
-    title: "Développement App",
-    description: "Développement d'outils et de logiciels de gestion performants avec interface graphique en Java/C/Python.",
-    domain: "apps"
-  }
-];
+export const services: {
+  title: string;
+  description: string;
+  domain: import('./domains').Domain;
+  /** Capture d'un vrai projet, nom de fichier dans assets/images. */
+  visual: string;
+  visualAlt: string;
+  /** Projets qui illustrent ce savoir-faire, par id. */
+  projectIds: string[];
 }[] = [
   {
     title: "Développement Web",
