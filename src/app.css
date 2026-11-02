@@ -190,6 +190,68 @@
 }
 
 /* Section eyebrow label */
+/*
+ * Paquet de deux cartes pour l'avatar, repris du deck photo d'humanitour.fr :
+ * au repos le logo est devant et la photo depasse a droite ; au survol, au
+ * focus ou au toucher, les deux s'ouvrent en eventail. `translate` et `rotate`
+ * s'animent separement, comme sur Humanitour.
+ */
+.avatar-deck {
+  --deck-size: 5rem;
+  --deck-spread: 1.9rem;
+  position: relative;
+  width: calc(var(--deck-size) + var(--deck-spread) * 2);
+  height: calc(var(--deck-size) + 0.75rem);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+@media (min-width: 1024px) {
+  .avatar-deck {
+    --deck-size: 7rem;
+    --deck-spread: 2.9rem;
+  }
+}
+
+.avatar-deck-card {
+  position: absolute;
+  width: var(--deck-size);
+  height: var(--deck-size);
+  object-fit: cover;
+  border-radius: 1rem;
+  border: 3px solid var(--surface);
+  box-shadow: 0 6px 18px rgba(23, 21, 29, 0.14);
+  transition:
+    translate 420ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    rotate 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.avatar-deck-card:nth-child(1) {
+  z-index: 2;
+  rotate: -3deg;
+}
+
+.avatar-deck-card:nth-child(2) {
+  z-index: 1;
+  translate: 0.9rem 0.25rem;
+  rotate: 6deg;
+}
+
+.avatar-deck:hover .avatar-deck-card:nth-child(1),
+.avatar-deck:focus-visible .avatar-deck-card:nth-child(1),
+.avatar-deck.is-open .avatar-deck-card:nth-child(1) {
+  translate: calc(var(--deck-spread) * -1) 0;
+  rotate: -8deg;
+}
+
+.avatar-deck:hover .avatar-deck-card:nth-child(2),
+.avatar-deck:focus-visible .avatar-deck-card:nth-child(2),
+.avatar-deck.is-open .avatar-deck-card:nth-child(2) {
+  translate: var(--deck-spread) -0.25rem;
+  rotate: 8deg;
+}
+
 /* Mot mis en avant dans un titre de section : surligne d'accent, legerement penche. */
 .title-mark {
   display: inline-block;
@@ -267,7 +329,8 @@
   }
   .card-interactive,
   .pill,
-  .pill-icon {
+  .pill-icon,
+  .avatar-deck-card {
     transition: none;
   }
   .reveal {

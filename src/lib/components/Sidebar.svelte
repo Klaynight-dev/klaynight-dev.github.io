@@ -3,6 +3,7 @@
   import { Github } from "lucide-svelte";
   import Papicon from "./Papicon.svelte";
   import myAvatar from "../../../assets/images/my-avatar.png";
+  import myPhoto from "../../../assets/images/photo-elouan.webp";
   import { personalInfo } from "../data/resume";
 
   // Local time in Bretagne, refreshed every minute — a small honest "alive" detail
@@ -13,6 +14,8 @@
     timeZone: "Europe/Paris"
   });
   let localTime = $state(timeFormatter.format(new Date()));
+  // Touch screens have no hover: a tap keeps the avatar deck open.
+  let deckOpen = $state(false);
 
   onMount(() => {
     const id = setInterval(() => {
@@ -25,9 +28,18 @@
 <aside class="card w-full lg:w-80 p-6 flex flex-col gap-6 lg:sticky lg:top-6 self-start animate-fade-in">
   <!-- Profile info header -->
   <div class="flex flex-row lg:flex-col items-center gap-4 lg:text-center">
-    <div class="w-20 h-20 lg:w-28 lg:h-28 rounded-2xl overflow-hidden bg-surface-muted border border-border shrink-0">
-      <img src={myAvatar} alt={personalInfo.name} class="w-full h-full object-cover" />
-    </div>
+    <!-- Two-card deck after humanitour.fr: logo in front, photo peeking right; fans out on hover, focus or tap -->
+    <button
+      type="button"
+      class="avatar-deck shrink-0"
+      class:is-open={deckOpen}
+      aria-pressed={deckOpen}
+      aria-label="Voir ma photo à côté de mon logo"
+      onclick={() => (deckOpen = !deckOpen)}
+    >
+      <img src={myAvatar} alt="" class="avatar-deck-card" />
+      <img src={myPhoto} alt={personalInfo.name} class="avatar-deck-card" />
+    </button>
 
     <div class="flex flex-col gap-2 items-start lg:items-center min-w-0">
       <h1 class="text-xl lg:text-2xl font-display font-semibold text-ink leading-tight">{personalInfo.name}</h1>
