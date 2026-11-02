@@ -48,7 +48,7 @@
   );
 
   // Icons relevant to each service's real subject (design tool, web code, app window)
-  const serviceIcons = [PenTool, Code, AppWindow];
+  const serviceIcons = [Code, PenTool, AppWindow];
 
   // Filter featured projects for preset view
   const featuredProjects = projects.filter(p => p.featured);
@@ -57,7 +57,7 @@
   // drag the last items in for a full second.
   const staggerDelay = (i: number) => Math.min(i, 6) * 60;
 
-  // Section index: reused as anchors for the jump-nav and the eyebrow labels below
+  // Section index: anchors and labels for the jump-nav
   const sections = [
     { id: "profil", number: "01", label: "Profil" },
     { id: "savoir-faire", number: "02", label: "Savoir-faire" },
@@ -79,9 +79,6 @@
 
   <!-- Bio Section -->
   <section id="profil" class="flex flex-col gap-4 scroll-mt-6" use:reveal>
-    <div class="flex items-center gap-2">
-      <span class="eyebrow">{sections[0].number} · {sections[0].label}</span>
-    </div>
     <h2 class="text-3xl md:text-4xl font-display font-semibold text-ink leading-tight max-w-2xl">
       Enchanté, moi c'est <span style="color: var(--accent);">Elouan</span> : je développe des
       applications web et mobiles pensées jusque dans les détails.
@@ -96,37 +93,62 @@
 
   <!-- Core Services -->
   <section id="savoir-faire" class="flex flex-col gap-4 scroll-mt-6" use:reveal>
-    <span class="eyebrow">{sections[1].number} · {sections[1].label}</span>
-    <h2 class="text-2xl md:text-3xl font-display font-semibold text-ink">Ce que je fais</h2>
+    <h2 class="text-3xl md:text-4xl font-display font-semibold text-ink leading-tight">Ce que je <span class="title-mark">fais</span></h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+    <!-- Each skill shown through a real project screenshot; the first one spans the full row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
       {#each services as service, i}
         {@const Icon = serviceIcons[i % serviceIcons.length]}
         {@const domain = domainColors[service.domain]}
-        <div
-          class="card card-interactive group p-5 flex flex-col gap-3"
+        {@const wide = i === 0}
+        <article
+          class="card card-interactive group overflow-hidden flex flex-col {wide ? 'md:col-span-2 md:flex-row' : ''}"
           style="--card-accent: {domain.hue};"
           use:reveal={{ delay: staggerDelay(i) }}
         >
-          <span
-            class="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 ease-out group-hover:scale-105 group-hover:rotate-3"
-            style="background: {domain.bg}; color: {domain.text};"
+          <div class="p-6 flex flex-col gap-3 {wide ? 'md:w-2/5 md:justify-center' : ''}">
+            <span
+              class="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 ease-out group-hover:scale-105 group-hover:rotate-3"
+              style="background: {domain.bg}; color: {domain.text};"
+            >
+              <Icon size={19} />
+            </span>
+            <h3 class="font-display font-semibold text-ink {wide ? 'text-2xl' : 'text-lg'}">{service.title}</h3>
+            <p class="text-sm text-ink-muted leading-relaxed">{service.description}</p>
+            <div class="flex flex-wrap gap-1.5 mt-1">
+              {#each service.projectIds as id}
+                {@const project = projects.find((p) => p.id === id)}
+                {#if project}
+                  <button
+                    type="button"
+                    class="tag hover:text-ink transition-colors"
+                    onclick={() => onSelectProject?.(project)}
+                  >
+                    {project.title}
+                  </button>
+                {/if}
+              {/each}
+            </div>
+          </div>
+          <div
+            class="relative overflow-hidden min-h-56 {wide ? 'md:flex-1 md:min-h-80' : 'flex-1'}"
+            style="background: {domain.bg};"
           >
-            <Icon size={19} />
-          </span>
-          <h3 class="font-display font-semibold text-ink text-lg">{service.title}</h3>
-          <p class="text-sm text-ink-muted leading-relaxed">
-            {service.description}
-          </p>
-        </div>
+            <img
+              src={screenshotMap[service.visual]}
+              alt={service.visualAlt}
+              loading="lazy"
+              class="absolute left-8 top-8 w-[125%] max-w-none rounded-xl border border-border shadow-lg transition-transform duration-500 ease-out group-hover:-translate-x-1 group-hover:-translate-y-1"
+            />
+          </div>
+        </article>
       {/each}
     </div>
   </section>
 
   <!-- Featured Projects -->
   <section id="selection" class="flex flex-col gap-4 scroll-mt-6" use:reveal>
-    <span class="eyebrow">{sections[2].number} · {sections[2].label}</span>
-    <h2 class="text-2xl md:text-3xl font-display font-semibold text-ink">Projets phares</h2>
+    <h2 class="text-3xl md:text-4xl font-display font-semibold text-ink leading-tight">Projets <span class="title-mark">phares</span></h2>
 
     <div class="pt-1">
       <ProjectGallery
@@ -148,8 +170,7 @@
 
   <!-- Skills -->
   <section id="stack" class="flex flex-col gap-4 scroll-mt-6" use:reveal>
-    <span class="eyebrow">{sections[3].number} · {sections[3].label}</span>
-    <h2 class="text-2xl md:text-3xl font-display font-semibold text-ink">Mes compétences</h2>
+    <h2 class="text-3xl md:text-4xl font-display font-semibold text-ink leading-tight">Mes <span class="title-mark">compétences</span></h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
       {#each skillCategories as category, i}
@@ -184,8 +205,7 @@
 
   <!-- Testimonials -->
   <section id="recommandations" class="flex flex-col gap-4 scroll-mt-6" use:reveal>
-    <span class="eyebrow">{sections[4].number} · {sections[4].label}</span>
-    <h2 class="text-2xl md:text-3xl font-display font-semibold text-ink">Ce qu'on dit de moi</h2>
+    <h2 class="text-3xl md:text-4xl font-display font-semibold text-ink leading-tight">Ce qu'on dit de <span class="title-mark">moi</span></h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
       {#each testimonials as item, i}

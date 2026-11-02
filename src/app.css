@@ -190,6 +190,17 @@
 }
 
 /* Section eyebrow label */
+/* Mot mis en avant dans un titre de section : surligne d'accent, legerement penche. */
+.title-mark {
+  display: inline-block;
+  padding: 0 0.28em;
+  border-radius: 0.3em;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-style: italic;
+  transform: rotate(-2deg);
+}
+
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 0.75rem;

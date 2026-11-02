@@ -173,7 +173,7 @@
           <div class="flex flex-col gap-10 animate-fade-in">
             <!-- Scholastic -->
             <div class="flex flex-col gap-4">
-              <span class="eyebrow">Parcours scolaire</span>
+              <h3 class="text-2xl font-display font-semibold text-ink">Parcours <span class="title-mark">scolaire</span></h3>
               <div class="timeline-rail ml-2 pl-6 flex flex-col gap-7 relative">
                 {#each education as item, i}
                   <div class="relative py-1" use:reveal={{ delay: staggerDelay(i) }}>
@@ -189,7 +189,7 @@
 
             <!-- Experience -->
             <div class="flex flex-col gap-4">
-              <span class="eyebrow">Expériences</span>
+              <h3 class="text-2xl font-display font-semibold text-ink"><span class="title-mark">Expériences</span></h3>
               <div class="timeline-rail ml-2 pl-6 flex flex-col gap-7 relative">
                 {#each experiences as item, i}
                   <div class="relative py-1" use:reveal={{ delay: staggerDelay(i) }}>
@@ -210,7 +210,7 @@
 
             <!-- Key competencies -->
             <div class="flex flex-col gap-4">
-              <span class="eyebrow">Compétences clés</span>
+              <h3 class="text-2xl font-display font-semibold text-ink">Compétences <span class="title-mark">clés</span></h3>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {#each keyCompetences as competence, i}
                   <div class="card p-4 flex flex-col gap-2.5" use:reveal={{ delay: staggerDelay(i) }}>
@@ -231,8 +231,7 @@
           <!-- Render Projects Catalog -->
           <div class="flex flex-col gap-6 animate-fade-in">
             <div class="flex flex-col gap-3">
-              <span class="eyebrow">Tous mes projets</span>
-              <h3 class="text-2xl font-display font-semibold text-ink">Portfolio</h3>
+              <h3 class="text-2xl font-display font-semibold text-ink">Tous mes <span class="title-mark">projets</span></h3>
             </div>
 
             <!-- Category filter pills — the active pill takes its category's
@@ -268,8 +267,7 @@
           <!-- Render Contact Page -->
           <div class="flex flex-col gap-6 animate-fade-in">
             <div class="flex flex-col gap-3">
-              <span class="eyebrow">Me contacter</span>
-              <h3 class="text-2xl font-display font-semibold text-ink">Formulaire de contact</h3>
+              <h3 class="text-2xl font-display font-semibold text-ink">Me <span class="title-mark">contacter</span></h3>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
