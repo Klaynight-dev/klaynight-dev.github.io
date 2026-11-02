@@ -392,7 +392,7 @@ export const projects: Project[] = [
     id: "openforms",
     title: "OpenForms",
     category: "Web Development",
-    description: "Alternative auto-hébergeable à Google Forms, développée pour l'association Humanitour. Constructeur de formulaires par glisser-déposer (onze types de champs, validation par regex et bornes), tableur d'administration maison avec formules SUM, AVG, MEDIAN et import/export xlsx, consentement RGPD explicite et chiffrement AES-256-GCM des réponses en base.",
+    description: "Alternative open source (MIT) et auto-hébergeable à Google Forms, développée pour le tour de France d'Humanitour. Édition collaborative en direct avec les curseurs des autres, statistiques et croisements multi-sources intégrés, tableur maison pour corriger les réponses, signature, organisations et partage par rôles, consentement RGPD par finalité et chiffrement AES-256-GCM des réponses en base.",
     url: "https://forms.humanitour.fr/",
     github: "https://github.com/Klaynight-dev/Openforms",
     image: "openforms-builder.png",
@@ -404,16 +404,36 @@ export const projects: Project[] = [
     period: "Juillet – octobre 2026",
     stats: [
       { label: "commits", value: "126" },
-      { label: "types de champs", value: "11" },
+      { label: "réponses sur un formulaire", value: "1 000+" },
+      { label: "licence", value: "MIT" },
       { label: "chiffrement", value: "AES-256-GCM" }
     ],
     sections: [
       {
         title: "Pourquoi un outil maison",
-        body: "Humanitour collecte des réponses de citoyens interrogés en face-à-face : les confier à Google Forms n'était pas compatible avec la promesse faite aux répondants. OpenForms s'héberge sur nos serveurs, sans tracker tiers, et chiffre les réponses au repos.",
+        body: "Pour le tour de France d'Humanitour, il fallait collecter les réponses de citoyens interrogés en face-à-face. Google Forms posait deux problèmes : confier ces réponses à un tiers n'était pas compatible avec la promesse faite aux répondants, et l'outil s'arrêtait trop tôt, sans analyse sérieuse ni moyen propre de corriger une saisie.\n\nOpenForms s'héberge sur nos serveurs, sans tracker tiers, chiffre les réponses au repos, et le code est publié sous licence MIT.",
         image: "openforms-accueil.webp",
         imageAlt: "Page d'accueil d'OpenForms : « Formulaire Humanitour », bouton Espace administration et trois cartes, builder, tableur intégré, RGPD par design.",
         caption: "L'instance de l'association, forms.humanitour.fr."
+      },
+      {
+        title: "La première version",
+        body: "Le premier commit date du 8 juillet 2026. Le jour même, l'éditeur glisser-déposer tournait avec onze types de champs, les sections multipages, l'option « Autre » et les colonnes internes au tableur. Le reste de l'été a ajouté les organisations, l'invitation par mail, la duplication de formulaires, les webhooks et la signature manuscrite.",
+        image: "openforms-juillet.webp",
+        imageAlt: "Premier éditeur d'OpenForms, juillet 2026 : palette de onze types de champs à gauche, formulaire de démonstration au centre, configuration d'une grille d'évaluation à droite.",
+        caption: "Juillet 2026 : l'éditeur des premiers jours."
+      },
+      {
+        title: "Éprouvé sur le terrain",
+        body: "Le formulaire du tour a dépassé les 1 000 réponses. Ce volume a guidé la suite : synchronisation incrémentale du tableur et cache local pour ne plus tout recharger, chargement différé des graphiques, et un formulaire public qui guide la correction et protège la saisie quand le réseau lâche.\n\nLe travail en équipe a aussi demandé des groupes : organisations dont l'appartenance ouvre les formulaires, partage explicite à trois rôles, et répartition des participants entre plusieurs variantes d'un même questionnaire."
+      },
+      {
+        title: "Collaborer en direct",
+        body: "Comme sur Google Forms, plusieurs personnes éditent le même formulaire en même temps. Les curseurs des collaborateurs sont visibles à l'écran, chacun voit la question choisie par les autres dans leur couleur, et les modifications se propagent par opérations, une couche que j'ai réécrite de zéro.\n\nLe même canal WebSocket authentifié met à jour en direct les réponses, les statistiques, les commentaires et la présence. Chaque version du formulaire reste consultable et restaurable."
+      },
+      {
+        title: "Analyser sans exporter",
+        body: "Les statistiques vivent dans l'outil : croisement de plusieurs champs et de plusieurs sources, corrélations, répartition par heure de la journée, presets de croisement réutilisables et export des graphiques en image aux couleurs du formulaire.\n\nLe tableur se pose comme un calque sur les réponses : on corrige une cellule d'un double-clic, on ajoute des colonnes calculées par formule (SUM, AVG, MEDIAN…), on filtre, puis on exporte en Excel, CSV ou JSON. Un serveur MCP permet enfin de consulter et configurer OpenForms depuis Claude."
       }
     ]
   },
