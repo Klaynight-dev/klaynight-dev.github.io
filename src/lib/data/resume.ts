@@ -93,6 +93,32 @@ export const services: { title: string; description: string; domain: import('./d
     domain: "apps"
   }
 ];
+}[] = [
+  {
+    title: "Développement Web",
+    description: "Des applications web complètes, de l'interface en Svelte au back en Bun et PostgreSQL, conteneurisées et déployées sur mes propres serveurs.",
+    domain: "webdev",
+    visual: "tafac-notes.webp",
+    visualAlt: "Page Mes notes de Tafac : moyenne générale, UE validées et dernières notes.",
+    projectIds: ["kotbo-fr", "humanitour", "openforms", "tafac"]
+  },
+  {
+    title: "Design Web",
+    description: "Maquettes interactives, systèmes de composants et iconographie sur Figma, pensés pour être intégrés tels quels.",
+    domain: "design",
+    visual: "papicons-sheet.svg",
+    visualAlt: "Planche d'icônes Papicons dessinées sur grille 24 px.",
+    projectIds: ["papicon-design", "sae-cobrec-design", "affiches-design"]
+  },
+  {
+    title: "Développement App",
+    description: "Logiciels de bureau et outils de gestion avec interface graphique, en Java, C ou Python.",
+    domain: "apps",
+    visual: "Jobi.png",
+    visualAlt: "Fenêtre Jobi affichant la table de gestion du stock.",
+    projectIds: ["jobi"]
+  }
+];
 
 export const testimonials = [
   {
@@ -409,8 +435,7 @@ export const projects: Project[] = [
     imageAlt: "Accueil d'Aellyel : jeu coup de cœur à gauche, nuage d'humeurs en étiquettes colorées à droite.",
     period: "Juin – juillet 2026",
     stats: [{ label: "commits", value: "22" }],
-    tags: ["SvelteKit", "ElysiaJS", "Prisma", "PostgreSQL", "Redis", "Bun"],
-    featured: true
+    tags: ["SvelteKit", "ElysiaJS", "Prisma", "PostgreSQL", "Redis", "Bun"]
   },
   {
     id: "plinkk-fr",
@@ -421,8 +446,7 @@ export const projects: Project[] = [
     github: "https://github.com/Klaynight-dev/links_website_template",
     image: "plinkk-accueil.webp",
     imageAlt: "Accueil de plinkk.fr : titre « Votre univers en un lien. Clair, vivant, mémorisable. » et champ d'inscription par mail.",
-    tags: ["EJS", "Bun", "TypeScript", "Tailwind"],
-    featured: true
+    tags: ["EJS", "Bun", "TypeScript", "Tailwind"]
   },
   {
     id: "kotbo-fr",
@@ -464,8 +488,7 @@ export const projects: Project[] = [
     stats: [
       { label: "commits", value: "15" },
       { label: "plus rapide que le DOM", value: "×46" }
-    ],
-    featured: true
+    ]
   },
   {
     id: "sae-cobrec",
