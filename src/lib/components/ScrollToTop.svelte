@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { ArrowUp } from "lucide-svelte";
+  import Papicon from "./Papicon.svelte";
   import { scrollToTop } from "../scroll";
 
   // Appears once the reader has actually scrolled somewhere — showing it at
@@ -26,6 +26,6 @@
     aria-label="Remonter en haut de la page"
     title="Remonter en haut"
   >
-    <ArrowUp size={18} />
+    <Papicon icon="ArrowUp" size={18} />
   </button>
 {/if}

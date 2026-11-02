@@ -10,7 +10,7 @@
   import { projects, type Project } from "./lib/data/projects";
   import { education, experiences, keyCompetences, personalInfo } from "./lib/data/resume";
   import { domainColors, projectCategoryDomain } from "./lib/data/domains";
-  import { Mail, User, GraduationCap, LayoutGrid, Link2, Check, CircleAlert, ArrowRight } from "lucide-svelte";
+  import Papicon from "./lib/components/Papicon.svelte";
 
   // Every file in assets/images, keyed by filename as referenced in resume.ts.
   const screenshotMap: Record<string, string> = Object.fromEntries(
@@ -20,10 +20,10 @@
   );
 
   const tabs = [
-    { id: "about", label: "À propos", icon: User },
-    { id: "resume", label: "Parcours", icon: GraduationCap },
-    { id: "portfolio", label: "Portfolio", icon: LayoutGrid },
-    { id: "contact", label: "Contact", icon: Mail }
+    { id: "about", label: "À propos", icon: "User" },
+    { id: "resume", label: "Parcours", icon: "GraduationHat" },
+    { id: "portfolio", label: "Portfolio", icon: "Grid" },
+    { id: "contact", label: "Contact", icon: "Mail" }
   ] as const;
 
   const filters = [
@@ -132,9 +132,9 @@
       >
         <span class="w-7 h-7 rounded-full flex items-center justify-center shrink-0 {toastError ? 'bg-red-100 text-red-600' : ''}" style={toastError ? '' : 'background: var(--accent-soft); color: var(--accent);'}>
           {#if toastError}
-            <CircleAlert size={15} />
+            <Papicon icon="AlertCircle" size={15} />
           {:else}
-            <Check size={15} />
+            <Papicon icon="Check" size={15} />
           {/if}
         </span>
         <p class="text-sm font-medium text-ink">{toastMessage}</p>
@@ -150,12 +150,11 @@
       <!-- Pill tab navigation -->
       <nav class="hidden md:flex flex-wrap gap-2 card p-2 w-fit">
         {#each tabs as tab}
-          {@const Icon = tab.icon}
           <button
             onclick={() => activeTab = tab.id}
             class="pill px-4 py-2 text-sm {activeTab === tab.id ? 'pill-active' : 'pill-ghost'}"
           >
-            <Icon size={15} />
+            <Papicon icon={tab.icon} size={15} />
             {tab.label}
           </button>
         {/each}
@@ -200,7 +199,7 @@
                     <p class="text-sm text-ink-muted mt-2 leading-relaxed">{item.description}</p>
                     {#if item.url}
                       <a href={item.url} target="_blank" rel="noopener noreferrer" class="pill pill-neutral px-3 py-1.5 text-xs mt-3">
-                        {item.urlLabel || "Lien"} <ArrowRight size={12} />
+                        {item.urlLabel || "Lien"} <Papicon icon="ArrowRight" size={12} />
                       </a>
                     {/if}
                   </div>
@@ -218,7 +217,7 @@
                     <div class="flex flex-wrap gap-2">
                       {#each competence.links as link}
                         <a href={link.url} target="_blank" rel="noopener noreferrer" class="pill pill-neutral px-3 py-1 text-xs">
-                          <Link2 size={11} /> {link.label}
+                          <Papicon icon="Link" size={11} /> {link.label}
                         </a>
                       {/each}
                     </div>
@@ -316,7 +315,7 @@
                 >
                   {isSending ? "Envoi en cours..." : "Envoyer le message"}
                   {#if !isSending}
-                    <ArrowRight size={14} />
+                    <Papicon icon="ArrowRight" size={14} />
                   {/if}
                 </button>
               </form>
@@ -325,7 +324,7 @@
               <div class="flex flex-col gap-6 justify-between">
                 <div class="card p-5 flex flex-col gap-3">
                   <span class="pill-icon w-10 h-10" style="color: var(--accent);">
-                    <Mail size={18} />
+                    <Papicon icon="Mail" size={18} />
                   </span>
                   <h4 class="text-base font-display font-semibold text-ink">Contact direct</h4>
                   <p class="text-sm text-ink-muted leading-relaxed">
@@ -363,13 +362,12 @@
     <!-- Mobile Docked Bottom Navbar -->
     <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-border flex items-center justify-around py-2 px-2">
       {#each tabs as tab}
-        {@const Icon = tab.icon}
         <button
           onclick={() => activeTab = tab.id}
           class="flex flex-col items-center gap-1 py-1.5 rounded-2xl transition-colors flex-1 text-center {activeTab === tab.id ? 'text-ink' : 'text-ink-muted'}"
         >
           <span class="w-9 h-9 rounded-full flex items-center justify-center {activeTab === tab.id ? 'bg-surface-muted' : ''}">
-            <Icon size={17} />
+            <Papicon icon={tab.icon} size={17} />
           </span>
           <span class="text-[0.65rem] font-medium tracking-tight">{tab.label}</span>
         </button>

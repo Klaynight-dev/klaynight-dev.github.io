@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { X, Eye, Github } from "lucide-svelte";
+  import { Github } from "lucide-svelte";
+  import Papicon from "./Papicon.svelte";
   import type { Project } from "../data/projects";
   import { lockScroll, unlockScroll } from "../scroll";
   import ProjectCover from "./ProjectCover.svelte";
@@ -75,7 +76,7 @@
         aria-label="Fermer la fiche projet"
         title="Fermer"
       >
-        <X size={16} />
+        <Papicon icon="Cross" size={16} />
       </button>
 
       <div class="aspect-[16/10] overflow-hidden bg-surface-muted border-b border-border">
@@ -139,7 +140,7 @@
             rel="noopener noreferrer"
             class="pill pill-primary px-4 py-2 text-sm"
           >
-            <Eye size={14} /> Voir le site
+            <Papicon icon="Globe" size={14} /> Voir le site
           </a>
           {#if project.github}
             <a

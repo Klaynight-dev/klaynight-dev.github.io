@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { Mail, Github, ExternalLink, Briefcase, MapPin } from "lucide-svelte";
+  import { Github } from "lucide-svelte";
+  import Papicon from "./Papicon.svelte";
   import myAvatar from "../../../assets/images/my-avatar.png";
   import { personalInfo } from "../data/resume";
 
@@ -51,7 +52,7 @@
       class="flex items-center gap-3 group rounded-xl -mx-1 px-1 py-1 transition-colors hover:bg-surface-muted"
     >
       <span class="pill-icon w-9 h-9 shrink-0 group-hover:bg-ink group-hover:text-white">
-        <Mail size={16} />
+        <Papicon icon="Mail" size={16} />
       </span>
       <span class="min-w-0 flex-1">
         <span class="block text-xs text-ink-muted">Email</span>
@@ -62,7 +63,7 @@
     {#if personalInfo.location}
       <div class="flex items-center gap-3">
         <span class="pill-icon w-9 h-9 shrink-0">
-          <MapPin size={16} />
+          <Papicon icon="MapPin" size={16} />
         </span>
         <span class="min-w-0 flex-1">
           <span class="block text-xs text-ink-muted">Localisation</span>
@@ -80,7 +81,7 @@
   {#if personalInfo.alternance}
     <div class="rounded-2xl p-4 flex gap-3 items-start" style="background: var(--accent-soft);">
       <span class="w-8 h-8 rounded-full bg-white text-accent flex items-center justify-center shrink-0" style="color: var(--accent);">
-        <Briefcase size={15} />
+        <Papicon icon="GraduationHat" size={15} />
       </span>
       <div class="flex-1 min-w-0">
         <h4 class="text-sm font-semibold text-ink leading-tight">{personalInfo.alternance.title}</h4>
@@ -115,7 +116,7 @@
         title="Liens"
         aria-label="Autres liens"
       >
-        <ExternalLink size={18} />
+        <Papicon icon="ExternalLink" size={18} />
       </a>
     {/if}
   </div>

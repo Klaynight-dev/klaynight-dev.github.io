@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Eye, Github } from "lucide-svelte";
+  import { Github } from "lucide-svelte";
+  import Papicon from "./Papicon.svelte";
   import ProjectCover from "./ProjectCover.svelte";
   import { reveal } from "../actions/reveal";
   import type { Project } from "../data/projects";
@@ -99,7 +100,7 @@
             rel="noopener noreferrer"
             class="pill pill-neutral px-3.5 py-1.5 text-xs"
           >
-            <Eye size={13} /> {visitLabel}
+            <Papicon icon="Globe" size={13} /> {visitLabel}
           </a>
 
           {#if project.github}

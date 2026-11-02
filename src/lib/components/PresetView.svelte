@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { PenTool, Code, AppWindow, Quote, ArrowRight } from "lucide-svelte";
   import { projects, type Project } from "../data/projects";
   import { skillCategories, biography, services, testimonials, personalInfo } from "../data/resume";
   import { domainColors } from "../data/domains";
@@ -48,7 +47,7 @@
   );
 
   // Icons relevant to each service's real subject (design tool, web code, app window)
-  const serviceIcons = [Code, PenTool, AppWindow];
+  const serviceIcons = ["Code", "Palette", "Grid"];
 
   // Filter featured projects for preset view
   const featuredProjects = projects.filter(p => p.featured);
@@ -98,7 +97,6 @@
     <!-- Each skill shown through a real project screenshot; the first one spans the full row -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
       {#each services as service, i}
-        {@const Icon = serviceIcons[i % serviceIcons.length]}
         {@const domain = domainColors[service.domain]}
         {@const wide = i === 0}
         <article
@@ -111,7 +109,7 @@
               class="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 ease-out group-hover:scale-105 group-hover:rotate-3"
               style="background: {domain.bg}; color: {domain.text};"
             >
-              <Icon size={19} />
+              <Papicon icon={serviceIcons[i % serviceIcons.length]} size={19} />
             </span>
             <h3 class="font-display font-semibold text-ink {wide ? 'text-2xl' : 'text-lg'}">{service.title}</h3>
             <p class="text-sm text-ink-muted leading-relaxed">{service.description}</p>
@@ -162,7 +160,7 @@
     {#if onViewPortfolio}
       <div class="flex justify-end">
         <button type="button" onclick={onViewPortfolio} class="pill pill-neutral px-4 py-2 text-xs">
-          Voir tout le portfolio <ArrowRight size={12} />
+          Voir tout le portfolio <Papicon icon="ArrowRight" size={12} />
         </button>
       </div>
     {/if}
@@ -211,7 +209,7 @@
       {#each testimonials as item, i}
         <div class="card p-6 flex flex-col gap-4 relative" use:reveal={{ delay: staggerDelay(i) }}>
           <span class="absolute right-5 top-5" style="color: var(--accent-soft);">
-            <Quote size={32} />
+            <Papicon icon="TextBubble" size={32} />
           </span>
 
           <p class="font-display text-lg text-ink leading-relaxed flex-1 z-10 pr-6">
