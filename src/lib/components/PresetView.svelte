@@ -94,50 +94,39 @@
   <section id="savoir-faire" class="flex flex-col gap-4 scroll-mt-6" use:reveal>
     <h2 class="text-3xl md:text-4xl font-display font-semibold text-ink leading-tight">Ce que je <span class="title-mark">fais</span></h2>
 
-    <!-- Each skill shown through a real project screenshot; the first one spans the full row -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+    <!-- Each skill shown through a real project screenshot, captioned underneath; the first one spans the full row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-8 pt-1">
       {#each services as service, i}
         {@const domain = domainColors[service.domain]}
         {@const wide = i === 0}
-        <article
-          class="card card-interactive group overflow-hidden flex flex-col {wide ? 'md:col-span-2 md:flex-row' : ''}"
-          style="--card-accent: {domain.hue};"
-          use:reveal={{ delay: staggerDelay(i) }}
-        >
-          <div class="p-6 flex flex-col gap-3 {wide ? 'md:w-2/5 md:justify-center' : ''}">
-            <span
-              class="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 ease-out group-hover:scale-105 group-hover:rotate-3"
-              style="background: {domain.bg}; color: {domain.text};"
-            >
-              <Papicon icon={serviceIcons[i % serviceIcons.length]} size={19} />
-            </span>
-            <h3 class="font-display font-semibold text-ink {wide ? 'text-2xl' : 'text-lg'}">{service.title}</h3>
-            <p class="text-sm text-ink-muted leading-relaxed">{service.description}</p>
-            <div class="flex flex-wrap gap-1.5 mt-1">
-              {#each service.projectIds as id}
-                {@const project = projects.find((p) => p.id === id)}
-                {#if project}
-                  <button
-                    type="button"
-                    class="tag hover:text-ink transition-colors"
-                    onclick={() => onSelectProject?.(project)}
-                  >
-                    {project.title}
-                  </button>
-                {/if}
-              {/each}
-            </div>
-          </div>
+        <article class="group flex flex-col gap-4 {wide ? 'md:col-span-2' : ''}" use:reveal={{ delay: staggerDelay(i) }}>
           <div
-            class="relative overflow-hidden min-h-56 {wide ? 'md:flex-1 md:min-h-80' : 'flex-1'}"
+            class="relative overflow-hidden rounded-3xl border border-border {wide ? 'aspect-[16/9] md:aspect-[21/9]' : 'aspect-[4/3]'}"
             style="background: {domain.bg};"
           >
             <img
               src={screenshotMap[service.visual]}
               alt={service.visualAlt}
               loading="lazy"
-              class="absolute left-8 top-8 w-[125%] max-w-none rounded-xl border border-border shadow-lg transition-transform duration-500 ease-out group-hover:-translate-x-1 group-hover:-translate-y-1"
+              class="absolute left-[8%] top-[10%] w-[110%] max-w-none rounded-2xl border border-border shadow-xl transition-transform duration-500 ease-out group-hover:-translate-y-1.5"
             />
+          </div>
+          <div class="flex flex-col gap-2 px-1 {wide ? 'md:max-w-2xl' : ''}">
+            <h3 class="flex items-center gap-2 font-display font-semibold text-ink text-xl">
+              <span style="color: {domain.text};"><Papicon icon={serviceIcons[i % serviceIcons.length]} size={20} /></span>
+              {service.title}
+            </h3>
+            <p class="text-sm text-ink-muted leading-relaxed">{service.description}</p>
+            <div class="flex flex-wrap gap-1.5 mt-1">
+              {#each service.projectIds as id}
+                {@const project = projects.find((p) => p.id === id)}
+                {#if project}
+                  <button type="button" class="pill pill-neutral px-3 py-1 text-xs" onclick={() => onSelectProject?.(project)}>
+                    {project.title}
+                  </button>
+                {/if}
+              {/each}
+            </div>
           </div>
         </article>
       {/each}
