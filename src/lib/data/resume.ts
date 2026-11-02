@@ -381,7 +381,23 @@ export const projects: Project[] = [
     imageAlt: "Éditeur de formulaire OpenForms : palette de champs à gauche, formulaire au centre, panneau de configuration du champ à droite.",
     tags: ["SvelteKit", "ElysiaJS", "Prisma", "PostgreSQL", "Bun", "Docker"],
     featured: true,
-    tile: "wide"
+    tile: "wide",
+    role: "Conception et développement",
+    period: "Juillet – octobre 2026",
+    stats: [
+      { label: "commits", value: "126" },
+      { label: "types de champs", value: "11" },
+      { label: "chiffrement", value: "AES-256-GCM" }
+    ],
+    sections: [
+      {
+        title: "Pourquoi un outil maison",
+        body: "Humanitour collecte des réponses de citoyens interrogés en face-à-face : les confier à Google Forms n'était pas compatible avec la promesse faite aux répondants. OpenForms s'héberge sur nos serveurs, sans tracker tiers, et chiffre les réponses au repos.",
+        image: "openforms-accueil.webp",
+        imageAlt: "Page d'accueil d'OpenForms : « Formulaire Humanitour », bouton Espace administration et trois cartes, builder, tableur intégré, RGPD par design.",
+        caption: "L'instance de l'association, forms.humanitour.fr."
+      }
+    ]
   },
   {
     id: "aellyel",
@@ -389,7 +405,10 @@ export const projects: Project[] = [
     category: "Web Development",
     description: "Hub de découverte de jeux indépendants rangés par humeur plutôt que par genre : bulle cozy, récit poétique, exploration calme, pixel nostalgie. Tirage au sort d'un jeu, notes et commentaires, favoris, liste de souhaits, suggestions de joueurs modérées depuis un back-office.",
     url: "https://aellyel.klaynight.fr/",
-    image: "",
+    image: "aellyel-accueil.webp",
+    imageAlt: "Accueil d'Aellyel : jeu coup de cœur à gauche, nuage d'humeurs en étiquettes colorées à droite.",
+    period: "Juin – juillet 2026",
+    stats: [{ label: "commits", value: "22" }],
     tags: ["SvelteKit", "ElysiaJS", "Prisma", "PostgreSQL", "Redis", "Bun"],
     featured: true
   },
@@ -400,7 +419,8 @@ export const projects: Project[] = [
     description: "Service d'agrégation de liens hébergé en France : chaque profil est une page personnalisable en temps réel, avec bibliothèque de thèmes, animations et éditeur visuel.",
     url: "https://plinkk.fr",
     github: "https://github.com/Klaynight-dev/links_website_template",
-    image: "",
+    image: "plinkk-accueil.webp",
+    imageAlt: "Accueil de plinkk.fr : titre « Votre univers en un lien. Clair, vivant, mémorisable. » et champ d'inscription par mail.",
     tags: ["EJS", "Bun", "TypeScript", "Tailwind"],
     featured: true
   },
@@ -411,9 +431,24 @@ export const projects: Project[] = [
     description: "Site et tableau de bord de Kotbo, un bot de gestion de communauté Discord : configuration des modules, modération, économie et statistiques de serveur depuis le navigateur.",
     url: "https://kotbo.fr",
     github: "https://github.com/Kotbo-Bot",
-    image: "",
+    image: "kotbo-accueil.webp",
+    imageAlt: "Accueil de kotbo.fr : « Le bot Discord qui gère ton serveur pendant que tu dors », boutons Ajouter à Discord et Tester le dashboard.",
     tags: ["Svelte", "TailwindCSS", "Bun", "Vite"],
-    featured: true
+    featured: true,
+    period: "Depuis mars 2026",
+    stats: [
+      { label: "commits sur le bot", value: "1 793 / 3 530" },
+      { label: "modules", value: "58" }
+    ],
+    sections: [
+      {
+        title: "Raconter le problème",
+        body: "La landing ne liste pas des fonctionnalités : elle met en scène la nuit d'un fondateur de serveur sans Kotbo, notifications et messages de modérateurs à l'appui, puis bascule sur la même scène avec le bot.",
+        image: "kotbo-staff.webp",
+        imageAlt: "Section comparative de kotbo.fr : salon #staff rempli de demandes de modérateurs à 2 h du matin et écran de téléphone couvert de notifications.",
+        caption: "Le comparatif « Sans Kotbo / Avec Kotbo »."
+      }
+    ]
   },
   {
     id: "synapsejs",
@@ -422,8 +457,14 @@ export const projects: Project[] = [
     description: "Framework JavaScript orienté événements pour monter rapidement une application web ou un bot Discord sur une même base de routage et d'écouteurs.",
     url: "https://synapsejs.klaynight.fr",
     github: "https://github.com/Klaynight-dev/SynapseJS",
-    image: "",
+    image: "synapsejs-accueil.webp",
+    imageAlt: "Site de SynapseJS en post-its : « Le moteur de rendu sans DOM pour le web » et chiffres du banc d'essai, 643 FPS contre 10,4 pour le DOM.",
     tags: ["TypeScript", "Node.js", "WebSocket", "Framework"],
+    period: "Mai – juillet 2026",
+    stats: [
+      { label: "commits", value: "15" },
+      { label: "plus rapide que le DOM", value: "×46" }
+    ],
     featured: true
   },
   {
