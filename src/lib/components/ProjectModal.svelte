@@ -63,6 +63,7 @@
       aria-modal="true"
       aria-labelledby="project-modal-title"
       tabindex="-1"
+      data-lenis-prevent
       onclick={(e) => e.stopPropagation()}
       onkeydown={handleKeydown}
     >
