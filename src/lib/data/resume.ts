@@ -394,8 +394,8 @@ export const projects: Project[] = [
     description: "Alternative open source (MIT) et auto-hébergeable à Google Forms, développée pour le tour de France d'Humanitour. Édition collaborative en direct avec les curseurs des autres, statistiques et croisements multi-sources intégrés, tableur maison pour corriger les réponses, signature, organisations et partage par rôles, consentement RGPD par finalité et chiffrement AES-256-GCM des réponses en base.",
     url: "https://forms.humanitour.fr/",
     github: "https://github.com/Klaynight-dev/Openforms",
-    image: "openforms-builder.png",
-    imageAlt: "Éditeur de formulaire OpenForms : palette de champs à gauche, formulaire au centre, panneau de configuration du champ à droite.",
+    image: "openforms-editeur.webp",
+    imageAlt: "Éditeur OpenForms du questionnaire « Tour de France citoyen 2026 » : la question sur la région est encadrée en bleu au nom de Côme, son curseur nommé est visible à l'écran et son avatar apparaît dans l'en-tête.",
     tags: ["SvelteKit", "ElysiaJS", "Prisma", "PostgreSQL", "Bun", "Docker"],
     featured: true,
     tile: "wide",
@@ -424,7 +424,10 @@ export const projects: Project[] = [
       },
       {
         title: "Éprouvé sur le terrain",
-        body: "Le formulaire du tour a dépassé les 1 000 réponses. Ce volume a guidé la suite : synchronisation incrémentale du tableur et cache local pour ne plus tout recharger, chargement différé des graphiques, et un formulaire public qui guide la correction et protège la saisie quand le réseau lâche.\n\nLe travail en équipe a aussi demandé des groupes : organisations dont l'appartenance ouvre les formulaires, partage explicite à trois rôles, et répartition des participants entre plusieurs variantes d'un même questionnaire."
+        body: "Le formulaire du tour a dépassé les 1 000 réponses. Ce volume a guidé la suite : synchronisation incrémentale du tableur et cache local pour ne plus tout recharger, chargement différé des graphiques, et un formulaire public qui guide la correction et protège la saisie quand le réseau lâche.\n\nLe travail en équipe a aussi demandé des groupes : organisations dont l'appartenance ouvre les formulaires, partage explicite à trois rôles, et répartition des participants entre plusieurs variantes d'un même questionnaire.",
+        image: "openforms-croisement.webp",
+        imageAlt: "Tableau croisé d'OpenForms : région en lignes, tranche d'âge en colonnes, chaque case colorée en vert selon l'effectif, sur 1 087 réponses.",
+        caption: "Région × tranche d'âge sur 1 087 réponses (données de démonstration)."
       },
       {
         title: "Collaborer en direct",
@@ -432,7 +435,17 @@ export const projects: Project[] = [
       },
       {
         title: "Analyser sans exporter",
-        body: "Les statistiques vivent dans l'outil : croisement de plusieurs champs et de plusieurs sources, corrélations, répartition par heure de la journée, presets de croisement réutilisables et export des graphiques en image aux couleurs du formulaire.\n\nLe tableur se pose comme un calque sur les réponses : on corrige une cellule d'un double-clic, on ajoute des colonnes calculées par formule (SUM, AVG, MEDIAN…), on filtre, puis on exporte en Excel, CSV ou JSON. Un serveur MCP permet enfin de consulter et configurer OpenForms depuis Claude."
+        body: "Les statistiques vivent dans l'outil : indicateurs clés, croisement de plusieurs champs et de plusieurs sources, corrélations, carte des réponses par jour et par heure, presets de croisement réutilisables et export des graphiques en image aux couleurs du formulaire.",
+        image: "openforms-statistiques.webp",
+        imageAlt: "Onglet Statistiques d'OpenForms : filtres par question, huit indicateurs (1087 réponses, 61 jours actifs, heure de pointe 11 h-12 h), courbe d'évolution et carte de chaleur jour × heure.",
+        caption: "Indicateurs et carte jour × heure (données de démonstration)."
+      },
+      {
+        title: "Le tableur, un calque sur les réponses",
+        body: "Le tableur se pose sur les réponses sans les remplacer : on corrige une cellule d'un double-clic, on ajoute des colonnes calculées par formule (SUM, AVG, MEDIAN…), on filtre chaque colonne, puis on exporte en Excel, CSV ou JSON. Un serveur MCP permet enfin de consulter et configurer OpenForms depuis Claude.",
+        image: "openforms-tableur.webp",
+        imageAlt: "Tableur des réponses d'OpenForms : une colonne par question avec un filtre en en-tête, une ligne par répondant.",
+        caption: "Les réponses en tableur, filtrables colonne par colonne (données de démonstration)."
       }
     ]
   },
