@@ -235,6 +235,7 @@
   function toPapiconsName(value: unknown) {
     const normalized = typeof value === "string" ? value.trim() : "";
     if (!normalized) return fallbackIconName;
+    if (availablePapicons.has(normalized)) return normalized;
 
     const lower = normalized.toLowerCase();
     if (iconAliases[lower]) return iconAliases[lower];
