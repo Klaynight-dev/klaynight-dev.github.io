@@ -232,3 +232,23 @@ plus tard). Trois changements, dials ENERGY 2 / RHYTHM 2 / MOTION 2 inchangés :
 - **Bouton remonter en haut** (`ScrollToTop.svelte`) : n'apparaît qu'une fois la page réellement
   scrollée (sinon ce serait un bouton sans effet, R-26), même style `pill-icon` que le reste du
   site plutôt qu'un composant à part, décalé au-dessus de la barre de navigation mobile.
+
+## Registre éditorial : sommaire, filtres, parcours, contact (ajout)
+
+Le propriétaire a demandé de rapprocher ces quatre zones de tomthings.fr et vincelinise.com.
+Le motif « tout en pilule beige » y cède la place à un registre éditorial ; les pilules restent
+pour les boutons d'action, les tags et la barre d'onglets principale.
+
+- **Sommaire de l'onglet À propos** (`.index-nav`) : numéro mono en accent + libellé, entre deux
+  filets, soulignement au survol. Les numéros existaient déjà dans les données sans être affichés.
+- **Filtres du portfolio** (`.filter-tabs`) : onglets texte avec leur compteur en mono ; l'onglet
+  actif porte un trait de 2 px à la couleur de son domaine (`--tab-color`), ink pour « Tout ».
+- **Parcours** : grands titres Fraunces en graisse 400 (`.title-xl`, écho aux titres légers de
+  Vince et serif de Tom), frise date | contenu dont le rail passe entre les deux colonnes sur grand
+  écran et à gauche sur mobile, liens en texte souligné (`.text-link`). Les compétences clés
+  deviennent une liste numérotée entre filets au lieu de cartes de pilules.
+- **Contact** (`.contact-block`) : bloc encre plein, titre géant « Parlons-en. » (Tom), liens
+  directs en icônes et nom géant rogné en pied de bloc (Vince), champs soulignés sur fond sombre.
+  La carte Google Maps est retirée : iframe tierce, et la localisation tient en une ligne.
+  Contrastes approximatifs sur `--ink` : texte blanc 18:1, texte secondaire à 70 % 9:1, placeholders à 50 % 5:1,
+  lavande `#d8c3ea` 11:1 ; le focus passe en blanc dans le bloc.
