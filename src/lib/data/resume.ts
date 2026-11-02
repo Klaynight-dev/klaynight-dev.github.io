@@ -286,6 +286,91 @@ export const keyCompetences: KeyCompetence[] = [
 
 export const projects: Project[] = [
   {
+    id: "humanitour",
+    title: "Humanitour",
+    category: "Web Development",
+    description: "Plateforme du premier institut de sondage citoyen : 4 000 km à vélo, 1 000 personnes interrogées en face-à-face dans les treize régions métropolitaines, et la totalité des données brutes publiée. Explorateur qui croise n'importe quelle question avec n'importe quelle autre, export CSV et JSON, médiathèque et back-office complet.",
+    url: "https://humanitour.fr",
+    github: "https://github.com/Klaynight-dev/Humanitour_Landing",
+    image: "humanitour-accueil.webp",
+    imageAlt: "Page d'accueil d'Humanitour : titre « Et si on était enfin écoutés ? », chiffres du tour et photo du vélo chargé devant un pré.",
+    tags: ["SvelteKit", "Svelte 5", "Prisma", "PostgreSQL", "ECharts", "Bun", "Docker"],
+    featured: true,
+    tile: "wide",
+    role: "Cofondateur, responsable numérique",
+    period: "Depuis septembre 2026",
+    stats: [
+      { label: "commits", value: "96 / 97" },
+      { label: "lignes ajoutées", value: "+115 665" },
+      { label: "licence du code", value: "AGPL-3.0" },
+      { label: "licence des données", value: "ODbL 1.0" }
+    ],
+    sections: [
+      {
+        title: "Le constat",
+        body: "Les sondages d'opinion sont presque tous réalisés en ligne, auprès de volontaires rémunérés, par des instituts qui ne publient ni leurs données brutes ni leurs redressements.\n\nAvec l'association, on a pris le problème par l'autre bout : deux mois sur la route, hébergés chez les habitants, pour interroger un échantillon représentatif en face-à-face. Il fallait ensuite un site à la hauteur de cette promesse de transparence, et c'est la partie que je porte.",
+        image: "humanitour-tour.webp",
+        imageAlt: "Page « Le tour » : titre « Le premier sondage de terrain » et bandeau de chiffres, 4000 kilomètres, 1 000 sondés, 70 % de participation, 50 nuits.",
+        caption: "La page du tour, qui raconte le terrain avant de montrer les chiffres."
+      },
+      {
+        title: "Tout est publié",
+        body: "L'explorateur de données laisse croiser n'importe quelle variable avec n'importe quelle autre, et chaque résultat se partage par un lien permanent. Les exports CSV et JSON sont accessibles sans compte.\n\nLes garanties sont écrites dans le code plutôt que dans une charte : la non-réponse est une modalité comme une autre, jamais un null filtré ; l'effectif brut accompagne chaque pourcentage ; un redressement, s'il existe, s'affiche à côté du brut ; un seuil de k-anonymat masque les croisements trop fins pour empêcher toute ré-identification.",
+        image: "humanitour-donnees.webp",
+        imageAlt: "Page « Les données » : titre « Tout est publié. Croisez ce que vous voulez. » et champ de recherche d'enquête.",
+        caption: "Point d'entrée de l'explorateur : recherche par enquête ou par question."
+      },
+      {
+        title: "Le back-office",
+        body: "Les questionnaires sont collectés par OpenForms, l'outil de formulaires que j'ai écrit pour l'association, puis synchronisés dans la plateforme. Le back-office gère l'import en trois étapes, l'édition des questions, la consultation des réponses, le moteur de redressement (raking réécrit sur des tableaux typés, avec diagnostics de Kish), la newsletter avec double confirmation par mail et l'export des graphiques en affiche PNG."
+      }
+    ]
+  },
+  {
+    id: "tafac",
+    title: "Tafac",
+    category: "Web Development",
+    description: "Client web alternatif aux ENT universitaires, membre de la famille Papillon : emploi du temps, notes, messagerie, Moodle, menu du CROUS et bus dans une seule application installable. Contributeur principal du back des notes et du planning, et de l'intégration du réseau de bus TILT.",
+    url: "https://tafac.fr",
+    github: "https://github.com/l-ent-univ/tafac",
+    image: "tafac-accueil.webp",
+    imageAlt: "Page d'accueil de Tafac : widgets du prochain cours, de la dernière note, des mails récents et des échéances, au-dessus du titre « Ta journée à la fac, en un coup d'œil ».",
+    tags: ["React", "Express", "Node.js", "TailwindCSS", "PWA"],
+    featured: true,
+    tile: "wide",
+    role: "Contributeur (back des notes et du planning, bus TILT)",
+    period: "Depuis octobre 2026",
+    stats: [
+      { label: "commits", value: "92" },
+      { label: "lignes ajoutées", value: "+29 856" },
+      { label: "licence", value: "AGPL-3.0" }
+    ],
+    sections: [
+      {
+        title: "Le projet",
+        body: "Tafac est né d'un constat partagé par tous les étudiants de l'Université de Rennes : l'emploi du temps, les notes, les mails et Moodle vivent sur quatre sites différents, aucun n'étant pensé pour le téléphone. Le projet est lancé par Tom (tomthings.fr) et fait partie de Papillon ; j'y contribue sur le back et sur les nouvelles fonctionnalités."
+      },
+      {
+        title: "Les notes",
+        body: "J'ai écrit la lecture des relevés ScoDoc : relevé par semestre, UE, ressources et SAÉ, message du département, téléchargement du PDF officiel, avec un cache mémoire et un préchargement des semestres pour que la page s'ouvre sans attente.\n\nPar-dessus, un simulateur permet d'ajouter des notes fictives pour voir l'effet sur les moyennes et la validation des UE, sans jamais toucher à ScoDoc.",
+        image: "tafac-notes.webp",
+        imageAlt: "Section « Suis tes résultats pendant le semestre » : moyenne générale 14,5 sur 20, trois UE validées sur trois et dernières notes.",
+        caption: "Mes notes : moyenne, UE validées et dernières évaluations."
+      },
+      {
+        title: "Le planning",
+        body: "Côté emploi du temps, j'ai travaillé la lecture d'ADE : détection du groupe TD/TP, majeures, mineures et options ajoutées au groupe, salles libres lues dans la branche Salles, saut au prochain jour de cours.\n\nLes mails de l'université annoncent souvent un cours déplacé ou annulé : des règles locales repèrent ces annonces et marquent le cours concerné directement dans le planning.",
+        image: "tafac-planning.webp",
+        imageAlt: "Section « Prépare ta semaine de cours » : liste des cours du lendemain avec horaires, salles et menu contextuel « Écrire au sujet de ce cours ».",
+        caption: "Planning : cours du jour, salles, enseignants et mail prérempli depuis un cours."
+      },
+      {
+        title: "Bus TILT, CROUS et Moodle",
+        body: "J'ai intégré le réseau de bus TILT de Lannion : une page Bus avec les passages et le plan du réseau, les trajets de la semaine calculés à partir du planning, le bus aller et retour affiché dans la fiche d'un cours, et des rappels en notifications push qui ne gardent aucune donnée d'étudiant.\n\nJ'ai aussi proposé et développé le menu du restaurant universitaire (service en direct, une carte par repas) et l'intégration de Moodle avec ses cours, sections et échéances."
+      }
+    ]
+  },
+  {
     id: "openforms",
     title: "OpenForms",
     category: "Web Development",
