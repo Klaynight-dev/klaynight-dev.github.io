@@ -27,14 +27,6 @@
   import bootstrapLogo from "../../../assets/images/Bootstrap.svg";
   import tailwindLogo from "../../../assets/images/Tailwind.svg.png";
 
-  // Import project screenshots for Vite static bundling
-  import plinkkImg from "../../../assets/images/plinkk.png";
-  import hubgamesImg from "../../../assets/images/HubGames.jpeg";
-  import jobiImg from "../../../assets/images/Jobi.png";
-  import joSurfImg from "../../../assets/images/jo-surf-pages.png";
-  import openformsImg from "../../../assets/images/openforms-builder.png";
-  import papiconsSheet from "../../../assets/images/papicons-sheet.svg";
-
   const logoMap: Record<string, string> = {
     "Postgresql_elephant.png": pgLogo,
     "MySQL.svg": mySqlLogo,
@@ -48,14 +40,12 @@
     "Tailwind.svg.png": tailwindLogo
   };
 
-  const screenshotMap: Record<string, string> = {
-    "plinkk.png": plinkkImg,
-    "HubGames.jpeg": hubgamesImg,
-    "Jobi.png": jobiImg,
-    "jo-surf-pages.png": joSurfImg,
-    "openforms-builder.png": openformsImg,
-    "papicons-sheet.svg": papiconsSheet
-  };
+  // Every file in assets/images, keyed by filename as referenced in resume.ts.
+  const screenshotMap: Record<string, string> = Object.fromEntries(
+    Object.entries(
+      import.meta.glob<string>("../../../assets/images/*", { eager: true, import: "default", query: "?url" })
+    ).map(([path, url]) => [path.split("/").pop()!, url])
+  );
 
   // Icons relevant to each service's real subject (design tool, web code, app window)
   const serviceIcons = [PenTool, Code, AppWindow];

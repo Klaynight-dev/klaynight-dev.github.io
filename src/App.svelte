@@ -12,22 +12,12 @@
   import { domainColors, projectCategoryDomain } from "./lib/data/domains";
   import { Mail, User, GraduationCap, LayoutGrid, Link2, Check, CircleAlert, ArrowRight } from "lucide-svelte";
 
-  // Import project screenshots and fallbacks
-  import plinkkImg from "../assets/images/plinkk.png";
-  import hubgamesImg from "../assets/images/HubGames.jpeg";
-  import jobiImg from "../assets/images/Jobi.png";
-  import joSurfImg from "../assets/images/jo-surf-pages.png";
-  import openformsImg from "../assets/images/openforms-builder.png";
-  import papiconsSheet from "../assets/images/papicons-sheet.svg";
-
-  const screenshotMap: Record<string, string> = {
-    "plinkk.png": plinkkImg,
-    "HubGames.jpeg": hubgamesImg,
-    "Jobi.png": jobiImg,
-    "jo-surf-pages.png": joSurfImg,
-    "openforms-builder.png": openformsImg,
-    "papicons-sheet.svg": papiconsSheet
-  };
+  // Every file in assets/images, keyed by filename as referenced in resume.ts.
+  const screenshotMap: Record<string, string> = Object.fromEntries(
+    Object.entries(
+      import.meta.glob<string>("../assets/images/*", { eager: true, import: "default", query: "?url" })
+    ).map(([path, url]) => [path.split("/").pop()!, url])
+  );
 
   const tabs = [
     { id: "about", label: "À propos", icon: User },
