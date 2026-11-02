@@ -502,7 +502,8 @@ export const projects: Project[] = [
     category: "Web Design",
     description: "Affiche pédagogique co-signée avec Guéwen Maréchal : le système d'exploitation expliqué comme un chef d'orchestre, où les programmes sont les musiciens, le matériel les instruments et vos clics la partition.",
     url: "https://www.figma.com/design/8Ssy1x4r895uqdRB88IJgQ/C-est-quoi-un-os-affiche?node-id=0-1&t=Us7LhQsjuHm2UcWO-1",
-    image: "",
+    image: "affiche-os.webp",
+    imageAlt: "Affiche « C'est quoi un OS ? » : un chef d'orchestre au centre, entouré des blocs Les Musiciens, La Partition, Les Instruments et Le Public, et en bas les quatre rôles de l'OS, interpréter les gestes, éviter les fausses notes, gérer les ressources, donner le tempo.",
     tags: ["Figma", "Affiche", "Vulgarisation", "Typographie"],
     tile: "tall"
   },
