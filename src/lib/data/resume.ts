@@ -458,11 +458,43 @@ export const projects: Project[] = [
     ],
     sections: [
       {
+        title: "Un bot pour un seul serveur",
+        body: "Kotbo est né en mars 2026 pour le serveur Discord des Nerds, une communauté de créateur de contenu. Le besoin était simple : gérer mon staff en quelques clics plutôt qu'à coups de tableurs et de messages épinglés.\n\nLes fonctionnalités se sont ajoutées au fil des demandes (modération, tickets, notifications YouTube, économie), puis j'ai ouvert le bot pour qu'il puisse s'installer sur d'autres serveurs."
+      },
+      {
+        title: "Une équipe, puis une bêta",
+        body: "Nathan m'a rejoint en avril 2026, puis Victor (Intercalaire) en mai. À trois, on a repris l'interface, ajouté de nouveaux écrans et fait passer le dashboard d'un outil interne à un produit.\n\nLa bêta fermée a servi à confronter les fonctionnalités Discord aux retours des premiers utilisateurs. À sa sortie, Kotbo est passé en production et les premiers clients sont arrivés courant juin 2026, en même temps que la première landing.",
+        image: "kotbo-landing-juin.webp",
+        imageAlt: "Première landing de Kotbo, juin 2026 : titre « Le centre de contrôle de ta communauté », post-its « Trop d'outils différents ! » et « Regrouper ça ici » posés sur des captures du dashboard.",
+        caption: "Juin 2026 : la première landing, au moment de la mise en production."
+      },
+      {
+        title: "Un dashboard qui se professionnalise",
+        body: "À force d'ajouter des modules, le dashboard en affichait plus d'une soixantaine dans une barre latérale de trois menus, avec des widgets qui se disputaient l'accueil. En octobre 2026, on l'a simplifié écran par écran.",
+        image: "kotbo-dashboard-avant.webp",
+        imageAlt: "Accueil du dashboard Kotbo avant la refonte : barre latérale de vingt entrées réparties en Général, Modération et Sécurité, badges BETA, accueil chargé de widgets.",
+        caption: "Avant : vingt entrées dans la barre latérale et des badges BETA partout."
+      },
+      {
+        title: "Moins d'écrans, plus clairs",
+        body: "La barre latérale tient en sept familles, les libellés parlent français courant (« Exclusions temporaires » plutôt que « Timeouts ») et l'accueil ne garde que ce qui demande une action.",
+        image: "kotbo-dashboard-apres.webp",
+        imageAlt: "Accueil du dashboard Kotbo après la refonte : barre latérale en sept familles repliables, liste « À traiter », chiffres du serveur, graphe des messages et bloc Modération.",
+        caption: "Après : le même accueil, recentré sur ce qui est à traiter."
+      },
+      {
         title: "Raconter le problème",
         body: "La landing ne liste pas des fonctionnalités : elle met en scène la nuit d'un fondateur de serveur sans Kotbo, notifications et messages de modérateurs à l'appui, puis bascule sur la même scène avec le bot.",
         image: "kotbo-staff.webp",
         imageAlt: "Section comparative de kotbo.fr : salon #staff rempli de demandes de modérateurs à 2 h du matin et écran de téléphone couvert de notifications.",
         caption: "Le comparatif « Sans Kotbo / Avec Kotbo »."
+      },
+      {
+        title: "Le passage en freemium",
+        body: "Depuis le 1er novembre 2026, la modération et les essentiels sont ouverts sans abonnement : sanctions et AutoMod, anti-raid, logs, accueil, niveaux, tickets, giveaways, analytics et notifications YouTube et Twitch. L'offre complète garde la gestion du staff, l'IA de modération AegisAI, le site de communauté et le serveur MCP.\n\nL'objectif est d'attirer beaucoup plus de serveurs : un bot gratuit s'installe sans hésiter, et le staff se gère ensuite là où la communauté vit déjà.",
+        image: "kotbo-freemium.webp",
+        imageAlt: "Comparatif des offres Kotbo : neuf modules gratuits cochés à gauche, sept modules de l'offre complète dans un encart sombre à droite.",
+        caption: "Novembre 2026 : neuf modules gratuits, sept réservés à l'offre complète."
       }
     ]
   },
