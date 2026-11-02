@@ -345,6 +345,50 @@
   text-decoration-color: currentColor;
 }
 
+/* Filtres du portfolio en onglets texte ; le trait prend la couleur du domaine (--tab-color). */
+.filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.filter-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.6rem 0 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink-muted-strong);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.filter-tab::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 2px;
+  background: var(--tab-color, var(--ink));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.filter-tab:hover,
+.filter-tab[aria-pressed="true"] {
+  color: var(--ink);
+}
+.filter-tab[aria-pressed="true"]::after {
+  transform: scaleX(1);
+}
+.filter-count {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+}
+
 /* Timeline (resume) */
 .timeline-rail {
   border-left: 2px solid var(--border);

@@ -233,18 +233,19 @@
               <h3 class="text-2xl font-display font-semibold text-ink">Tous mes <span class="title-mark">projets</span></h3>
             </div>
 
-            <!-- Category filter pills — the active pill takes its category's
-                 domain color (see domains.ts) so the filter choice is legible
-                 as color, not just weight. "Tout" has no domain: stays ink. -->
-            <div class="flex flex-wrap gap-2">
+            <!-- Category filter tabs — the active underline takes its category's
+                 domain color (see domains.ts). "Tout" has no domain: stays ink. -->
+            <div class="filter-tabs">
               {#each filters as filter}
                 {@const domain = filter.id in projectCategoryDomain ? domainColors[projectCategoryDomain[filter.id as keyof typeof projectCategoryDomain]] : null}
                 <button
                   onclick={() => projectFilter = filter.id}
-                  class="pill px-4 py-2 text-xs {projectFilter === filter.id ? 'pill-active' : 'pill-neutral'}"
-                  style={projectFilter === filter.id && domain ? `background: ${domain.text}; color: #fff;` : ''}
+                  class="filter-tab"
+                  aria-pressed={projectFilter === filter.id}
+                  style={domain ? `--tab-color: ${domain.text};` : ''}
                 >
                   {filter.label}
+                  <span class="filter-count">{filter.id === "all" ? projects.length : projects.filter(p => p.category === filter.id).length}</span>
                 </button>
               {/each}
             </div>
