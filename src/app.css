@@ -282,6 +282,69 @@
   color: var(--ink-muted-strong);
 }
 
+/* ==========================================================
+   Registre éditorial, d'après tomthings.fr et vincelinise.com :
+   grands titres serif, liens texte soulignés, très peu de pilules.
+   ========================================================== */
+
+.title-xl {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 4.2vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.3em;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+.text-link:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+/* Sommaire de la page À propos : numéro mono + libellé. */
+.index-nav {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1.75rem;
+  row-gap: 0.5rem;
+  padding-block: 0.9rem;
+  border-block: 1px solid var(--border);
+}
+.index-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink-muted-strong);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.35em;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+.index-link span {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+}
+.index-link:hover {
+  color: var(--ink);
+  text-decoration-color: currentColor;
+}
+
 /* Timeline (resume) */
 .timeline-rail {
   border-left: 2px solid var(--border);

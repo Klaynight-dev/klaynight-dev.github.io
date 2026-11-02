@@ -68,10 +68,10 @@
 
 <div class="flex flex-col gap-12 animate-fade-in">
   <!-- Section jump-nav: quick way to skip a long page, smooth-scrolled -->
-  <nav class="flex flex-wrap gap-2" aria-label="Sections de la page">
+  <nav class="index-nav" aria-label="Sections de la page">
     {#each sections as section}
-      <a href="#{section.id}" class="pill pill-neutral px-3.5 py-1.5 text-xs">
-        {section.label}
+      <a href="#{section.id}" class="index-link">
+        <span>{section.number}</span>{section.label}
       </a>
     {/each}
   </nav>
