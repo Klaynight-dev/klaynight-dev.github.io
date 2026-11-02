@@ -169,62 +169,51 @@
           />
         {:else if activeTab === "resume"}
           <!-- Render CV/Timeline -->
-          <div class="flex flex-col gap-10 animate-fade-in">
-            <!-- Scholastic -->
-            <div class="flex flex-col gap-4">
-              <h3 class="text-2xl font-display font-semibold text-ink">Parcours <span class="title-mark">scolaire</span></h3>
-              <div class="timeline-rail ml-2 pl-6 flex flex-col gap-7 relative">
-                {#each education as item, i}
-                  <div class="relative py-1" use:reveal={{ delay: staggerDelay(i) }}>
-                    <div class="timeline-dot absolute -left-7.75 top-2"></div>
-                    <span class="eyebrow">{item.date}</span>
-                    <h4 class="text-base font-display font-semibold text-ink mt-1.5">{item.title}</h4>
-                    <p class="text-sm text-ink-muted mt-0.5">{item.subtitle}</p>
-                    <p class="text-sm text-ink-muted mt-2 leading-relaxed">{item.description}</p>
-                  </div>
-                {/each}
-              </div>
-            </div>
-
-            <!-- Experience -->
-            <div class="flex flex-col gap-4">
-              <h3 class="text-2xl font-display font-semibold text-ink"><span class="title-mark">Expériences</span></h3>
-              <div class="timeline-rail ml-2 pl-6 flex flex-col gap-7 relative">
-                {#each experiences as item, i}
-                  <div class="relative py-1" use:reveal={{ delay: staggerDelay(i) }}>
-                    <div class="timeline-dot absolute -left-7.75 top-2"></div>
-                    <span class="eyebrow">{item.date}</span>
-                    <h4 class="text-base font-display font-semibold text-ink mt-1.5">{item.title}</h4>
-                    <p class="text-sm text-ink-muted mt-0.5">{item.subtitle}</p>
-                    <p class="text-sm text-ink-muted mt-2 leading-relaxed">{item.description}</p>
-                    {#if item.url}
-                      <a href={item.url} target="_blank" rel="noopener noreferrer" class="pill pill-neutral px-3 py-1.5 text-xs mt-3">
-                        {item.urlLabel || "Lien"} <Papicon icon="ArrowRight" size={12} />
-                      </a>
-                    {/if}
-                  </div>
-                {/each}
-              </div>
-            </div>
+          <div class="flex flex-col gap-16 animate-fade-in">
+            {#each [{ title: "Ma formation", items: education }, { title: "Mes expériences", items: experiences }] as group}
+              <section class="flex flex-col gap-8">
+                <h3 class="title-xl">{group.title}</h3>
+                <ol class="timeline">
+                  {#each group.items as item, i}
+                    <li class="timeline-row" use:reveal={{ delay: staggerDelay(i) }}>
+                      <span class="timeline-date eyebrow">{item.date}</span>
+                      <div class="timeline-body mt-1.5 md:mt-0">
+                        <h4 class="text-xl font-display font-semibold text-ink leading-snug">{item.title}</h4>
+                        <p class="text-sm font-medium text-ink-muted mt-1">{item.subtitle}</p>
+                        <p class="text-[0.95rem] text-ink-muted mt-3 leading-relaxed max-w-prose">{item.description}</p>
+                        {#if item.url}
+                          <a href={item.url} target="_blank" rel="noopener noreferrer" class="text-link mt-3">
+                            {item.urlLabel || "Lien"} <Papicon icon="ArrowRight" size={12} />
+                          </a>
+                        {/if}
+                      </div>
+                    </li>
+                  {/each}
+                </ol>
+              </section>
+            {/each}
 
             <!-- Key competencies -->
-            <div class="flex flex-col gap-4">
-              <h3 class="text-2xl font-display font-semibold text-ink">Compétences <span class="title-mark">clés</span></h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <section class="flex flex-col gap-8">
+              <h3 class="title-xl">Compétences clés</h3>
+              <ol class="border-y border-border divide-y divide-border">
                 {#each keyCompetences as competence, i}
-                  <div class="card p-4 flex flex-col gap-2.5" use:reveal={{ delay: staggerDelay(i) }}>
-                    <h4 class="text-sm font-semibold text-ink">{competence.title}</h4>
-                    <div class="flex flex-wrap gap-2">
-                      {#each competence.links as link}
-                        <a href={link.url} target="_blank" rel="noopener noreferrer" class="pill pill-neutral px-3 py-1 text-xs">
-                          <Papicon icon="Link" size={11} /> {link.label}
-                        </a>
-                      {/each}
+                  <li class="grid md:grid-cols-[10rem_1fr] gap-y-2 py-6" use:reveal={{ delay: staggerDelay(i) }}>
+                    <span class="eyebrow md:text-right md:pr-8 pt-1">{String(i + 1).padStart(2, "0")}</span>
+                    <div class="md:pl-8">
+                      <h4 class="text-lg font-display font-semibold text-ink">{competence.title}</h4>
+                      <div class="flex flex-wrap gap-x-5 gap-y-1.5 mt-2">
+                        {#each competence.links as link}
+                          <a href={link.url} target="_blank" rel="noopener noreferrer" class="text-link">
+                            {link.label} <Papicon icon="ArrowRight" size={12} />
+                          </a>
+                        {/each}
+                      </div>
                     </div>
-                  </div>
+                  </li>
                 {/each}
-              </div>
-            </div>
+              </ol>
+            </section>
           </div>
         {:else if activeTab === "portfolio"}
           <!-- Render Projects Catalog -->
