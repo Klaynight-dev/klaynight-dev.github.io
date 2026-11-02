@@ -34,6 +34,7 @@
       class="avatar-deck shrink-0"
       class:is-open={deckOpen}
       aria-pressed={deckOpen}
+      data-no-blobity
       aria-label="Voir ma photo à côté de mon logo"
       onclick={() => (deckOpen = !deckOpen)}
     >
