@@ -39,6 +39,13 @@ export interface Project {
    * `tall` pour les pieces graphiques au format portrait.
    */
   tile?: 'wide' | 'tall';
+  /** Role tenu sur le projet, affiche en tete de l'etude de cas. */
+  role?: string;
+  period?: string;
+  /** Chiffres tires de l'historique git du depot. */
+  stats?: { label: string; value: string }[];
+  /** Recit de l'etude de cas ; les paragraphes de `body` sont separes par une ligne vide. */
+  sections?: { title: string; body: string; image?: string; imageAlt?: string; caption?: string }[];
 }
 
 // ==========================================

@@ -116,7 +116,7 @@
 <ScrollToTop />
 <ProjectModal
   project={selectedProject}
-  image={selectedProject ? screenshotMap[selectedProject.image] : undefined}
+  screenshots={screenshotMap}
   onClose={closeProject}
 />
 

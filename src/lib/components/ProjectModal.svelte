@@ -4,7 +4,7 @@
   import { lockScroll, unlockScroll } from "../scroll";
   import ProjectCover from "./ProjectCover.svelte";
 
-  let { project, image, onClose }: { project: Project | null; image?: string; onClose: () => void } = $props();
+  let { project, screenshots, onClose }: { project: Project | null; screenshots: Record<string, string>; onClose: () => void } = $props();
 
   let dialogEl: HTMLDivElement | undefined = $state();
   let lastFocused: HTMLElement | null = null;
@@ -58,7 +58,7 @@
   >
     <div
       bind:this={dialogEl}
-      class="card w-full max-w-2xl max-h-[90vh] overflow-y-auto relative"
+      class="card w-full max-w-3xl max-h-[90vh] overflow-y-auto relative"
       role="dialog"
       aria-modal="true"
       aria-labelledby="project-modal-title"
@@ -78,11 +78,15 @@
       </button>
 
       <div class="aspect-[16/10] overflow-hidden bg-surface-muted border-b border-border">
-        <ProjectCover {project} {image} />
+        <ProjectCover {project} image={screenshots[project.image]} />
       </div>
 
       <div class="p-6 flex flex-col gap-3">
-        <span class="tag w-fit">{project.category}</span>
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="tag w-fit">{project.category}</span>
+          {#if project.role}<span class="text-xs text-ink-muted">{project.role}</span>{/if}
+          {#if project.period}<span class="text-xs text-ink-muted">· {project.period}</span>{/if}
+        </div>
         <h3 id="project-modal-title" class="text-2xl font-display font-semibold text-ink">
           {project.title}
         </h3>
@@ -93,6 +97,39 @@
             <span class="tag">{tag}</span>
           {/each}
         </div>
+
+        {#if project.stats}
+          <dl class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
+            {#each project.stats as stat}
+              <div class="rounded-xl border border-border px-3 py-2">
+                <dt class="text-xs text-ink-muted">{stat.label}</dt>
+                <dd class="font-display font-semibold text-ink">{stat.value}</dd>
+              </div>
+            {/each}
+          </dl>
+        {/if}
+
+        {#each project.sections ?? [] as section}
+          <section class="flex flex-col gap-2 mt-4">
+            <h4 class="text-lg font-display font-semibold text-ink">{section.title}</h4>
+            {#each section.body.split("\n\n") as paragraph}
+              <p class="text-sm text-ink-muted leading-relaxed">{paragraph}</p>
+            {/each}
+            {#if section.image && screenshots[section.image]}
+              <figure class="mt-2 flex flex-col gap-1.5">
+                <img
+                  src={screenshots[section.image]}
+                  alt={section.imageAlt ?? ""}
+                  loading="lazy"
+                  class="w-full rounded-xl border border-border"
+                />
+                {#if section.caption}
+                  <figcaption class="text-xs text-ink-muted">{section.caption}</figcaption>
+                {/if}
+              </figure>
+            {/if}
+          </section>
+        {/each}
 
         <div class="flex items-center gap-3 mt-3 pt-4 border-t border-border">
           <a
