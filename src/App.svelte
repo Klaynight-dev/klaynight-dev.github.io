@@ -11,6 +11,7 @@
   import { education, experiences, keyCompetences, personalInfo } from "./lib/data/resume";
   import { domainColors, projectCategoryDomain } from "./lib/data/domains";
   import Papicon from "./lib/components/Papicon.svelte";
+  import { Github } from "lucide-svelte";
 
   // Every file in assets/images, keyed by filename as referenced in resume.ts.
   const screenshotMap: Record<string, string> = Object.fromEntries(
@@ -254,55 +255,28 @@
           </div>
         {:else if activeTab === "contact"}
           <!-- Render Contact Page -->
-          <div class="flex flex-col gap-6 animate-fade-in">
-            <div class="flex flex-col gap-3">
-              <h3 class="text-2xl font-display font-semibold text-ink">Me <span class="title-mark">contacter</span></h3>
-            </div>
+          <div class="contact-block animate-fade-in">
+            <h3 class="contact-title">Une alternance, un projet ?<br /><em>Parlons-en.</em></h3>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <!-- Form -->
-              <form onsubmit={handleFormSubmit} class="flex flex-col gap-4">
-                <div class="flex flex-col gap-1.5">
-                  <label for="fullname" class="text-sm text-ink font-medium">Nom complet</label>
-                  <input
-                    type="text"
-                    id="fullname"
-                    bind:value={fullname}
-                    required
-                    placeholder="Ex: John Doe"
-                    class="field"
-                  />
+            <div class="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-12 mt-10 relative">
+              <form onsubmit={handleFormSubmit} class="flex flex-col gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div class="flex flex-col gap-1">
+                    <label for="fullname" class="text-sm contact-muted font-medium">Nom complet</label>
+                    <input type="text" id="fullname" bind:value={fullname} required placeholder="Ex : Jeanne Martin" class="field-dark" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label for="email" class="text-sm contact-muted font-medium">Adresse email</label>
+                    <input type="email" id="email" bind:value={email} required placeholder="jeanne@exemple.fr" class="field-dark" />
+                  </div>
                 </div>
 
-                <div class="flex flex-col gap-1.5">
-                  <label for="email" class="text-sm text-ink font-medium">Adresse email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    bind:value={email}
-                    required
-                    placeholder="Ex: john@example.com"
-                    class="field"
-                  />
+                <div class="flex flex-col gap-1">
+                  <label for="message" class="text-sm contact-muted font-medium">Votre message</label>
+                  <textarea id="message" bind:value={message} required rows="4" placeholder="Quelques lignes sur votre besoin" class="field-dark resize-none"></textarea>
                 </div>
 
-                <div class="flex flex-col gap-1.5">
-                  <label for="message" class="text-sm text-ink font-medium">Votre message</label>
-                  <textarea
-                    id="message"
-                    bind:value={message}
-                    required
-                    rows="4"
-                    placeholder="Écrivez votre message ici..."
-                    class="field resize-none"
-                  ></textarea>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSending}
-                  class="pill pill-primary self-end py-2.5 px-5 text-sm"
-                >
+                <button type="submit" disabled={isSending} class="pill contact-submit self-start py-3 px-6 text-sm">
                   {isSending ? "Envoi en cours..." : "Envoyer le message"}
                   {#if !isSending}
                     <Papicon icon="ArrowRight" size={14} />
@@ -310,35 +284,30 @@
                 </button>
               </form>
 
-              <!-- Info & Map -->
-              <div class="flex flex-col gap-6 justify-between">
-                <div class="card p-5 flex flex-col gap-3">
-                  <span class="pill-icon w-10 h-10" style="color: var(--accent);">
-                    <Papicon icon="Mail" size={18} />
-                  </span>
-                  <h4 class="text-base font-display font-semibold text-ink">Contact direct</h4>
-                  <p class="text-sm text-ink-muted leading-relaxed">
-                    Pour toute demande professionnelle, vous pouvez utiliser le formulaire ci-contre ou me contacter directement par mail à :
-                  </p>
-                  <a href="mailto:{personalInfo.email}" class="text-sm font-semibold" style="color: var(--accent);">
-                    {personalInfo.email}
-                  </a>
-                </div>
-
-                <div class="card overflow-hidden h-48">
-                  <iframe
-                    src={personalInfo.mapIframeUrl}
-                    width="100%"
-                    height="100%"
-                    style="border:0;"
-                    allowfullscreen={true}
-                    loading="lazy"
-                    title="Localisation"
-                    referrerpolicy="no-referrer-when-downgrade"
-                  ></iframe>
-                </div>
+              <div class="flex flex-col gap-5">
+                <p class="text-sm contact-muted leading-relaxed">
+                  Pour une demande professionnelle, le formulaire ou un mail direct, au choix.
+                </p>
+                <a href="mailto:{personalInfo.email}" class="contact-link text-sm break-all">
+                  <span class="contact-link-icon"><Papicon icon="Mail" size={16} /></span>
+                  {personalInfo.email}
+                </a>
+                <a href={personalInfo.socials.github} target="_blank" rel="noopener noreferrer" class="contact-link text-sm">
+                  <span class="contact-link-icon"><Github size={16} /></span>
+                  GitHub
+                </a>
+                <a href={personalInfo.socials.external} target="_blank" rel="noopener noreferrer" class="contact-link text-sm">
+                  <span class="contact-link-icon"><Papicon icon="ExternalLink" size={16} /></span>
+                  me.klaynight.fr
+                </a>
+                <p class="flex items-center gap-3 text-sm contact-muted">
+                  <span class="contact-link-icon"><Papicon icon="MapPin" size={16} /></span>
+                  {personalInfo.location}
+                </p>
               </div>
             </div>
+
+            <span class="contact-wordmark" aria-hidden="true">{personalInfo.nickname}</span>
           </div>
         {/if}
       </div>

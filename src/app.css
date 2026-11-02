@@ -437,6 +437,104 @@
   }
 }
 
+/* Bloc contact sombre, nom géant rogné en pied de bloc. */
+.contact-block {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  color: #ffffff;
+  border-radius: 20px;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  padding-bottom: clamp(5.5rem, 13vw, 10rem);
+}
+.contact-block :focus-visible {
+  outline-color: #ffffff;
+}
+.contact-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 5.5vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+.contact-title em {
+  color: #d8c3ea;
+}
+.contact-muted {
+  color: rgba(255, 255, 255, 0.7);
+}
+.field-dark {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0;
+  padding: 0.6rem 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: #ffffff;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.field-dark::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.field-dark:focus {
+  border-bottom-color: #ffffff;
+}
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.3em;
+  transition: text-decoration-color 0.15s ease;
+}
+.contact-link:hover {
+  text-decoration-color: currentColor;
+}
+.contact-link-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.1);
+  color: #d8c3ea;
+}
+.contact-submit {
+  background: #ffffff;
+  color: var(--ink);
+}
+.contact-submit:hover {
+  background: var(--accent);
+  color: #ffffff;
+}
+.contact-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.contact-wordmark {
+  position: absolute;
+  left: 50%;
+  bottom: -0.3em;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(5rem, 18vw, 13rem);
+  line-height: 1;
+  white-space: nowrap;
+  color: rgba(216, 195, 234, 0.14);
+  pointer-events: none;
+  user-select: none;
+}
+
 /* Animations */
 @keyframes fadeInUp {
   from {
