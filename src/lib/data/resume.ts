@@ -366,7 +366,7 @@ export const projects: Project[] = [
     sections: [
       {
         title: "Le projet",
-        body: "Tafac est né d'un constat partagé par tous les étudiants de l'Université de Rennes : l'emploi du temps, les notes, les mails et Moodle vivent sur quatre sites différents, aucun n'étant pensé pour le téléphone. Le projet est lancé par Tom (tomthings.fr) et fait partie de Papillon ; j'y contribue sur le back et sur les nouvelles fonctionnalités."
+        body: "Tafac est né d'un constat partagé par tous les étudiants de l'Université de Rennes : l'emploi du temps, les notes, les mails et Moodle vivent sur quatre sites différents, aucun n'étant pensé pour le téléphone. Tom (tomthings.fr) a lancé le projet en mars 2026 et l'a porté seul pendant sept mois ; il fait partie de la famille Papillon.\n\nJe l'ai d'abord utilisé comme étudiant, parce que des camarades de MMI m'en avaient parlé. En octobre 2026, j'ai proposé de rejoindre Tom : pour l'aider sur un projet qu'il tenait seul, améliorer ce qui existait, et ajouter les fonctionnalités qui manquaient encore, en commençant par les notes."
       },
       {
         title: "Les notes",
