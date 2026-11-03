@@ -198,7 +198,7 @@ export const experiences: TimelineItem[] = [
     title: "Jobi - Gestion",
     subtitle: "Développeur Application (En pause)",
     date: "2021 - 2024",
-    description: "Développement d'une application Java Desktop (Swing/SQL) de gestion de stocks pour les librairies, intégrant le suivi des clients et emprunts.",
+    description: "Développement d'un logiciel desktop en Python et PyQt5 de gestion de bibliothèque : catalogue des ouvrages, utilisateurs, suivi des emprunts et retours.",
     url: "https://github.com/Klaynight-dev/stock_gestion_library",
     urlLabel: "Code Source Jobi"
   }
