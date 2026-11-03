@@ -3,6 +3,7 @@ export interface TimelineItem {
   subtitle: string;
   date: string;
   description: string;
+  logo?: string;
   url?: string;
   urlLabel?: string;
 }
@@ -17,7 +18,9 @@ export interface SkillCategory {
 export interface KeyCompetence {
   title: string;
   description?: string;
-  links: { label: string; url: string }[];
+  domain: import('./domains').Domain;
+  icon: string;
+  links: { label: string; url?: string }[];
 }
 
 export interface Project {
@@ -79,7 +82,7 @@ export const services: {
   title: string;
   description: string;
   domain: import('./domains').Domain;
-  /** Capture d'un vrai projet, nom de fichier dans assets/images. */
+  /** Capture d'un vrai projet, chemin relatif dans assets/images. */
   visual: string;
   visualAlt: string;
   /** Projets qui illustrent ce savoir-faire, par id. */
@@ -89,7 +92,7 @@ export const services: {
     title: "Développement Web",
     description: "Des applications web complètes, de l'interface en Svelte au back en Bun et PostgreSQL, conteneurisées et déployées sur mes propres serveurs.",
     domain: "webdev",
-    visual: "tafac-notes.webp",
+    visual: "projects/tafac/tafac-notes.webp",
     visualAlt: "Page Mes notes de Tafac : moyenne générale, UE validées et dernières notes.",
     projectIds: ["kotbo-fr", "humanitour", "openforms", "tafac"]
   },
@@ -97,16 +100,16 @@ export const services: {
     title: "Design Web",
     description: "Maquettes interactives, systèmes de composants et iconographie sur Figma, pensés pour être intégrés tels quels.",
     domain: "design",
-    visual: "papicons-sheet.svg",
+    visual: "projects/design/papicons-sheet.svg",
     visualAlt: "Planche d'icônes Papicons dessinées sur grille 24 px.",
     projectIds: ["papicon-design", "sae-cobrec-design", "affiches-design"]
   },
   {
     title: "Développement App",
-    description: "Logiciels de bureau et outils de gestion avec interface graphique, en Java, C ou Python.",
+    description: "Logiciels de bureau et outils de gestion avec interface graphique, en Python (PyQt5) ou C.",
     domain: "apps",
-    visual: "Jobi.png",
-    visualAlt: "Fenêtre Jobi affichant la table de gestion du stock.",
+    visual: "projects/jobi/jobi-gestion-livres.webp",
+    visualAlt: "Interface de Jobi affichant la table de gestion des livres avec recherche et filtres.",
     projectIds: ["jobi"]
   }
 ];
@@ -115,19 +118,25 @@ export const testimonials = [
   {
     name: "Paco PICARD",
     role: "Collaborateur",
-    avatar: "https://cdn.simpleicons.org/postgresql/4169E1",
+    context: "Plinkk",
+    avatar: "testimonials/avatar1.jpeg",
+    isLogo: false,
     text: "J'ai embauché Elouan pour travailler avec moi sur mon agrégateur de liens, et j'ai pu constater son sens de l'humanisme ainsi que son esprit d'équipe. Si vous choisissez de lui confier des tâches, vous pouvez être certain que le travail sera effectué avec soin et, surtout, de manière excellente."
   },
   {
     name: "Cédric RIOU",
     role: "Ingénieur en développement LABOCEA",
-    avatar: "https://www.labocea.fr/wp-content/uploads/2024/08/LABOCEA-logo-laboratoire-analyse.svg",
+    context: "LABOCEA · MyData",
+    avatar: "testimonials/labocea.svg",
+    isLogo: true,
     text: "Elouan apporte de la fraîcheur dans nos pratiques et de l'efficacité. Il est bénéfique pour le projet MyData et plus généralement LABOCEA."
   },
   {
     name: "Fabien RAULIC",
     role: "Chef de Projet MyData · LABOCEA",
-    avatar: "https://www.labocea.fr/wp-content/uploads/2024/08/LABOCEA-logo-laboratoire-analyse.svg",
+    context: "LABOCEA · MyData",
+    avatar: "testimonials/labocea.svg",
+    isLogo: true,
     text: "Travaillant étroitement avec Elouan sur les aspects design et parcours utilisateurs. Les compétences d'Elouan lui ont permis d'acquérir une bonne connaissance du contexte fonctionnel de My Data. Son implication a apporté un plus non négligeable au projet, à la structure et aux utilisateurs."
   }
 ];
@@ -151,18 +160,21 @@ export const experiences: TimelineItem[] = [
   {
     title: "Ingénieur Full Stack",
     subtitle: "Labocéa · Stage puis CDD · Ploufragan",
+    logo: "companies/labocea.svg",
     date: "Avr. 2026 - Août 2026",
     description: "Développement de MyData en ingénierie de production : remise en état de plus de 60 % du code déprécié, site 10 à 24 fois plus rapide et base de code allégée de 4 Mo à 1,3 Mo. Optimisation de l'application mobile, intégration de nouvelles technologies et mise en place de tests automatisés. Stage prolongé en CDD à l'issue de la mission."
   },
   {
     title: "Livreur",
-    subtitle: "Amazon",
+    subtitle: "Fidéli Express",
+    logo: "companies/fideli-express.svg",
     date: "Juin 2025 - Août 2025",
     description: "Mission saisonnière de trois mois en livraison de colis."
   },
   {
     title: "Responsable de labyrinthe",
     subtitle: "La ferme de Sous la Ville · CDD · Lantic",
+    logo: "companies/ferme-sous-la-ville.webp",
     date: "Juin 2024 - Août 2024",
     description: "Entretien du site, vente des entrées, animation et gestion des ventes annexes. Création d'animations ludiques pour les visiteurs, gestion des stocks et entretien des espaces de jeu ainsi que de l'escape game."
   },
@@ -218,7 +230,7 @@ export const skillCategories: SkillCategory[] = [
       { name: "Node.js", icon: "nodedotjs", type: "cdn" },
       { name: "PostgreSQL", icon: "postgresql", type: "cdn" },
       { name: "MySQL", icon: "mysql", type: "cdn" },
-      { name: "SQL", icon: "sql.png", type: "img" },
+      { name: "SQL", icon: "tech/sql.png", type: "img" },
       { name: "PHP", icon: "php", type: "cdn" },
       { name: "PHPMyAdmin", icon: "phpmyadmin", type: "cdn" }
     ]
@@ -240,9 +252,9 @@ export const skillCategories: SkillCategory[] = [
     name: "Langages Applicatifs",
     domain: "apps",
     skills: [
-      { name: "Java", icon: "java.png", type: "img" },
-      { name: "Python", icon: "Python.png", type: "img" },
-      { name: "C (langage)", icon: "c.png", type: "img" },
+      { name: "Java", icon: "tech/java.png", type: "img" },
+      { name: "Python", icon: "tech/Python.png", type: "img" },
+      { name: "C (langage)", icon: "tech/c.png", type: "img" },
       { name: "Assembleur", icon: "code", type: "lucide" }
     ]
   },
@@ -264,6 +276,9 @@ export const skillCategories: SkillCategory[] = [
 export const keyCompetences: KeyCompetence[] = [
   {
     title: "Réaliser un développement d'application",
+    description: "Conception, codage et test d'applications web et clientes répondant à un besoin précis.",
+    domain: "webdev",
+    icon: "Code",
     links: [
       { label: "Console Linux Web", url: "https://github.com/Klaynight-dev/links_website_template" },
       { label: "Plinkk Open Source", url: "https://github.com/Klaynight-dev/plinkk" }
@@ -271,30 +286,45 @@ export const keyCompetences: KeyCompetence[] = [
   },
   {
     title: "Optimiser des applications informatiques",
+    description: "Algorithmique, structures de données et amélioration des performances d'exécution.",
+    domain: "apps",
+    icon: "Grades",
     links: [
       { label: "Snake Auto", url: "https://github.com/Klaynight-dev/Snake_Auto" }
     ]
   },
   {
     title: "Administrer des systèmes complexes",
+    description: "Installation de postes, virtualisation, configuration réseau et déploiement de services.",
+    domain: "cloud",
+    icon: "Gears",
     links: [
-      { label: "Installation réseau", url: "#" }
+      { label: "Installation réseau" }
     ]
   },
   {
     title: "Gérer des données de l'information",
+    description: "Modélisation relationnelle, requêtage SQL, intégrité et exploitation de bases de données.",
+    domain: "backend",
+    icon: "Grid",
     links: [
-      { label: "Création Base de Données", url: "#" }
+      { label: "Création Base de Données" }
     ]
   },
   {
     title: "Conduite de projet",
+    description: "Recueil du besoin, planification, suivi des livrables et organisation du travail.",
+    domain: "design",
+    icon: "Tasks",
     links: [
       { label: "Projet HubGames", url: "https://github.com/TheHubGames/hub_games" }
     ]
   },
   {
     title: "Travailler dans une équipe informatique",
+    description: "Collaboration sur Git, répartition des rôles, communication et revue de code.",
+    domain: "webdev",
+    icon: "User",
     links: [
       { label: "Projet HubGames", url: "https://github.com/TheHubGames/hub_games" }
     ]
@@ -309,7 +339,7 @@ export const projects: Project[] = [
     description: "Plateforme du premier institut de sondage citoyen : 4 000 km à vélo, 1 000 personnes interrogées en face-à-face dans les treize régions métropolitaines, et la totalité des données brutes publiée. Explorateur qui croise n'importe quelle question avec n'importe quelle autre, export CSV et JSON, médiathèque et back-office complet.",
     url: "https://humanitour.fr",
     github: "https://github.com/Klaynight-dev/Humanitour_Landing",
-    image: "humanitour-accueil.webp",
+    image: "projects/humanitour/humanitour-accueil.webp",
     imageAlt: "Page d'accueil d'Humanitour : titre « Et si on était enfin écoutés ? », chiffres du tour et photo du vélo chargé devant un pré.",
     tags: ["SvelteKit", "Svelte 5", "Prisma", "PostgreSQL", "ECharts", "Bun", "Docker"],
     featured: true,
@@ -326,14 +356,14 @@ export const projects: Project[] = [
       {
         title: "Le constat",
         body: "Les sondages d'opinion sont presque tous réalisés en ligne, auprès de volontaires rémunérés, par des instituts qui ne publient ni leurs données brutes ni leurs redressements.\n\nAvec l'association, on a pris le problème par l'autre bout : deux mois sur la route, hébergés chez les habitants, pour interroger un échantillon représentatif en face-à-face. Il fallait ensuite un site à la hauteur de cette promesse de transparence, et c'est la partie que je porte.",
-        image: "humanitour-tour.webp",
+        image: "projects/humanitour/humanitour-tour.webp",
         imageAlt: "Page « Le tour » : titre « Le premier sondage de terrain » et bandeau de chiffres, 4000 kilomètres, 1 000 sondés, 70 % de participation, 50 nuits.",
         caption: "La page du tour, qui raconte le terrain avant de montrer les chiffres."
       },
       {
         title: "Tout est publié",
         body: "L'explorateur de données laisse croiser n'importe quelle variable avec n'importe quelle autre, et chaque résultat se partage par un lien permanent. Les exports CSV et JSON sont accessibles sans compte.\n\nLes garanties sont écrites dans le code plutôt que dans une charte : la non-réponse est une modalité comme une autre, jamais un null filtré ; l'effectif brut accompagne chaque pourcentage ; un redressement, s'il existe, s'affiche à côté du brut ; un seuil de k-anonymat masque les croisements trop fins pour empêcher toute ré-identification.",
-        image: "humanitour-donnees.webp",
+        image: "projects/humanitour/humanitour-donnees.webp",
         imageAlt: "Page « Les données » : titre « Tout est publié. Croisez ce que vous voulez. » et champ de recherche d'enquête.",
         caption: "Point d'entrée de l'explorateur : recherche par enquête ou par question."
       },
@@ -350,7 +380,7 @@ export const projects: Project[] = [
     description: "Client web alternatif aux ENT universitaires, membre de la famille Papillon : emploi du temps, notes, messagerie, Moodle, menu du CROUS et bus dans une seule application installable. Contributeur principal du back des notes et du planning, et de l'intégration du réseau de bus TILT.",
     url: "https://tafac.fr",
     github: "https://github.com/l-ent-univ/tafac",
-    image: "tafac-accueil.webp",
+    image: "projects/tafac/tafac-accueil.webp",
     imageAlt: "Page d'accueil de Tafac : widgets du prochain cours, de la dernière note, des mails récents et des échéances, au-dessus du titre « Ta journée à la fac, en un coup d'œil ».",
     tags: ["React", "Express", "Node.js", "TailwindCSS", "PWA"],
     featured: true,
@@ -370,14 +400,14 @@ export const projects: Project[] = [
       {
         title: "Les notes",
         body: "J'ai écrit la lecture des relevés ScoDoc : relevé par semestre, UE, ressources et SAÉ, message du département, téléchargement du PDF officiel, avec un cache mémoire et un préchargement des semestres pour que la page s'ouvre sans attente.\n\nPar-dessus, un simulateur permet d'ajouter des notes fictives pour voir l'effet sur les moyennes et la validation des UE, sans jamais toucher à ScoDoc.",
-        image: "tafac-notes.webp",
+        image: "projects/tafac/tafac-notes.webp",
         imageAlt: "Section « Suis tes résultats pendant le semestre » : moyenne générale 14,5 sur 20, trois UE validées sur trois et dernières notes.",
         caption: "Mes notes : moyenne, UE validées et dernières évaluations."
       },
       {
         title: "Le planning",
         body: "Côté emploi du temps, j'ai travaillé la lecture d'ADE : détection du groupe TD/TP, majeures, mineures et options ajoutées au groupe, salles libres lues dans la branche Salles, saut au prochain jour de cours.\n\nLes mails de l'université annoncent souvent un cours déplacé ou annulé : des règles locales repèrent ces annonces et marquent le cours concerné directement dans le planning.",
-        image: "tafac-planning.webp",
+        image: "projects/tafac/tafac-planning.webp",
         imageAlt: "Section « Prépare ta semaine de cours » : liste des cours du lendemain avec horaires, salles et menu contextuel « Écrire au sujet de ce cours ».",
         caption: "Planning : cours du jour, salles, enseignants et mail prérempli depuis un cours."
       },
@@ -394,7 +424,7 @@ export const projects: Project[] = [
     description: "Alternative open source (MIT) et auto-hébergeable à Google Forms, développée pour le tour de France d'Humanitour. Édition collaborative en direct avec les curseurs des autres, statistiques et croisements multi-sources intégrés, tableur maison pour corriger les réponses, signature, organisations et partage par rôles, consentement RGPD par finalité et chiffrement AES-256-GCM des réponses en base.",
     url: "https://forms.humanitour.fr/",
     github: "https://github.com/Klaynight-dev/Openforms",
-    image: "openforms-editeur.webp",
+    image: "projects/openforms/openforms-editeur.webp",
     imageAlt: "Éditeur OpenForms du questionnaire « Tour de France citoyen 2026 » : la question sur la région est encadrée en bleu au nom de Côme, son curseur nommé est visible à l'écran et son avatar apparaît dans l'en-tête.",
     tags: ["SvelteKit", "ElysiaJS", "Prisma", "PostgreSQL", "Bun", "Docker"],
     featured: true,
@@ -411,21 +441,21 @@ export const projects: Project[] = [
       {
         title: "Pourquoi un outil maison",
         body: "Pour le tour de France d'Humanitour, il fallait collecter les réponses de citoyens interrogés en face-à-face. Google Forms posait deux problèmes : confier ces réponses à un tiers n'était pas compatible avec la promesse faite aux répondants, et l'outil s'arrêtait trop tôt, sans analyse sérieuse ni moyen propre de corriger une saisie.\n\nOpenForms s'héberge sur nos serveurs, sans tracker tiers, chiffre les réponses au repos, et le code est publié sous licence MIT.",
-        image: "openforms-accueil.webp",
+        image: "projects/openforms/openforms-accueil.webp",
         imageAlt: "Page d'accueil d'OpenForms : « Formulaire Humanitour », bouton Espace administration et trois cartes, builder, tableur intégré, RGPD par design.",
         caption: "L'instance de l'association, forms.humanitour.fr."
       },
       {
         title: "La première version",
         body: "Le premier commit date du 8 juillet 2026. Le jour même, l'éditeur glisser-déposer tournait avec onze types de champs, les sections multipages, l'option « Autre » et les colonnes internes au tableur. Le reste de l'été a ajouté les organisations, l'invitation par mail, la duplication de formulaires, les webhooks et la signature manuscrite.",
-        image: "openforms-juillet.webp",
+        image: "projects/openforms/openforms-juillet.webp",
         imageAlt: "Premier éditeur d'OpenForms, juillet 2026 : palette de onze types de champs à gauche, formulaire de démonstration au centre, configuration d'une grille d'évaluation à droite.",
         caption: "Juillet 2026 : l'éditeur des premiers jours."
       },
       {
         title: "Éprouvé sur le terrain",
         body: "Le formulaire du tour a dépassé les 1 000 réponses. Ce volume a guidé la suite : synchronisation incrémentale du tableur et cache local pour ne plus tout recharger, chargement différé des graphiques, et un formulaire public qui guide la correction et protège la saisie quand le réseau lâche.\n\nLe travail en équipe a aussi demandé des groupes : organisations dont l'appartenance ouvre les formulaires, partage explicite à trois rôles, et répartition des participants entre plusieurs variantes d'un même questionnaire.",
-        image: "openforms-croisement.webp",
+        image: "projects/openforms/openforms-croisement.webp",
         imageAlt: "Tableau croisé d'OpenForms : région en lignes, tranche d'âge en colonnes, chaque case colorée en vert selon l'effectif, sur 1 087 réponses.",
         caption: "Région × tranche d'âge sur 1 087 réponses (données de démonstration)."
       },
@@ -436,14 +466,14 @@ export const projects: Project[] = [
       {
         title: "Analyser sans exporter",
         body: "Les statistiques vivent dans l'outil : indicateurs clés, croisement de plusieurs champs et de plusieurs sources, corrélations, carte des réponses par jour et par heure, presets de croisement réutilisables et export des graphiques en image aux couleurs du formulaire.",
-        image: "openforms-statistiques.webp",
+        image: "projects/openforms/openforms-statistiques.webp",
         imageAlt: "Onglet Statistiques d'OpenForms : filtres par question, huit indicateurs (1087 réponses, 61 jours actifs, heure de pointe 11 h-12 h), courbe d'évolution et carte de chaleur jour × heure.",
         caption: "Indicateurs et carte jour × heure (données de démonstration)."
       },
       {
         title: "Le tableur, un calque sur les réponses",
         body: "Le tableur se pose sur les réponses sans les remplacer : on corrige une cellule d'un double-clic, on ajoute des colonnes calculées par formule (SUM, AVG, MEDIAN…), on filtre chaque colonne, puis on exporte en Excel, CSV ou JSON. Un serveur MCP permet enfin de consulter et configurer OpenForms depuis Claude.",
-        image: "openforms-tableur.webp",
+        image: "projects/openforms/openforms-tableur.webp",
         imageAlt: "Tableur des réponses d'OpenForms : une colonne par question avec un filtre en en-tête, une ligne par répondant.",
         caption: "Les réponses en tableur, filtrables colonne par colonne (données de démonstration)."
       }
@@ -455,7 +485,7 @@ export const projects: Project[] = [
     category: "Web Development",
     description: "Hub de découverte de jeux indépendants rangés par humeur plutôt que par genre : bulle cozy, récit poétique, exploration calme, pixel nostalgie. Tirage au sort d'un jeu, notes et commentaires, favoris, liste de souhaits, suggestions de joueurs modérées depuis un back-office.",
     url: "https://aellyel.klaynight.fr/",
-    image: "aellyel-accueil.webp",
+    image: "projects/aellyel/aellyel-accueil.webp",
     imageAlt: "Accueil d'Aellyel : jeu coup de cœur à gauche, nuage d'humeurs en étiquettes colorées à droite.",
     period: "Juin – juillet 2026",
     stats: [{ label: "commits", value: "22" }],
@@ -465,12 +495,54 @@ export const projects: Project[] = [
     id: "plinkk-fr",
     title: "Plinkk.fr",
     category: "Web Development",
-    description: "Service d'agrégation de liens hébergé en France : chaque profil est une page personnalisable en temps réel, avec bibliothèque de thèmes, animations et éditeur visuel.",
+    description: "Plateforme d'agrégation de liens et profils personnalisables hébergée en France : d'un template statique open source à une architecture SaaS complète avec dashboard, aperçu temps réel (live view) et personnalisation modulaire.",
     url: "https://plinkk.fr",
     github: "https://github.com/Klaynight-dev/links_website_template",
-    image: "plinkk-accueil.webp",
-    imageAlt: "Accueil de plinkk.fr : titre « Votre univers en un lien. Clair, vivant, mémorisable. » et champ d'inscription par mail.",
-    tags: ["EJS", "Bun", "TypeScript", "Tailwind"]
+    image: "projects/plinkk/plinkk-dashboard-liveview.webp",
+    imageAlt: "Dashboard de Plinkk avec l'éditeur en direct et l'aperçu mobile Live View.",
+    tags: ["EJS", "Fastify", "TypeScript", "Tailwind", "Prisma", "PostgreSQL", "Redis"],
+    period: "Septembre 2025 – mars 2026",
+    stats: [
+      { label: "commits backend", value: "664" },
+      { label: "thèmes & cosmétiques", value: "Multiples" }
+    ],
+    sections: [
+      {
+        title: "Au départ : un template statique open source",
+        body: "Avant de devenir un service complet avec base de données et gestion d'utilisateurs, Plinkk est né sous la forme d'un projet open source (links_website_template). L'objectif initial était de fournir une page de liens ultra-légère en HTML/CSS/JS pur, configurable via un simple fichier JavaScript, dotée d'animations fluides, d'effets néon et de thèmes personnalisables sans aucune dépendance serveur.",
+        image: "projects/plinkk/plinkk-template-statique.webp",
+        imageAlt: "Version originelle de Plinkk : template statique de page de profil avec effet néon et boutons animés.",
+        caption: "Le template client originel en HTML/CSS/JS statique."
+      },
+      {
+        title: "Le passage au backend et au dashboard modulaire",
+        body: "Pour permettre à n'importe qui de créer et mettre à jour sa page en ligne sans toucher au code, une couche backend complète a été bâtie (Fastify, Prisma, PostgreSQL, Redis et stockage S3). Un dashboard d'administration dédié a vu le jour, articulé autour de modules clairs : gestion des liens, badges et flairs personnalisés, statistiques de visites, redirections et thèmes.",
+        image: "projects/plinkk/plinkk-dashboard-modularite.webp",
+        imageAlt: "Dashboard Plinkk : sélection des cosmétiques, flairs personnalisés (Admin, Developer, Founder) et personnalisation modulaire.",
+        caption: "La modularité du dashboard : sélection visuelle des badges, flairs et cosmétiques."
+      },
+      {
+        title: "L'éditeur interactif et l'arrivée de la Live View",
+        body: "Une des étapes majeures du dashboard a été l'intégration de la Live View. Plus besoin d'enregistrer et de rafraîchir un onglet séparé : l'éditeur intègre un aperçu interactif direct synchronisé en temps réel, permettant de tester instantanément l'agencement, les animations, le mode sombre/clair et les thèmes graphiques exactement comme les visiteurs les verront.",
+        image: "projects/plinkk/plinkk-dashboard-liveview.webp",
+        imageAlt: "Éditeur Plinkk avec prévisualisation Live View synchronisée en temps réel.",
+        caption: "L'éditeur avec son rendu Live View interactif et instantané."
+      },
+      {
+        title: "Monétisation freemium et offres sur-mesure",
+        body: "Le projet a évolué vers une offre freemium structurée, proposant un plan gratuit pour démarrer et des formules Premium (mensuel, annuel et licence à vie Lifetime) débloquant des pages supplémentaires, davantage de redirections, un historique étendu de statistiques et un support prioritaire.",
+        image: "projects/plinkk/plinkk-dashboard-offres.webp",
+        imageAlt: "Interface de configuration des offres Plinkk : Gratuit, Premium Mensuel, Premium Annuel et Lifetime.",
+        caption: "La grille tarifaire et le système de formules au sein du dashboard."
+      },
+      {
+        title: "Le rendu final pour l'utilisateur",
+        body: "Grâce à cette technologie sous-jacente combinant la réactivité du moteur statique d'origine et la flexibilité de l'API moderne, chaque page générée reste ultra-rapide au chargement tout en affichant un profil vivant et soigné sur mobile comme sur desktop.",
+        image: "projects/plinkk/plinkk-mobile-live.webp",
+        imageAlt: "Page de profil Plinkk finalisée affichée sur mobile avec avatar circulaire, badges et boutons d'action.",
+        caption: "Le résultat final : profil utilisateur optimisé et réactif."
+      }
+    ]
   },
   {
     id: "kotbo-fr",
@@ -479,7 +551,7 @@ export const projects: Project[] = [
     description: "Site et tableau de bord de Kotbo, un bot de gestion de communauté Discord : configuration des modules, modération, économie et statistiques de serveur depuis le navigateur.",
     url: "https://kotbo.fr",
     github: "https://github.com/Kotbo-Bot",
-    image: "kotbo-accueil.webp",
+    image: "projects/kotbo/kotbo-accueil.webp",
     imageAlt: "Accueil de kotbo.fr : « Le bot Discord qui gère ton serveur pendant que tu dors », boutons Ajouter à Discord et Tester le dashboard.",
     tags: ["Svelte", "TailwindCSS", "Bun", "Vite"],
     featured: true,
@@ -496,35 +568,35 @@ export const projects: Project[] = [
       {
         title: "Une équipe, puis une bêta",
         body: "Nathan m'a rejoint en avril 2026, puis Victor (Intercalaire) en mai. À trois, on a repris l'interface, ajouté de nouveaux écrans et fait passer le dashboard d'un outil interne à un produit.\n\nLa bêta fermée a servi à confronter les fonctionnalités Discord aux retours des premiers utilisateurs. À sa sortie, Kotbo est passé en production et les premiers clients sont arrivés courant juin 2026, en même temps que la première landing.",
-        image: "kotbo-landing-juin.webp",
+        image: "projects/kotbo/kotbo-landing-juin.webp",
         imageAlt: "Première landing de Kotbo, juin 2026 : titre « Le centre de contrôle de ta communauté », post-its « Trop d'outils différents ! » et « Regrouper ça ici » posés sur des captures du dashboard.",
         caption: "Juin 2026 : la première landing, au moment de la mise en production."
       },
       {
         title: "Un dashboard qui se professionnalise",
         body: "À force d'ajouter des modules, le dashboard en affichait plus d'une soixantaine dans une barre latérale de trois menus, avec des widgets qui se disputaient l'accueil. En octobre 2026, on l'a simplifié écran par écran.",
-        image: "kotbo-dashboard-avant.webp",
+        image: "projects/kotbo/kotbo-dashboard-avant.webp",
         imageAlt: "Accueil du dashboard Kotbo avant la refonte : barre latérale de vingt entrées réparties en Général, Modération et Sécurité, badges BETA, accueil chargé de widgets.",
         caption: "Avant : vingt entrées dans la barre latérale et des badges BETA partout."
       },
       {
         title: "Moins d'écrans, plus clairs",
         body: "La barre latérale tient en sept familles, les libellés parlent français courant (« Exclusions temporaires » plutôt que « Timeouts ») et l'accueil ne garde que ce qui demande une action.",
-        image: "kotbo-dashboard-apres.webp",
+        image: "projects/kotbo/kotbo-dashboard-apres.webp",
         imageAlt: "Accueil du dashboard Kotbo après la refonte : barre latérale en sept familles repliables, liste « À traiter », chiffres du serveur, graphe des messages et bloc Modération.",
         caption: "Après : le même accueil, recentré sur ce qui est à traiter."
       },
       {
         title: "Raconter le problème",
         body: "La landing ne liste pas des fonctionnalités : elle met en scène la nuit d'un fondateur de serveur sans Kotbo, notifications et messages de modérateurs à l'appui, puis bascule sur la même scène avec le bot.",
-        image: "kotbo-staff.webp",
+        image: "projects/kotbo/kotbo-staff.webp",
         imageAlt: "Section comparative de kotbo.fr : salon #staff rempli de demandes de modérateurs à 2 h du matin et écran de téléphone couvert de notifications.",
         caption: "Le comparatif « Sans Kotbo / Avec Kotbo »."
       },
       {
         title: "Le passage en freemium",
         body: "Depuis le 1er novembre 2026, la modération et les essentiels sont ouverts sans abonnement : sanctions et AutoMod, anti-raid, logs, accueil, niveaux, tickets, giveaways, analytics et notifications YouTube et Twitch. L'offre complète garde la gestion du staff, l'IA de modération AegisAI, le site de communauté et le serveur MCP.\n\nL'objectif est d'attirer beaucoup plus de serveurs : un bot gratuit s'installe sans hésiter, et le staff se gère ensuite là où la communauté vit déjà.",
-        image: "kotbo-freemium.webp",
+        image: "projects/kotbo/kotbo-freemium.webp",
         imageAlt: "Comparatif des offres Kotbo : neuf modules gratuits cochés à gauche, sept modules de l'offre complète dans un encart sombre à droite.",
         caption: "Novembre 2026 : neuf modules gratuits, sept réservés à l'offre complète."
       }
@@ -537,7 +609,7 @@ export const projects: Project[] = [
     description: "Moteur de rendu sans DOM pour le web : le scene graph vit en mémoire et part directement au GPU via WebGPU, en un seul draw call pour des milliers d'éléments. Adaptateurs pour React, Svelte, Angular et Vanilla JS, et banc d'essai intégré contre le DOM.",
     url: "https://synapsejs.klaynight.fr",
     github: "https://github.com/Klaynight-dev/SynapseJS",
-    image: "synapsejs-accueil.webp",
+    image: "projects/synapsejs/synapsejs-accueil.webp",
     imageAlt: "Site de SynapseJS en post-its : « Le moteur de rendu sans DOM pour le web » et chiffres du banc d'essai, 643 FPS contre 10,4 pour le DOM.",
     tags: ["TypeScript", "WebGPU", "Bun", "Framework"],
     period: "Mai – juillet 2026",
@@ -571,7 +643,7 @@ export const projects: Project[] = [
     category: "Web Design",
     description: "Dessin d'icônes pour Papicons, la bibliothèque d'icônes de l'application Papillon : construction sur grille 24 px, contours pleins, et déclinaison des variantes d'un même signe (panneau ouvert ou fermé, horloge simple ou historique).",
     url: "https://www.figma.com/design/xjPgRmLmqtR16vWkyuXaon/Untitled?node-id=0-1&p=f&t=AeEWavMzmH3kWmqO-0",
-    image: "papicons-sheet.svg",
+    image: "projects/design/papicons-sheet.svg",
     imageAlt: "Planche de douze icônes Papicons : panneaux latéraux, horloge d'historique, bulle de texte, ajout, utilisateur, réglages, document, tâches, flèche, étoile.",
     tags: ["Figma", "Iconographie", "Design System", "Papillon"]
   },
@@ -581,7 +653,7 @@ export const projects: Project[] = [
     category: "Web Design",
     description: "Affiche pédagogique co-signée avec Guéwen Maréchal : le système d'exploitation expliqué comme un chef d'orchestre, où les programmes sont les musiciens, le matériel les instruments et vos clics la partition.",
     url: "https://www.figma.com/design/8Ssy1x4r895uqdRB88IJgQ/C-est-quoi-un-os-affiche?node-id=0-1&t=Us7LhQsjuHm2UcWO-1",
-    image: "affiche-os.webp",
+    image: "projects/design/affiche-os.webp",
     imageAlt: "Affiche « C'est quoi un OS ? » : un chef d'orchestre au centre, entouré des blocs Les Musiciens, La Partition, Les Instruments et Le Public, et en bas les quatre rôles de l'OS, interpréter les gestes, éviter les fausses notes, gérer les ressources, donner le tempo.",
     tags: ["Figma", "Affiche", "Vulgarisation", "Typographie"],
     tile: "tall"
@@ -593,7 +665,7 @@ export const projects: Project[] = [
     description: "Maquettage sur Figma puis intégration d'un site consacré aux épreuves de surf des Jeux Olympiques de Paris, du choix typographique jusqu'au responsive.",
     url: "https://klaynight.fr/JO_Website_project/",
     github: "https://github.com/klaynight-dev/JO_Website_project/",
-    image: "jo-surf-pages.png",
+    image: "projects/jo-surf/jo-surf-pages.png",
     imageAlt: "Deux pages finies du site JO de surf : la fiche du champion français et l'épreuve de Teahupo'o.",
     tags: ["HTML", "CSS", "JavaScript", "Figma", "Responsive"]
   },
@@ -604,7 +676,7 @@ export const projects: Project[] = [
     description: "Portail qui regroupe les mini-jeux et les petits outils web développés en équipe depuis 2020, avec une base commune de comptes et de scores.",
     url: "https://hubgames.klaynight.fr",
     github: "https://github.com/TheHubGames/hub_games",
-    image: "HubGames.jpeg",
+    image: "projects/hubgames/HubGames.jpeg",
     imageAlt: "Page d'accueil de HubGames listant les mini-jeux disponibles.",
     tags: ["JavaScript", "HTML5", "CSS3", "PHP"]
   },
@@ -612,12 +684,41 @@ export const projects: Project[] = [
     id: "jobi",
     title: "Jobi",
     category: "Applications",
-    description: "Application de bureau Java pour les librairies : gestion du stock, fiches clients et suivi des emprunts, avec une base SQL et une interface Swing.",
+    description: "Logiciel desktop de gestion de bibliothèque complet conçu en Python et PyQt5 : inventaire et catalogue des ouvrages, gestion des utilisateurs, suivi dynamique des emprunts et retours, moteur de recherche avec filtres, import/export CSV et génération de fiches en PDF avec ReportLab.",
     url: "https://github.com/Klaynight-dev/stock_gestion_library",
     github: "https://github.com/Klaynight-dev/stock_gestion_library",
-    image: "Jobi.png",
-    imageAlt: "Fenêtre Jobi affichant la table de gestion du stock.",
-    tags: ["Java", "SQL", "Swing", "Database"]
+    image: "projects/jobi/jobi-gestion-livres.webp",
+    imageAlt: "Fenêtre principale de Jobi : onglet Gestion des Livres avec tableau interactif et moteur de recherche.",
+    tags: ["Python", "PyQt5", "ReportLab", "CSV", "Desktop App"],
+    period: "2021 – 2024",
+    stats: [
+      { label: "commits", value: "71" },
+      { label: "interface", value: "PyQt5" },
+      { label: "licence", value: "GPL-3.0" }
+    ],
+    sections: [
+      {
+        title: "Le projet et ses objectifs",
+        body: "Jobi est né du besoin de disposer d'un outil desktop simple, rapide et autonome pour gérer le catalogue d'une bibliothèque sans lourde infrastructure serveur. Développé en Python avec l'interface graphique PyQt5, le logiciel permet de cataloguer les livres, d'enregistrer les adhérents et de tracer les exemplaires empruntés et disponibles en temps réel.",
+        image: "projects/jobi/jobi-gestion-livres.webp",
+        imageAlt: "Tableau de bord de gestion des livres dans Jobi.",
+        caption: "Interface principale : catalogue des livres avec recherche multi-critères et indicateurs d'exemplaires disponibles."
+      },
+      {
+        title: "Gestion des utilisateurs et des emprunts",
+        body: "Un deuxième onglet est dédié à la gestion des utilisateurs et au suivi de leurs emprunts en cours. L'application permet d'importer et d'exporter la base sous forme de fichiers CSV, facilitant les sauvegardes régulières et la compatibilité avec des tableurs externes.",
+        image: "projects/jobi/jobi-gestion-utilisateurs.webp",
+        imageAlt: "Interface de gestion des utilisateurs dans Jobi.",
+        caption: "Onglet Gestion des Utilisateurs : liste des adhérents et suivi du nombre d'emprunts actifs."
+      },
+      {
+        title: "Formulaires de saisie et génération de documents",
+        body: "Pour simplifier les opérations courantes, des boîtes de dialogue personnalisées encadrent l'ajout et la modification des ouvrages (titre, auteur, éditeur, code ISBN, nombre total d'exemplaires). L'application intègre également la bibliothèque ReportLab pour exporter et imprimer des fiches récapitulatives au format PDF.",
+        image: "projects/jobi/jobi-ajout-livre.webp",
+        imageAlt: "Boîte de dialogue d'ajout d'un livre dans Jobi.",
+        caption: "Fenêtre modale d'ajout d'un livre avec validation des champs."
+      }
+    ]
   },
   {
     id: "plinkk-os",
@@ -626,8 +727,9 @@ export const projects: Project[] = [
     description: "Modèle de page de profil à personnaliser puis héberger soi-même, point de départ open source qui a donné naissance à plinkk.fr.",
     url: "https://github.com/Klaynight-dev/links_website_template",
     github: "https://github.com/Klaynight-dev/links_website_template",
-    image: "plinkk.png",
+    image: "projects/plinkk/plinkk.png",
     imageAlt: "Page de profil générée à partir du modèle open source Plinkk.",
     tags: ["HTML", "CSS", "JavaScript"]
   }
 ];
+
