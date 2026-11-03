@@ -10,12 +10,14 @@ export function setLenis(instance: Lenis | null) {
   lenis = instance;
 }
 
-export function scrollToTop() {
+// immediate: jump without animation (tab switches swap the whole page).
+export function scrollToTop(immediate = false) {
   if (lenis) {
-    lenis.scrollTo(0);
+    lenis.scrollTo(0, { immediate });
     return;
   }
   const instant =
+    immediate ||
     window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
     document.documentElement.classList.contains("no-smooth-scroll");
   window.scrollTo({ top: 0, behavior: instant ? "auto" : "smooth" });

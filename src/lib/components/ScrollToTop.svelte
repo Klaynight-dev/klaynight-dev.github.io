@@ -20,7 +20,7 @@
 {#if visible}
   <button
     type="button"
-    onclick={scrollToTop}
+    onclick={() => scrollToTop()}
     class="pill-icon fixed right-4 md:right-6 bottom-20 md:bottom-6 z-40 animate-fade-in"
     style="box-shadow: 0 8px 20px rgba(23, 21, 29, 0.16);"
     aria-label="Remonter en haut de la page"
