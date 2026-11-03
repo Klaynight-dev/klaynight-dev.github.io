@@ -74,8 +74,8 @@ export const personalInfo = {
 };
 
 export const biography = [
-  "Je suis un développeur web et d'applications passionné par la création, le design et le développement technique. Depuis mon plus jeune âge, j'ai développé ma curiosité informatique en commençant par des projets visuels, puis j'ai appris le développement web en autodidacte à partir de 2018 (HTML, CSS, JS).",
-  "En 2024, j'ai rejoint l'IUT de Lannion en BUT Informatique pour consolider mes bases théoriques et pratiques dans le développement d'applications web et mobiles complexes. J'administre également mon propre nom de domaine klaynight.fr que j'utilise pour déployer et tester mes projets personnels."
+  "Je suis un développeur web et d'applications passionné par la création, ==le design== et le développement technique. Depuis mon plus jeune âge, j'ai développé ma curiosité informatique en commençant par des projets visuels, puis j'ai appris le développement web ==en autodidacte== à partir de 2018 (HTML, CSS, JS).",
+  "En 2024, j'ai rejoint l'IUT de Lannion en ==BUT Informatique== pour consolider mes bases théoriques et pratiques dans le développement d'==applications web et mobiles== complexes. J'administre également mon propre nom de domaine ==klaynight.fr== que j'utilise pour déployer et tester mes projets personnels."
 ];
 
 export const services: {
@@ -90,7 +90,7 @@ export const services: {
 }[] = [
   {
     title: "Développement Web",
-    description: "Des applications web complètes, de l'interface en Svelte au back en Bun et PostgreSQL, conteneurisées et déployées sur mes propres serveurs.",
+    description: "Des applications web ==complètes==, de l'interface en ==Svelte== au back en ==Bun et PostgreSQL==, conteneurisées et déployées sur mes propres serveurs.",
     domain: "webdev",
     visual: "projects/tafac/tafac-notes.webp",
     visualAlt: "Page Mes notes de Tafac : moyenne générale, UE validées et dernières notes.",
@@ -98,7 +98,7 @@ export const services: {
   },
   {
     title: "Design Web",
-    description: "Maquettes interactives, systèmes de composants et iconographie sur Figma, pensés pour être intégrés tels quels.",
+    description: "Maquettes interactives, systèmes de composants et iconographie sur Figma, pensés pour être ==intégrés tels quels==.",
     domain: "design",
     visual: "projects/design/papicons-sheet.svg",
     visualAlt: "Planche d'icônes Papicons dessinées sur grille 24 px.",
@@ -106,7 +106,7 @@ export const services: {
   },
   {
     title: "Développement App",
-    description: "Logiciels de bureau et outils de gestion avec interface graphique, en Python (PyQt5) ou C.",
+    description: "Logiciels de bureau et outils de gestion avec interface graphique, en ==Python (PyQt5)== ou C.",
     domain: "apps",
     visual: "projects/jobi/jobi-gestion-livres.webp",
     visualAlt: "Interface de Jobi affichant la table de gestion des livres avec recherche et filtres.",
@@ -135,8 +135,8 @@ export const testimonials = [
     name: "Fabien RAULIC",
     role: "Chef de Projet MyData · LABOCEA",
     context: "LABOCEA · MyData",
-    avatar: "testimonials/labocea.svg",
-    isLogo: true,
+    avatar: "testimonials/fabien-raulic.jpg",
+    isLogo: false,
     text: "Travaillant étroitement avec Elouan sur les aspects design et parcours utilisateurs. Les compétences d'Elouan lui ont permis d'acquérir une bonne connaissance du contexte fonctionnel de My Data. Son implication a apporté un plus non négligeable au projet, à la structure et aux utilisateurs."
   }
 ];
@@ -146,13 +146,13 @@ export const education: TimelineItem[] = [
     title: "Institut Universitaire de Technologie",
     subtitle: "BUT Informatique (Parcours A : Dével. Web/Mobile)",
     date: "2024 - Aujourd'hui",
-    description: "Bachelor Universitaire de Technologie en Informatique, axé sur l'apprentissage pratique du développement web et mobile, des structures de données, et de l'architecture logicielle."
+    description: "Bachelor Universitaire de Technologie en Informatique, axé sur l'apprentissage pratique du ==développement web et mobile==, des structures de données, et de l'architecture logicielle."
   },
   {
     title: "Lycée Général",
     subtitle: "Baccalauréat Spécialité NSI & SES",
     date: "2021 - 2024",
-    description: "Baccalauréat général obtenu avec mention. Options choisies : Numérique et Sciences de l'Informatique (NSI) et Sciences Économiques et Sociales (SES)."
+    description: "Baccalauréat général obtenu ==avec mention==. Options choisies : Numérique et Sciences de l'Informatique (NSI) et Sciences Économiques et Sociales (SES)."
   }
 ];
 
@@ -162,35 +162,45 @@ export const experiences: TimelineItem[] = [
     subtitle: "Labocéa · Stage puis CDD · Ploufragan",
     logo: "companies/labocea.svg",
     date: "Avr. 2026 - Août 2026",
-    description: "Développement de MyData en ingénierie de production : remise en état de plus de 60 % du code déprécié, site 10 à 24 fois plus rapide et base de code allégée de 4 Mo à 1,3 Mo. Optimisation de l'application mobile, intégration de nouvelles technologies et mise en place de tests automatisés. Stage prolongé en CDD à l'issue de la mission."
+    description: "Développement de MyData en ingénierie de production : remise en état de ==plus de 60 % du code déprécié==, site ==10 à 24 fois plus rapide== et base de code allégée ==de 4 Mo à 1,3 Mo==. Optimisation de l'application mobile, intégration de nouvelles technologies et mise en place de tests automatisés. Stage ==prolongé en CDD== à l'issue de la mission."
   },
   {
     title: "Livreur",
     subtitle: "Fidéli Express",
     logo: "companies/fideli-express.svg",
     date: "Juin 2025 - Août 2025",
-    description: "Mission saisonnière de trois mois en livraison de colis."
+    description: "Mission saisonnière de ==trois mois== en livraison de colis."
   },
   {
     title: "Responsable de labyrinthe",
     subtitle: "La ferme de Sous la Ville · CDD · Lantic",
     logo: "companies/ferme-sous-la-ville.webp",
     date: "Juin 2024 - Août 2024",
-    description: "Entretien du site, vente des entrées, animation et gestion des ventes annexes. Création d'animations ludiques pour les visiteurs, gestion des stocks et entretien des espaces de jeu ainsi que de l'escape game."
+    description: "Entretien du site, vente des entrées, animation et gestion des ventes annexes. Création d'==animations ludiques== pour les visiteurs, gestion des stocks et entretien des espaces de jeu ainsi que de l'escape game."
+  },
+  {
+    title: "kotbo.fr",
+    subtitle: "Co-fondateur & Développeur · Bot Discord",
+    logo: "companies/kotbo.svg",
+    date: "Mars 2026 - Aujourd'hui",
+    description: "Bot de gestion de communauté Discord et son tableau de bord : ==58 modules== (modération, économie, staff, statistiques). Né pour le serveur des Nerds, rejoint par Nathan puis Victor, passé en ==freemium== en novembre 2026.",
+    url: "https://kotbo.fr",
+    urlLabel: "Visiter kotbo.fr"
   },
   {
     title: "plinkk.fr",
     subtitle: "Créateur & Développeur Principal",
     date: "2025 - Aujourd'hui",
-    description: "Conception, développement et maintenance d'un service d'agrégation de liens thémable en temps réel, déployé avec Bun, EJS et TypeScript.",
+    description: "Conception, développement et maintenance d'un service d'agrégation de liens thémable ==en temps réel==, déployé avec Bun, EJS et TypeScript.",
     url: "https://github.com/Klaynight-dev/links_website_template",
     urlLabel: "Repository GitHub"
   },
   {
     title: "Chef de Projet HubGames",
     subtitle: "Gestion de projet & Développement",
+    logo: "companies/hubgames.png",
     date: "2020 - Aujourd'hui",
-    description: "Regroupement et développement d'une suite de jeux web et d'applications utilitaires en équipe.",
+    description: "Regroupement et développement d'une suite de jeux web et d'applications utilitaires ==en équipe==.",
     url: "https://hubgames.klaynight.fr",
     urlLabel: "Visiter HubGames"
   },
@@ -198,7 +208,7 @@ export const experiences: TimelineItem[] = [
     title: "Jobi - Gestion",
     subtitle: "Développeur Application (En pause)",
     date: "2021 - 2024",
-    description: "Développement d'un logiciel desktop en Python et PyQt5 de gestion de bibliothèque : catalogue des ouvrages, utilisateurs, suivi des emprunts et retours.",
+    description: "Développement d'un logiciel desktop en ==Python et PyQt5== de gestion de bibliothèque : catalogue des ouvrages, utilisateurs, suivi des emprunts et retours.",
     url: "https://github.com/Klaynight-dev/stock_gestion_library",
     urlLabel: "Code Source Jobi"
   }
