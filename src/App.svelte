@@ -42,11 +42,18 @@
   const staggerDelay = (i: number) => Math.min(i, 6) * 60;
 
   // Tab state (only active in Preset mode)
-  let activeTab = $state("about"); // 'about', 'resume', 'portfolio', 'contact'
+  // Tabs reachable by link (klaynight.fr/#portfolio), so a link shared on Discord or
+  // LinkedIn opens straight on the projects or the contact form. À propos has no hash:
+  // its own anchors (#profil, #stack...) stay free for the section summary.
+  const tabHashes: Record<string, string> = { resume: "#parcours", portfolio: "#portfolio", contact: "#contact" };
+  const tabFromHash = () => Object.keys(tabHashes).find((id) => tabHashes[id] === location.hash);
+
+  let activeTab = $state(tabFromHash() ?? "about"); // 'about', 'resume', 'portfolio', 'contact'
 
   // A new tab is a new page: start it from the top instead of the old scroll position.
   function goToTab(id: string) {
     activeTab = id;
+    history.replaceState(null, "", tabHashes[id] ?? location.pathname + location.search);
     scrollToTop(true);
   }
 
@@ -176,6 +183,10 @@
 
 <svelte:window
   bind:scrollY
+  onhashchange={() => {
+    const id = tabFromHash();
+    if (id) goToTab(id);
+  }}
   onkeydown={(e) => {
     if (e.key === "Escape" && settingsOpen) settingsOpen = false;
   }}
