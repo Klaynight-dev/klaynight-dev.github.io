@@ -2,8 +2,8 @@
   import { onMount } from "svelte";
   import { Github } from "lucide-svelte";
   import Papicon from "./Papicon.svelte";
-  import myAvatar from "../../../assets/images/my-avatar.png";
-  import myPhoto from "../../../assets/images/photo-elouan.webp";
+  import myAvatar from "../../../assets/images/profile/my-avatar.png";
+  import myPhoto from "../../../assets/images/profile/photo-elouan.webp";
   import { personalInfo } from "../data/resume";
 
   // Local time in Bretagne, refreshed every minute — a small honest "alive" detail
