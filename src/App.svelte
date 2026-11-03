@@ -16,8 +16,12 @@
   // Every file in assets/images, keyed by filename as referenced in resume.ts.
   const screenshotMap: Record<string, string> = Object.fromEntries(
     Object.entries(
-      import.meta.glob<string>("../assets/images/*", { eager: true, import: "default", query: "?url" })
-    ).map(([path, url]) => [path.split("/").pop()!, url])
+      import.meta.glob<string>("../assets/images/**/*", { eager: true, import: "default", query: "?url" })
+    ).flatMap(([path, url]) => {
+      const rel = path.replace(/^(\.\.\/)+assets\/images\//, "");
+      const file = path.split("/").pop()!;
+      return [[rel, url], [file, url]];
+    })
   );
 
   const tabs = [
@@ -28,10 +32,10 @@
   ] as const;
 
   const filters = [
-    { id: "all", label: "Tout" },
-    { id: "Web Development", label: "Développement Web" },
-    { id: "Web Design", label: "Design Web" },
-    { id: "Applications", label: "Applications" }
+    { id: "all", label: "Tout", icon: "Grid" },
+    { id: "Web Development", label: "Développement Web", icon: "Code" },
+    { id: "Web Design", label: "Design Web", icon: "Palette" },
+    { id: "Applications", label: "Applications", icon: "Tasks" }
   ] as const;
 
   // Stagger delay for timeline/competence cards, capped so a long list
@@ -40,6 +44,28 @@
 
   // Tab state (only active in Preset mode)
   let activeTab = $state("about"); // 'about', 'resume', 'portfolio', 'contact'
+
+  const readPref = (key: string, fallback = true) => {
+    try {
+      const saved = localStorage.getItem(key);
+      return saved === null ? fallback : saved === "1";
+    } catch {
+      return fallback;
+    }
+  };
+
+  let customCursorEnabled = $state(readPref("portfolio:cursor", true));
+  let smoothScrollEnabled = $state(readPref("portfolio:smooth-scroll", true));
+  let settingsOpen = $state(false);
+  let settingsContainer = $state<HTMLDivElement | null>(null);
+
+  $effect(() => {
+    try {
+      localStorage.setItem("portfolio:cursor", customCursorEnabled ? "1" : "0");
+      localStorage.setItem("portfolio:smooth-scroll", smoothScrollEnabled ? "1" : "0");
+    } catch {}
+    document.documentElement.classList.toggle("no-smooth-scroll", !smoothScrollEnabled);
+  });
 
   // Project filtering state
   let projectFilter = $state("all");
@@ -112,8 +138,23 @@
   }
 </script>
 
-<CustomCursor />
-<SmoothScroll />
+<svelte:window
+  onkeydown={(e) => {
+    if (e.key === "Escape" && settingsOpen) settingsOpen = false;
+  }}
+  onpointerdown={(e) => {
+    if (settingsOpen && settingsContainer && !settingsContainer.contains(e.target as Node)) {
+      settingsOpen = false;
+    }
+  }}
+/>
+
+{#if customCursorEnabled}
+  <CustomCursor />
+{/if}
+{#if smoothScrollEnabled}
+  <SmoothScroll />
+{/if}
 <ScrollToTop />
 <ProjectModal
   project={selectedProject}
@@ -149,6 +190,8 @@
     <main class="flex-1 flex flex-col gap-6 min-w-0">
 
       <!-- Pill tab navigation -->
+      <!-- Top bar: pill tab navigation + display settings -->
+      <div class="flex items-center justify-end md:justify-between gap-3">
       <nav class="hidden md:flex flex-wrap gap-2 card p-2 w-fit">
         {#each tabs as tab}
           <button
@@ -160,6 +203,62 @@
           </button>
         {/each}
       </nav>
+
+        <div class="relative" bind:this={settingsContainer}>
+          <button
+            type="button"
+            class="pill-icon"
+            aria-label="Paramètres d'affichage"
+            aria-expanded={settingsOpen}
+            aria-haspopup="dialog"
+            onclick={() => (settingsOpen = !settingsOpen)}
+          >
+            <Papicon icon="Gears" size={18} />
+          </button>
+
+          {#if settingsOpen}
+            <div
+              role="dialog"
+              aria-label="Paramètres d'affichage"
+              class="card p-4 w-64 absolute right-0 top-full mt-2 z-50 flex flex-col gap-1 shadow-lg animate-fade-in"
+            >
+              <span class="eyebrow mb-1">Paramètres</span>
+
+              <button
+                type="button"
+                role="switch"
+                data-no-blobity
+                aria-checked={customCursorEnabled}
+                onclick={() => (customCursorEnabled = !customCursorEnabled)}
+                class="flex items-center justify-between gap-3 min-h-11 px-2 -mx-2 rounded-xl hover:bg-surface-muted transition-colors text-left text-sm font-medium text-ink cursor-pointer"
+              >
+                <span>Curseur animé</span>
+                <span
+                  class="w-10 h-6 rounded-full p-0.5 transition-colors flex items-center shrink-0 {customCursorEnabled ? 'bg-ink justify-end' : 'bg-surface-muted border border-border justify-start'}"
+                >
+                  <span class="w-4 h-4 rounded-full {customCursorEnabled ? 'bg-white' : 'bg-ink-muted'}"></span>
+                </span>
+              </button>
+
+              <button
+                type="button"
+                role="switch"
+                data-no-blobity
+                aria-checked={smoothScrollEnabled}
+                onclick={() => (smoothScrollEnabled = !smoothScrollEnabled)}
+                class="flex items-center justify-between gap-3 min-h-11 px-2 -mx-2 rounded-xl hover:bg-surface-muted transition-colors text-left text-sm font-medium text-ink cursor-pointer"
+              >
+                <span>Défilement fluide</span>
+                <span
+                  class="w-10 h-6 rounded-full p-0.5 transition-colors flex items-center shrink-0 {smoothScrollEnabled ? 'bg-ink justify-end' : 'bg-surface-muted border border-border justify-start'}"
+                >
+                  <span class="w-4 h-4 rounded-full {smoothScrollEnabled ? 'bg-white' : 'bg-ink-muted'}"></span>
+                </span>
+              </button>
+            </div>
+          {/if}
+        </div>
+      </div>
 
       <!-- View Panel -->
       <div class="card p-6 lg:p-8 flex-1 min-h-125">
@@ -180,7 +279,7 @@
                       <span class="timeline-date eyebrow">{item.date}</span>
                       <div class="timeline-body mt-1.5 md:mt-0">
                         <h4 class="text-xl font-display font-semibold text-ink leading-snug">{item.title}</h4>
-                        <p class="text-sm font-medium text-ink-muted mt-1">{item.subtitle}</p>
+                        <p class="flex items-center gap-2 text-sm font-medium text-ink-muted mt-1">{#if item.logo && screenshotMap[item.logo]}<img src={screenshotMap[item.logo]} alt="" class="w-4 h-4 aspect-square object-contain shrink-0 rounded-xs" />{/if}<span>{item.subtitle}</span></p>
                         <p class="text-[0.95rem] text-ink-muted mt-3 leading-relaxed max-w-prose">{item.description}</p>
                         {#if item.url}
                           <a href={item.url} target="_blank" rel="noopener noreferrer" class="text-link mt-3">
@@ -194,23 +293,63 @@
               </section>
             {/each}
 
-            <!-- Key competencies -->
-            <section class="flex flex-col gap-8">
-              <h3 class="title-xl">Compétences clés</h3>
-              <ol class="border-y border-border divide-y divide-border">
+            <!-- Key competencies — compact interactive rows façon Tom Things & Vince Linise -->
+            <section class="flex flex-col gap-6">
+              <div class="flex flex-col gap-1">
+                <h3 class="title-xl">Compétences <span class="title-mark">clés</span></h3>
+                <p class="text-sm text-ink-muted">Référentiel BUT Informatique · Parcours A (Développement web & applicatif)</p>
+              </div>
+
+              <ol class="flex flex-col gap-3 list-none p-0 m-0">
                 {#each keyCompetences as competence, i}
-                  <li class="grid md:grid-cols-[10rem_1fr] gap-y-2 py-6" use:reveal={{ delay: staggerDelay(i) }}>
-                    <span class="eyebrow md:text-right md:pr-8 pt-1">{String(i + 1).padStart(2, "0")}</span>
-                    <div class="md:pl-8">
-                      <h4 class="text-lg font-display font-semibold text-ink">{competence.title}</h4>
-                      <div class="flex flex-wrap gap-x-5 gap-y-1.5 mt-2">
-                        {#each competence.links as link}
-                          <a href={link.url} target="_blank" rel="noopener noreferrer" class="text-link">
-                            {link.label} <Papicon icon="ArrowRight" size={12} />
-                          </a>
-                        {/each}
+                  {@const domain = domainColors[competence.domain]}
+                  <li
+                    class="competence-row card-interactive"
+                    use:reveal={{ delay: staggerDelay(i) }}
+                  >
+                    <div class="flex items-start md:items-center gap-3.5 min-w-0 flex-1">
+                      <span
+                        class="competence-num-badge"
+                        style="background: {domain.bg}; color: {domain.text};"
+                      >
+                        <Papicon icon={competence.icon} size={15} />
+                        <span>{String(i + 1).padStart(2, "0")}</span>
+                      </span>
+
+                      <div class="flex flex-col gap-0.5 min-w-0 flex-1">
+                        <h4 class="text-base md:text-lg font-display font-semibold text-ink leading-snug">
+                          {competence.title}
+                        </h4>
+                        {#if competence.description}
+                          <p class="text-xs md:text-sm text-ink-muted leading-relaxed max-w-2xl">
+                            {competence.description}
+                          </p>
+                        {/if}
                       </div>
                     </div>
+
+                    {#if competence.links && competence.links.length > 0}
+                      <div class="flex flex-wrap items-center gap-1.5 md:self-center shrink-0 pl-11 md:pl-0">
+                        {#each competence.links as link}
+                          {#if link.url}
+                            <a
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="chip"
+                            >
+                              <span>{link.label}</span>
+                              <Papicon icon="ArrowRightUp" size={11} />
+                            </a>
+                          {:else}
+                            <span class="chip chip-static">
+                              <Papicon icon="Check" size={11} />
+                              <span>{link.label}</span>
+                            </span>
+                          {/if}
+                        {/each}
+                      </div>
+                    {/if}
                   </li>
                 {/each}
               </ol>
@@ -223,19 +362,19 @@
               <h3 class="text-2xl font-display font-semibold text-ink">Tous mes <span class="title-mark">projets</span></h3>
             </div>
 
-            <!-- Category filter tabs — the active underline takes its category's
-                 domain color (see domains.ts). "Tout" has no domain: stays ink. -->
-            <div class="filter-tabs">
+            <!-- Category filter segmented pill bar façon Tafac & Papillon -->
+            <div class="filter-bar" role="group" aria-label="Filtrer par catégorie">
               {#each filters as filter}
-                {@const domain = filter.id in projectCategoryDomain ? domainColors[projectCategoryDomain[filter.id as keyof typeof projectCategoryDomain]] : null}
+                {@const count = filter.id === "all" ? projects.length : projects.filter(p => p.category === filter.id).length}
                 <button
+                  type="button"
                   onclick={() => projectFilter = filter.id}
-                  class="filter-tab"
+                  class="filter-pill"
                   aria-pressed={projectFilter === filter.id}
-                  style={domain ? `--tab-color: ${domain.text};` : ''}
                 >
-                  {filter.label}
-                  <span class="filter-count">{filter.id === "all" ? projects.length : projects.filter(p => p.category === filter.id).length}</span>
+                  <Papicon icon={filter.icon} size={14} />
+                  <span>{filter.label}</span>
+                  <span class="filter-count">{count}</span>
                 </button>
               {/each}
             </div>

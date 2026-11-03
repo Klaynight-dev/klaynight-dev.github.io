@@ -15,16 +15,16 @@
   } = $props();
 
   // Import skill logos so Vite bundles and hashes them correctly
-  import pgLogo from "../../../assets/images/Postgresql_elephant.png";
-  import mySqlLogo from "../../../assets/images/MySQL.svg";
-  import sqlLogo from "../../../assets/images/sql.png";
-  import phpLogo from "../../../assets/images/PHP.png";
-  import phpMyAdminLogo from "../../../assets/images/phpmyadmin.png";
-  import javaLogo from "../../../assets/images/java.png";
-  import pythonLogo from "../../../assets/images/Python.png";
-  import cLogo from "../../../assets/images/c.png";
-  import bootstrapLogo from "../../../assets/images/Bootstrap.svg";
-  import tailwindLogo from "../../../assets/images/Tailwind.svg.png";
+  import pgLogo from "../../../assets/images/tech/Postgresql_elephant.png";
+  import mySqlLogo from "../../../assets/images/tech/MySQL.svg";
+  import sqlLogo from "../../../assets/images/tech/sql.png";
+  import phpLogo from "../../../assets/images/tech/PHP.png";
+  import phpMyAdminLogo from "../../../assets/images/tech/phpmyadmin.png";
+  import javaLogo from "../../../assets/images/tech/java.png";
+  import pythonLogo from "../../../assets/images/tech/Python.png";
+  import cLogo from "../../../assets/images/tech/c.png";
+  import bootstrapLogo from "../../../assets/images/tech/Bootstrap.svg";
+  import tailwindLogo from "../../../assets/images/tech/Tailwind.svg.png";
 
   const logoMap: Record<string, string> = {
     "Postgresql_elephant.png": pgLogo,
@@ -36,14 +36,28 @@
     "Python.png": pythonLogo,
     "c.png": cLogo,
     "Bootstrap.svg": bootstrapLogo,
-    "Tailwind.svg.png": tailwindLogo
+    "Tailwind.svg.png": tailwindLogo,
+    "tech/Postgresql_elephant.png": pgLogo,
+    "tech/MySQL.svg": mySqlLogo,
+    "tech/sql.png": sqlLogo,
+    "tech/PHP.png": phpLogo,
+    "tech/phpmyadmin.png": phpMyAdminLogo,
+    "tech/java.png": javaLogo,
+    "tech/Python.png": pythonLogo,
+    "tech/c.png": cLogo,
+    "tech/Bootstrap.svg": bootstrapLogo,
+    "tech/Tailwind.svg.png": tailwindLogo
   };
 
   // Every file in assets/images, keyed by filename as referenced in resume.ts.
   const screenshotMap: Record<string, string> = Object.fromEntries(
     Object.entries(
-      import.meta.glob<string>("../../../assets/images/*", { eager: true, import: "default", query: "?url" })
-    ).map(([path, url]) => [path.split("/").pop()!, url])
+      import.meta.glob<string>("../../../assets/images/**/*", { eager: true, import: "default", query: "?url" })
+    ).flatMap(([path, url]) => {
+      const rel = path.replace(/^(\.\.\/)+assets\/images\//, "");
+      const file = path.split("/").pop()!;
+      return [[rel, url], [file, url]];
+    })
   );
 
   // Icons relevant to each service's real subject (design tool, web code, app window)
@@ -56,22 +70,23 @@
   // drag the last items in for a full second.
   const staggerDelay = (i: number) => Math.min(i, 6) * 60;
 
-  // Section index: anchors and labels for the jump-nav
+  // Section index: anchors, numbers, icons and labels for the jump-nav
   const sections = [
-    { id: "profil", number: "01", label: "Profil" },
-    { id: "savoir-faire", number: "02", label: "Savoir-faire" },
-    { id: "selection", number: "03", label: "Sélection" },
-    { id: "stack", number: "04", label: "Stack" },
-    { id: "recommandations", number: "05", label: "Recommandations" }
+    { id: "profil", number: "01", label: "Profil", icon: "User" },
+    { id: "savoir-faire", number: "02", label: "Savoir-faire", icon: "Palette" },
+    { id: "selection", number: "03", label: "Sélection", icon: "Bookmark" },
+    { id: "stack", number: "04", label: "Stack", icon: "Code" },
+    { id: "recommandations", number: "05", label: "Recommandations", icon: "TextBubble" }
   ];
 </script>
 
 <div class="flex flex-col gap-12 animate-fade-in">
-  <!-- Section jump-nav: quick way to skip a long page, smooth-scrolled -->
-  <nav class="index-nav" aria-label="Sections de la page">
+  <!-- Section jump-nav: segmented pill bar façon Papillon / Tafac -->
+  <nav class="index-bar" aria-label="Sommaire des sections">
     {#each sections as section}
-      <a href="#{section.id}" class="index-link">
-        <span>{section.number}</span>{section.label}
+      <a href="#{section.id}" class="index-pill">
+        <Papicon icon={section.icon} size={14} />
+        <span>{section.label}</span>
       </a>
     {/each}
   </nav>
@@ -163,11 +178,13 @@
       {#each skillCategories as category, i}
         {@const domain = domainColors[category.domain]}
         <div
-          class="card p-5 flex flex-col gap-3 border-t-[3px]"
-          style="border-top-color: {domain.hue};"
+          class="card p-5 md:p-6 flex flex-col gap-3.5"
           use:reveal={{ delay: staggerDelay(i) }}
         >
-          <h3 class="text-sm font-semibold uppercase tracking-wide" style="color: {domain.text};">{category.name}</h3>
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-xs font-mono font-semibold uppercase tracking-wider text-ink-muted-strong">{category.name}</h3>
+            <span class="w-2 h-2 rounded-full shrink-0" style="background: {domain.hue};" title={category.name}></span>
+          </div>
 
           <div class="flex flex-wrap gap-2">
             {#each category.skills as skill}
@@ -195,32 +212,51 @@
     <h2 class="text-3xl md:text-4xl font-display font-semibold text-ink leading-tight">Ce qu'on dit de <span class="title-mark">moi</span></h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
-      {#each testimonials as item, i}
-        <div class="card p-6 flex flex-col gap-4 relative" use:reveal={{ delay: staggerDelay(i) }}>
-          <span class="absolute right-5 top-5" style="color: var(--accent-soft);">
-            <Papicon icon="TextBubble" size={32} />
-          </span>
-
-          <p class="font-display text-lg text-ink leading-relaxed flex-1 z-10 pr-6">
-            {item.text}
-          </p>
-
-          <div class="flex items-center gap-3.5 border-t border-border pt-4">
-            {#if item.avatar.startsWith('http')}
-              <div class="w-11 h-11 rounded-xl overflow-hidden bg-surface-muted border border-border flex items-center justify-center p-1 shrink-0">
-                <img src={item.avatar} alt={item.name} class="w-full h-full object-contain" />
-              </div>
-            {:else}
-              <div class="w-11 h-11 rounded-xl bg-surface-muted border border-border flex items-center justify-center font-display font-semibold text-sm shrink-0" style="color: var(--accent);">
-                {item.name[0]}
-              </div>
-            {/if}
-            <div class="min-w-0">
-              <h4 class="text-sm font-semibold text-ink truncate">{item.name}</h4>
-              <p class="text-xs text-ink-muted truncate mt-0.5">{item.role}</p>
+      {#each testimonials as item, i}{@const avatarSrc = screenshotMap[item.avatar] ?? (item.avatar.startsWith('http') ? item.avatar : '')}{@const initials = item.name.split(' ').map((part) => part[0]).slice(0, 2).join('')}
+        <figure
+          class="quote-card card-interactive m-0 {i === testimonials.length - 1 && testimonials.length % 2 === 1 ? 'md:col-span-2' : ''}"
+          use:reveal={{ delay: staggerDelay(i) }}
+        >
+          {#if item.context}
+            <div class="flex items-center justify-between gap-3">
+              <span class="tag">{item.context}</span>
             </div>
-          </div>
-        </div>
+          {/if}
+
+          <blockquote class="text-[0.975rem] md:text-base text-ink leading-relaxed flex-1 m-0">
+            « {item.text} »
+          </blockquote>
+
+          <figcaption class="quote-author">
+            <div class="flex items-center gap-3 min-w-0">
+              {#if avatarSrc && !item.isLogo}
+                <img
+                  src={avatarSrc}
+                  alt={item.name}
+                  class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-xs shrink-0"
+                />
+              {:else}
+                <div
+                  class="w-10 h-10 rounded-xl bg-white border border-border flex items-center justify-center font-display font-semibold text-xs shrink-0"
+                  style="color: #4c2f60;"
+                  aria-hidden="true"
+                >
+                  {initials}
+                </div>
+              {/if}
+              <div class="min-w-0">
+                <h3 class="text-sm font-semibold text-ink truncate">{item.name}</h3>
+                <p class="text-xs text-ink-muted-strong truncate mt-0.5">{item.role}</p>
+              </div>
+            </div>
+
+            {#if avatarSrc && item.isLogo}
+              <span class="quote-logo-pill" title={item.context || item.role}>
+                <img src={avatarSrc} alt="Logo {item.context || item.name}" class="h-4 w-auto object-contain" />
+              </span>
+            {/if}
+          </figcaption>
+        </figure>
       {/each}
     </div>
   </section>

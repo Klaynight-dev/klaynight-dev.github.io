@@ -15,8 +15,10 @@ export function scrollToTop() {
     lenis.scrollTo(0);
     return;
   }
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+  const instant =
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+    document.documentElement.classList.contains("no-smooth-scroll");
+  window.scrollTo({ top: 0, behavior: instant ? "auto" : "smooth" });
 }
 
 export function lockScroll() {

@@ -31,7 +31,7 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  html {
+  html:not(.no-smooth-scroll) {
     scroll-behavior: smooth;
   }
 }
@@ -41,7 +41,7 @@
     background-color: var(--bg);
     color: var(--ink);
     font-family: var(--font-sans);
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   h1, h2, h3, h4 {
@@ -314,79 +314,224 @@
   text-decoration-color: currentColor;
 }
 
-/* Sommaire de la page À propos : numéro mono + libellé. */
-.index-nav {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 1.75rem;
-  row-gap: 0.5rem;
-  padding-block: 0.9rem;
-  border-block: 1px solid var(--border);
-}
-.index-link {
+/* Pilules façon tomthings.fr & vincelinise.com : fond neutre chaud, petite icône,
+   micro-rebond tactile au survol/clic. */
+.chip {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.45rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--ink-muted-strong);
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-underline-offset: 0.35em;
-  transition: color 0.15s ease, text-decoration-color 0.15s ease;
-}
-.index-link span {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--accent);
-}
-.index-link:hover {
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
   color: var(--ink);
-  text-decoration-color: currentColor;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+.chip:hover {
+  background: var(--surface);
+  border-color: var(--border-strong);
+  color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card);
+}
+.chip:active {
+  transform: scale(0.97);
+}
+.chip[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #ffffff;
+}
+.chip-static {
+  cursor: default;
+  background: var(--surface);
+  color: var(--ink-muted-strong);
+}
+.chip-static:hover,
+.chip-static:active {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--ink-muted-strong);
+  transform: none;
+  box-shadow: none;
 }
 
-/* Filtres du portfolio en onglets texte ; le trait prend la couleur du domaine (--tab-color). */
-.filter-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 1.75rem;
-  border-bottom: 1px solid var(--border);
-}
-.filter-tab {
-  position: relative;
+/* Sommaire de navigation façon Papillon & Tafac :
+   barre segmentée en pilules douces, pastille numérotée et micro-survol surélevé */
+.index-bar {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.4rem;
-  padding: 0.6rem 0 0.85rem;
-  font-size: 0.95rem;
-  font-weight: 500;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  width: fit-content;
+  max-width: 100%;
+}
+.index-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
   color: var(--ink-muted-strong);
-  background: none;
-  border: 0;
-  cursor: pointer;
-  transition: color 0.15s ease;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.2s ease;
 }
-.filter-tab::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 -1px;
-  height: 2px;
-  background: var(--tab-color, var(--ink));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.filter-tab:hover,
-.filter-tab[aria-pressed="true"] {
+.index-pill:hover {
+  background: var(--surface);
+  border-color: var(--border);
   color: var(--ink);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px -2px rgba(23, 21, 29, 0.08);
 }
-.filter-tab[aria-pressed="true"]::after {
-  transform: scaleX(1);
+.index-pill:active {
+  transform: scale(0.97);
+}
+
+/* Barre de filtres du portfolio : contrôle segmenté raffiné façon tafac.fr & papillon.bzh */
+.filter-bar {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  width: fit-content;
+  max-width: 100%;
+}
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink-muted-strong);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+.filter-pill:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.6);
+}
+.filter-pill:active {
+  transform: scale(0.98);
+}
+.filter-pill[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #ffffff;
+  box-shadow: 0 2px 6px -1px rgba(23, 21, 29, 0.14);
 }
 .filter-count {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--ink-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.6;
+  margin-left: 0.15rem;
+}
+.filter-pill[aria-pressed="true"] .filter-count {
+  opacity: 0.85;
+  color: #ffffff;
+}
+
+/* Lignes de compétences clés façon Tom Things & Vince Linise :
+   lignes interactives compactes, aérées, avec badge domaine et réalisations associées */
+.competence-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1rem 1.25rem;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(23, 21, 29, 0.04);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.2s ease;
+}
+@media (min-width: 768px) {
+  .competence-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.15rem 1.4rem;
+  }
+}
+.competence-row:hover {
+  transform: translateY(-1.5px);
+  border-color: var(--border-strong);
+  box-shadow: 0 6px 16px -4px rgba(23, 21, 29, 0.08);
+}
+.competence-num-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Cartes de recommandations : cartes sobres et soignées façon papillon.bzh & tomthings.fr */
+.quote-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+.quote-author {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.875rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.quote-logo-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
 /* Frise du parcours : date | contenu, le rail passe entre les deux sur grand écran. */
@@ -570,6 +715,10 @@
   .card-interactive,
   .pill,
   .pill-icon,
+  .chip,
+  .index-pill,
+  .competence-row,
+  .filter-pill,
   .avatar-deck-card {
     transition: none;
   }
