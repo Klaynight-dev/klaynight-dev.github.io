@@ -14,6 +14,19 @@
     timeZone: "Europe/Paris"
   });
   let localTime = $state(timeFormatter.format(new Date()));
+  // Decorative icon cloud behind the avatar: x in %, y in px, size, tilt.
+  const cloud = [
+    { icon: "Star", x: 4, y: 14, size: 38, rotate: -14 },
+    { icon: "Code", x: 22, y: -6, size: 26, rotate: 12 },
+    { icon: "Clock", x: 6, y: 92, size: 44, rotate: 0 },
+    { icon: "Calendar", x: 20, y: 160, size: 30, rotate: -12 },
+    { icon: "Search", x: 76, y: 70, size: 40, rotate: -8 },
+    { icon: "Sparkles", x: 72, y: 6, size: 30, rotate: 18 },
+    { icon: "Home", x: 86, y: 150, size: 36, rotate: 10 },
+    { icon: "TrendingUp", x: 88, y: 22, size: 26, rotate: -10 },
+    { icon: "Palette", x: 2, y: 190, size: 28, rotate: 16 }
+  ];
+
   // Touch screens have no hover: a tap keeps the avatar deck open.
   let deckOpen = $state(false);
 
@@ -25,9 +38,17 @@
   });
 </script>
 
-<aside class="card w-full lg:w-80 p-6 flex flex-col gap-6 lg:sticky lg:top-6 self-start animate-fade-in">
+<aside class="relative card w-full lg:w-80 p-6 flex flex-col gap-6 lg:sticky lg:top-6 self-start animate-fade-in">
+  <div class="icon-cloud" aria-hidden="true">
+    {#each cloud as item}
+      <span style="left: {item.x}%; top: {item.y}px; transform: rotate({item.rotate}deg);">
+        <Papicon icon={item.icon} size={item.size} />
+      </span>
+    {/each}
+  </div>
+
   <!-- Profile info header -->
-  <div class="flex flex-row lg:flex-col items-center gap-4 lg:text-center">
+  <div class="relative flex flex-row lg:flex-col items-center gap-4 lg:text-center">
     <!-- Two-card deck after humanitour.fr: logo in front, photo peeking right; fans out on hover, focus or tap -->
     <button
       type="button"

@@ -5,6 +5,7 @@
   --surface: #ffffff;
   --surface-muted: #efece4;
   --border: #e4e0d6;
+  --border-strong: #cfcabd;
   --ink: #17151d;
   --ink-muted: #6d6a76;
   /* --ink-muted sur --surface-muted tombe a 4.48:1 : cette variante repasse AA. */
@@ -119,20 +120,6 @@
   background: var(--border);
 }
 
-.pill-active {
-  background: var(--ink);
-  color: #ffffff;
-}
-
-.pill-ghost {
-  background: transparent;
-  color: var(--ink-muted);
-}
-.pill-ghost:hover {
-  background: var(--surface-muted);
-  color: var(--ink);
-}
-
 .pill-icon {
   width: 2.75rem;
   height: 2.75rem;
@@ -196,6 +183,47 @@
  * focus ou au toucher, les deux s'ouvrent en eventail. `translate` et `rotate`
  * s'animent separement, comme sur Humanitour.
  */
+/* Même nuage, en petit, dans le coin haut gauche des titres (IconCloud.svelte).
+   isolation + z-index -1 : derrière le texte du titre, devant le fond de la carte. */
+.cloud-host {
+  position: relative;
+  isolation: isolate;
+}
+.title-cloud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+  color: var(--surface-muted);
+}
+.title-cloud > span {
+  position: absolute;
+  display: flex;
+}
+/* Sur le bloc contact (fond encre), le beige serait trop vif : blanc très léger. */
+.contact-block .title-cloud {
+  color: rgba(255, 255, 255, 0.07);
+}
+
+/* Nuage d'icônes décoratif derrière l'avatar : grandes Papicons pâles, inclinées,
+   qui s'effacent vers le bas. Purement visuel (aria-hidden, aucun clic). */
+.icon-cloud {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 15rem;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+  pointer-events: none;
+  color: var(--surface-muted);
+  -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent);
+  mask-image: linear-gradient(to bottom, #000 45%, transparent);
+}
+.icon-cloud > span {
+  position: absolute;
+  display: flex;
+}
+
 .avatar-deck {
   --deck-size: 5rem;
   --deck-spread: 1.9rem;
@@ -261,6 +289,14 @@
   color: var(--accent-ink);
   font-style: italic;
   transform: rotate(-2deg);
+}
+
+/* Mots clés du texte courant (Marked.svelte) : simple gras encre, pour lire en diagonale
+   sans charger la page (le surlignage violet reste réservé aux titres). */
+.text-mark {
+  background: none;
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .eyebrow {
@@ -362,106 +398,282 @@
   box-shadow: none;
 }
 
-/* Sommaire de navigation façon Papillon & Tafac :
-   barre segmentée en pilules douces, pastille numérotée et micro-survol surélevé */
-.index-bar {
-  display: inline-flex;
-  flex-wrap: wrap;
+/* Navigation collante.
+   - Capsule flottante blanche (vincelinise.com) : onglets à 60 % d'opacité, l'actif
+     sur une teinte encre légère, petit rebond au survol et à l'appui.
+   - Sous-navigation de l'onglet en « étiquette » grise suspendue sous la capsule
+     (boutons suspendus de beta.tomthings.fr) : elle glisse de dessous avec un rebond. */
+:root {
+  --ease-jiggle: cubic-bezier(0.55, -0.03, 0.15, 1.41);
+  --ease-spring: cubic-bezier(0.44, -0.2, 0, 1.57);
+}
+.topnav-wrap {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.35rem;
-  border-radius: 999px;
-  background: var(--surface-muted);
-  border: 1px solid var(--border);
-  width: fit-content;
-  max-width: 100%;
+  pointer-events: none;
 }
-.index-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.42rem 0.85rem;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--ink-muted-strong);
-  font-family: var(--font-sans);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  line-height: 1;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.2s ease;
+@media (min-width: 1024px) {
+  /* Même hauteur d'accroche que la sidebar (lg:top-6). */
+  .topnav-wrap {
+    top: 1.5rem;
+  }
 }
-.index-pill:hover {
-  background: var(--surface);
-  border-color: var(--border);
-  color: var(--ink);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px -2px rgba(23, 21, 29, 0.08);
+/* L'étiquette prend la largeur de la capsule (moins un retrait) : elle ne dépasse jamais. */
+.topnav-anchor {
+  position: relative;
+  width: 100%;
+  pointer-events: auto;
 }
-.index-pill:active {
-  transform: scale(0.97);
+@media (min-width: 768px) {
+  .topnav-anchor {
+    width: auto;
+  }
 }
-
-/* Barre de filtres du portfolio : contrôle segmenté raffiné façon tafac.fr & papillon.bzh */
-.filter-bar {
-  display: inline-flex;
-  flex-wrap: wrap;
+.topnav {
+  position: relative;
+  z-index: 2;
+  display: flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.25rem;
+  justify-content: space-between;
+  height: 3.5rem;
+  padding: 0.375rem;
   border-radius: 999px;
-  background: var(--surface-muted);
-  border: 1px solid var(--border);
-  width: fit-content;
-  max-width: 100%;
+  background: var(--surface);
+  box-shadow: 0 10px 30px -12px rgba(23, 21, 29, 0.22), 0 0 0 1px rgba(23, 21, 29, 0.04);
 }
-.filter-pill {
+/* Onglets et engrenage occupent toute la hauteur de la capsule (pilules pleine hauteur). */
+.topnav > nav,
+.topnav > div {
+  align-self: stretch;
+}
+.topnav-avatar {
+  width: 0;
+  height: 2.5rem;
+  margin-right: -0.25rem;
+  opacity: 0;
+  overflow: hidden;
+  border-radius: 999px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: width 0.35s var(--ease-jiggle), margin 0.35s var(--ease-jiggle), opacity 0.2s ease, transform 0.2s var(--ease-jiggle);
+}
+.topnav-avatar img {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: cover;
+  border-radius: 999px;
+}
+.topnav.is-stuck .topnav-avatar {
+  width: 2.5rem;
+  margin-right: 0.25rem;
+  opacity: 1;
+}
+.topnav-avatar:hover {
+  transform: rotate(-8deg) scale(1.06);
+}
+.topnav:not(.is-stuck) .topnav-avatar {
+  visibility: hidden;
+}
+
+.nav-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.42rem 0.85rem;
+  gap: 0.5rem;
+  height: 100%;
+  padding: 0 1.15rem;
   border-radius: 999px;
-  border: 1px solid transparent;
   background: transparent;
+  color: var(--ink);
+  opacity: 0.6;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.27s var(--ease-jiggle), opacity 0.15s ease, background-color 0.15s ease;
+}
+.nav-pill:hover {
+  opacity: 1;
+  transform: scale(1.05);
+  background: rgba(23, 21, 29, 0.05);
+}
+.nav-pill:active {
+  transform: scale(0.9);
+}
+.nav-pill[aria-current="page"] {
+  opacity: 1;
+  background: rgba(23, 21, 29, 0.07);
+}
+.nav-pill-icon {
+  width: 2.75rem;
+  padding: 0;
+  justify-content: center;
+}
+.nav-pill-icon[aria-expanded="true"] {
+  opacity: 1;
+  background: rgba(23, 21, 29, 0.07);
+}
+.nav-pill-icon[aria-expanded="true"] svg {
+  transform: rotate(60deg);
+}
+.nav-pill-icon svg {
+  transition: transform 0.4s var(--ease-spring);
+}
+
+/* Étiquette sous la capsule, toujours un peu plus large qu'elle (min-width en % de la
+   capsule) et sur une seule ligne. Ses coins hauts dépassent de chaque côté de la
+   capsule : arrondi sur les quatre coins. */
+.topnav-wrap.has-drawer {
+  padding-bottom: 2.4rem;
+}
+.topnav-drawer {
+  position: absolute;
+  z-index: 1;
+  top: calc(3.5rem - 1.4rem);
+  left: 50%;
+  width: max-content;
+  min-width: calc(100% + 2rem);
+  border-radius: 1.4rem;
+  background: var(--surface-muted);
+  box-shadow: 0 8px 20px -12px rgba(23, 21, 29, 0.25);
+  transform: translate(-50%, -100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.45s var(--ease-spring), opacity 0.15s ease, visibility 0s 0.45s;
+}
+.topnav-drawer.is-open {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  visibility: visible;
+  transition: transform 0.45s var(--ease-spring), opacity 0.15s ease;
+}
+.drawer-list {
+  display: flex;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 1.75rem 0.4rem 0.4rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.drawer-list::-webkit-scrollbar {
+  display: none;
+}
+/* Téléphone : la capsule prend déjà toute la largeur, l'étiquette s'y cale et défile. */
+@media (max-width: 767px) {
+  .topnav-drawer {
+    left: 0.75rem;
+    right: 0.75rem;
+    width: auto;
+    min-width: 0;
+    transform: translateY(-100%);
+  }
+  .topnav-drawer.is-open {
+    transform: none;
+  }
+  .drawer-list {
+    justify-content: safe center;
+  }
+}
+.drawer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 0.8rem;
   color: var(--ink-muted-strong);
-  font-family: var(--font-sans);
   font-size: 0.8125rem;
   font-weight: 500;
   line-height: 1;
   white-space: nowrap;
+  text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.27s var(--ease-jiggle), background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
-.filter-pill:hover {
+.drawer-pill:hover {
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
 }
-.filter-pill:active {
-  transform: scale(0.98);
+.drawer-pill:active {
+  transform: scale(0.92);
 }
-.filter-pill[aria-pressed="true"] {
+.drawer-pill[aria-current="true"],
+.drawer-pill[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(23, 21, 29, 0.12);
+}
+
+/* Paramètres en tuiles de « centre de contrôle » (widgets de Papillon) : une tuile par
+   réglage, pleine encre quand il est actif. Ouverture en rebond depuis l'engrenage. */
+.settings-menu {
+  position: absolute;
+  right: -0.375rem;
+  top: calc(100% + 0.75rem);
+  z-index: 50;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.375rem;
+  width: 15rem;
+  padding: 0.375rem;
+  border-radius: 1.5rem;
+  background: var(--surface);
+  box-shadow: 0 18px 40px -16px rgba(23, 21, 29, 0.3), 0 0 0 1px rgba(23, 21, 29, 0.04);
+  transform-origin: calc(100% - 1.75rem) -0.5rem;
+  animation: menuIn 0.35s var(--ease-spring);
+}
+@keyframes menuIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+.setting-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  min-height: 6.5rem;
+  padding: 0.85rem;
+  border-radius: 1.15rem;
+  background: var(--surface-muted);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.27s var(--ease-jiggle), background-color 0.2s ease, color 0.2s ease;
+}
+.setting-tile > :first-child {
+  margin-bottom: auto;
+}
+.setting-tile:hover {
+  transform: scale(1.03);
+}
+.setting-tile:active {
+  transform: scale(0.92);
+}
+.setting-tile[aria-checked="true"] {
   background: var(--ink);
-  border-color: var(--ink);
   color: #ffffff;
-  box-shadow: 0 2px 6px -1px rgba(23, 21, 29, 0.14);
 }
+.setting-state {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
 .filter-count {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   opacity: 0.6;
-  margin-left: 0.15rem;
-}
-.filter-pill[aria-pressed="true"] .filter-count {
-  opacity: 0.85;
-  color: #ffffff;
 }
 
 /* Lignes de compétences clés façon Tom Things & Vince Linise :
-   lignes interactives compactes, aérées, avec badge domaine et réalisations associées */
+   lignes compactes, aérées, avec badge domaine et réalisations associées */
 .competence-row {
   display: flex;
   flex-direction: column;
@@ -471,7 +683,6 @@
   background: var(--surface);
   border: 1px solid var(--border);
   box-shadow: 0 1px 3px rgba(23, 21, 29, 0.04);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.2s ease;
 }
 @media (min-width: 768px) {
   .competence-row {
@@ -481,11 +692,6 @@
     gap: 1.5rem;
     padding: 1.15rem 1.4rem;
   }
-}
-.competence-row:hover {
-  transform: translateY(-1.5px);
-  border-color: var(--border-strong);
-  box-shadow: 0 6px 16px -4px rgba(23, 21, 29, 0.08);
 }
 .competence-num-badge {
   display: inline-flex;
@@ -501,87 +707,145 @@
   flex-shrink: 0;
 }
 
-/* Cartes de recommandations : cartes sobres et soignées façon papillon.bzh & tomthings.fr */
+/* Recommandations façon avis de papillon.bzh : cartes plates (ni bordure ni ombre) dans
+   une bande qui défile à l'horizontale, bords fondus. */
+.quote-strip {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: 1.25rem;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 1.5rem, #000 calc(100% - 3rem), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 1.5rem, #000 calc(100% - 3rem), transparent);
+}
+.quote-strip::-webkit-scrollbar {
+  display: none;
+}
+.quote-track {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+  margin: 0;
+  padding: 0 1.5rem;
+  list-style: none;
+}
 .quote-card {
-  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 1.25rem;
+  align-items: flex-start;
+  gap: 1rem;
+  width: min(20rem, 78vw);
   padding: 1.5rem;
-  border-radius: 20px;
+  border-radius: 1.25rem;
+  background: var(--surface-muted);
+  scroll-snap-align: center;
+  transition: transform 0.35s var(--ease-spring);
+}
+.quote-card:hover {
+  transform: rotate(-1deg) translateY(-2px);
+}
+.quote-context {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
   background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-card);
+  color: var(--ink-muted-strong);
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
 }
 .quote-author {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.875rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
+  gap: 0.65rem;
 }
-.quote-logo-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.quote-avatar {
+  width: 2rem;
   height: 2rem;
-  padding: 0 0.75rem;
   border-radius: 999px;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  object-fit: cover;
   flex-shrink: 0;
 }
+.quote-initials {
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
 
-/* Frise du parcours : date | contenu, le rail passe entre les deux sur grand écran. */
-.timeline {
+/* Parcours : chaque étape porte sa tuile logo, reliées par un filet pointillé.
+   La tuile s'incline au survol comme un sticker (beta.tomthings.fr). */
+.tl {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.timeline-row {
+.tl-item {
   position: relative;
-  padding: 0 0 2.25rem 1.75rem;
-  border-left: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  column-gap: 1.1rem;
+  padding-bottom: 2.25rem;
 }
-.timeline-row:last-child {
+.tl-item:last-child {
   padding-bottom: 0;
 }
-.timeline-row::before {
+.tl-item:not(:last-child)::before {
   content: "";
   position: absolute;
-  left: -5px;
-  top: 0.3rem;
-  width: 11px;
-  height: 11px;
-  border-radius: 999px;
+  left: calc(1.5rem - 1px);
+  top: 3.75rem;
+  bottom: 0.75rem;
+  border-left: 2px dashed var(--border);
+}
+.tl-logo {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.95rem;
   background: var(--surface);
-  border: 2px solid var(--accent);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(23, 21, 29, 0.06);
+  color: var(--ink-muted-strong);
+  transition: transform 0.4s var(--ease-spring), box-shadow 0.2s ease;
 }
-@media (min-width: 768px) {
-  .timeline-row {
-    display: grid;
-    grid-template-columns: 10rem 1fr;
-    padding: 0;
-    border-left: 0;
-  }
-  .timeline-row::before {
-    left: calc(10rem - 5px);
-  }
-  .timeline-date {
-    padding-right: 2rem;
-    text-align: right;
-  }
-  .timeline-body {
-    padding: 0 0 2.75rem 2rem;
-    border-left: 1px solid var(--border);
-  }
-  .timeline-row:last-child .timeline-body {
-    padding-bottom: 0;
+.tl-logo img {
+  width: 1.75rem;
+  height: 1.75rem;
+  object-fit: contain;
+  border-radius: 0.4rem;
+}
+.tl-item:hover .tl-logo {
+  transform: rotate(-6deg) scale(1.08);
+  box-shadow: 0 6px 14px -6px rgba(23, 21, 29, 0.2);
+}
+.tl-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  padding-top: 0.2rem;
+}
+/* Téléphone : la date passe toujours sous le titre, sinon elle saute d'une ligne à l'autre. */
+@media (max-width: 639px) {
+  .tl-head {
+    flex-direction: column;
   }
 }
-
+.tl-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  color: var(--ink-muted-strong);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
 /* Bloc contact sombre, nom géant rogné en pied de bloc. */
 .contact-block {
   position: relative;
@@ -709,16 +973,24 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in {
+  .animate-fade-in,
+  .settings-menu {
     animation: none;
   }
   .card-interactive,
   .pill,
   .pill-icon,
   .chip,
-  .index-pill,
-  .competence-row,
-  .filter-pill,
+  .topnav-wrap,
+  .topnav-avatar,
+  .topnav-drawer,
+  .topnav-drawer.is-open,
+  .nav-pill,
+  .nav-pill-icon svg,
+  .drawer-pill,
+  .setting-tile,
+  .tl-logo,
+  .quote-card,
   .avatar-deck-card {
     transition: none;
   }

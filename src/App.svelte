@@ -1,6 +1,6 @@
 <script lang="ts">
   import Sidebar from "./lib/components/Sidebar.svelte";
-  import PresetView from "./lib/components/PresetView.svelte";
+  import PresetView, { sections } from "./lib/components/PresetView.svelte";
   import ProjectGallery from "./lib/components/ProjectGallery.svelte";
   import CustomCursor from "./lib/components/CustomCursor.svelte";
   import SmoothScroll from "./lib/components/SmoothScroll.svelte";
@@ -9,19 +9,18 @@
   import { reveal } from "./lib/actions/reveal";
   import { projects, type Project } from "./lib/data/projects";
   import { education, experiences, keyCompetences, personalInfo } from "./lib/data/resume";
-  import { domainColors, projectCategoryDomain } from "./lib/data/domains";
+  import { domainColors } from "./lib/data/domains";
   import Papicon from "./lib/components/Papicon.svelte";
+  import IconCloud from "./lib/components/IconCloud.svelte";
+  import Marked from "./lib/components/Marked.svelte";
   import { Github } from "lucide-svelte";
+  import { scrollToTop } from "./lib/scroll";
 
-  // Every file in assets/images, keyed by filename as referenced in resume.ts.
+  // Every file in assets/images, keyed by its path relative to that folder as referenced in resume.ts.
   const screenshotMap: Record<string, string> = Object.fromEntries(
     Object.entries(
       import.meta.glob<string>("../assets/images/**/*", { eager: true, import: "default", query: "?url" })
-    ).flatMap(([path, url]) => {
-      const rel = path.replace(/^(\.\.\/)+assets\/images\//, "");
-      const file = path.split("/").pop()!;
-      return [[rel, url], [file, url]];
-    })
+    ).map(([path, url]) => [path.replace(/^(\.\.\/)+assets\/images\//, ""), url])
   );
 
   const tabs = [
@@ -45,6 +44,12 @@
   // Tab state (only active in Preset mode)
   let activeTab = $state("about"); // 'about', 'resume', 'portfolio', 'contact'
 
+  // A new tab is a new page: start it from the top instead of the old scroll position.
+  function goToTab(id: string) {
+    activeTab = id;
+    scrollToTop(true);
+  }
+
   const readPref = (key: string, fallback = true) => {
     try {
       const saved = localStorage.getItem(key);
@@ -58,6 +63,29 @@
   let smoothScrollEnabled = $state(readPref("portfolio:smooth-scroll", true));
   let settingsOpen = $state(false);
   let settingsContainer = $state<HTMLDivElement | null>(null);
+
+  const currentTab = $derived(tabs.find((t) => t.id === activeTab) ?? tabs[0]);
+
+  // Sticky top bar: its second row holds the current tab's sub-navigation
+  // (section summary on À propos, filters on Portfolio).
+  let scrollY = $state(0);
+  let activeSection = $state(sections[0].id);
+  const hasSubnav = $derived(activeTab === "about" || activeTab === "portfolio");
+
+  $effect(() => {
+    if (activeTab !== "about") return;
+    const spy = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && (activeSection = e.target.id)),
+      { rootMargin: "-35% 0px -60% 0px" }
+    );
+    sections.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) spy.observe(el);
+    });
+    return () => {
+      spy.disconnect();
+    };
+  });
 
   $effect(() => {
     try {
@@ -138,7 +166,16 @@
   }
 </script>
 
+{#snippet settingTile(label: string, icon: string, checked: boolean, toggle: () => void)}
+  <button type="button" role="switch" data-no-blobity aria-checked={checked} onclick={toggle} class="setting-tile">
+    <Papicon {icon} size={20} />
+    <span class="text-sm font-semibold leading-tight">{label}</span>
+    <span class="setting-state">{checked ? "Activé" : "Désactivé"}</span>
+  </button>
+{/snippet}
+
 <svelte:window
+  bind:scrollY
   onkeydown={(e) => {
     if (e.key === "Escape" && settingsOpen) settingsOpen = false;
   }}
@@ -189,74 +226,92 @@
     <!-- Main Content Area -->
     <main class="flex-1 flex flex-col gap-6 min-w-0">
 
-      <!-- Pill tab navigation -->
-      <!-- Top bar: pill tab navigation + display settings -->
-      <div class="flex items-center justify-end md:justify-between gap-3">
-      <nav class="hidden md:flex flex-wrap gap-2 card p-2 w-fit">
-        {#each tabs as tab}
-          <button
-            onclick={() => activeTab = tab.id}
-            class="pill px-4 py-2 text-sm {activeTab === tab.id ? 'pill-active' : 'pill-ghost'}"
-          >
-            <Papicon icon={tab.icon} size={15} />
-            {tab.label}
-          </button>
-        {/each}
-      </nav>
-
-        <div class="relative" bind:this={settingsContainer}>
-          <button
-            type="button"
-            class="pill-icon"
-            aria-label="Paramètres d'affichage"
-            aria-expanded={settingsOpen}
-            aria-haspopup="dialog"
-            onclick={() => (settingsOpen = !settingsOpen)}
-          >
-            <Papicon icon="Gears" size={18} />
+      <!-- Sticky nav: a floating capsule (after vincelinise.com) with the current tab's
+           sub-navigation hanging underneath like a tag (after beta.tomthings.fr). -->
+      <div class="topnav-wrap" class:has-drawer={hasSubnav}>
+        <div class="topnav-anchor">
+        <div class="topnav" class:is-stuck={scrollY > 120}>
+          <button type="button" class="topnav-avatar" data-no-blobity aria-label="Remonter en haut de la page" onclick={() => scrollToTop()}>
+            <img src={screenshotMap["profile/my-avatar.png"]} alt="" />
           </button>
 
-          {#if settingsOpen}
-            <div
-              role="dialog"
+          <nav class="hidden md:flex items-center gap-1" aria-label="Onglets">
+            {#each tabs as tab}
+              <button
+                type="button"
+                data-no-blobity
+                onclick={() => goToTab(tab.id)}
+                class="nav-pill"
+                aria-current={activeTab === tab.id ? "page" : undefined}
+              >
+                <Papicon icon={tab.icon} size={18} />
+                {tab.label}
+              </button>
+            {/each}
+          </nav>
+          <span class="md:hidden flex items-center gap-2 px-3 text-sm font-semibold text-ink">
+            <Papicon icon={currentTab.icon} size={18} />
+            {currentTab.label}
+          </span>
+
+          <div class="relative" bind:this={settingsContainer}>
+            <button
+              type="button"
+              data-no-blobity
+              class="nav-pill nav-pill-icon"
               aria-label="Paramètres d'affichage"
-              class="card p-4 w-64 absolute right-0 top-full mt-2 z-50 flex flex-col gap-1 shadow-lg animate-fade-in"
+              aria-expanded={settingsOpen}
+              aria-haspopup="dialog"
+              onclick={() => (settingsOpen = !settingsOpen)}
             >
-              <span class="eyebrow mb-1">Paramètres</span>
+              <Papicon icon="Gears" size={18} />
+            </button>
 
-              <button
-                type="button"
-                role="switch"
-                data-no-blobity
-                aria-checked={customCursorEnabled}
-                onclick={() => (customCursorEnabled = !customCursorEnabled)}
-                class="flex items-center justify-between gap-3 min-h-11 px-2 -mx-2 rounded-xl hover:bg-surface-muted transition-colors text-left text-sm font-medium text-ink cursor-pointer"
-              >
-                <span>Curseur animé</span>
-                <span
-                  class="w-10 h-6 rounded-full p-0.5 transition-colors flex items-center shrink-0 {customCursorEnabled ? 'bg-ink justify-end' : 'bg-surface-muted border border-border justify-start'}"
-                >
-                  <span class="w-4 h-4 rounded-full {customCursorEnabled ? 'bg-white' : 'bg-ink-muted'}"></span>
-                </span>
-              </button>
+            {#if settingsOpen}
+              <div role="dialog" aria-label="Paramètres d'affichage" class="settings-menu">
+                {@render settingTile("Curseur", "Sparkles", customCursorEnabled, () => (customCursorEnabled = !customCursorEnabled))}
+                {@render settingTile("Défilement fluide", "ArrowDown", smoothScrollEnabled, () => (smoothScrollEnabled = !smoothScrollEnabled))}
+              </div>
+            {/if}
+          </div>
+        </div>
 
-              <button
-                type="button"
-                role="switch"
-                data-no-blobity
-                aria-checked={smoothScrollEnabled}
-                onclick={() => (smoothScrollEnabled = !smoothScrollEnabled)}
-                class="flex items-center justify-between gap-3 min-h-11 px-2 -mx-2 rounded-xl hover:bg-surface-muted transition-colors text-left text-sm font-medium text-ink cursor-pointer"
-              >
-                <span>Défilement fluide</span>
-                <span
-                  class="w-10 h-6 rounded-full p-0.5 transition-colors flex items-center shrink-0 {smoothScrollEnabled ? 'bg-ink justify-end' : 'bg-surface-muted border border-border justify-start'}"
+        <div class="topnav-drawer" class:is-open={hasSubnav} inert={!hasSubnav}>
+          <div>
+          {#if activeTab === "about"}
+            <nav class="drawer-list" aria-label="Sections de la page">
+              {#each sections as section}
+                <a
+                  href="#{section.id}"
+                  data-no-blobity
+                  class="drawer-pill"
+                  aria-current={activeSection === section.id ? "true" : undefined}
                 >
-                  <span class="w-4 h-4 rounded-full {smoothScrollEnabled ? 'bg-white' : 'bg-ink-muted'}"></span>
-                </span>
-              </button>
+                  <Papicon icon={section.icon} size={14} />
+                  <span>{section.label}</span>
+                </a>
+              {/each}
+            </nav>
+          {:else if activeTab === "portfolio"}
+            <div class="drawer-list" role="group" aria-label="Filtrer par catégorie">
+              {#each filters as filter}
+                {@const count = filter.id === "all" ? projects.length : projects.filter(p => p.category === filter.id).length}
+                <button
+                  type="button"
+                  data-no-blobity
+                  onclick={() => projectFilter = filter.id}
+                  class="drawer-pill"
+                  aria-pressed={projectFilter === filter.id}
+                >
+                  <Papicon icon={filter.icon} size={14} />
+                  <span>{filter.label}</span>
+                  <span class="filter-count">{count}</span>
+                </button>
+              {/each}
             </div>
           {/if}
+          </div>
+        </div>
         </div>
       </div>
 
@@ -264,26 +319,40 @@
       <div class="card p-6 lg:p-8 flex-1 min-h-125">
         {#if activeTab === "about"}
           <PresetView
-            onViewPortfolio={() => activeTab = "portfolio"}
+            onViewPortfolio={() => goToTab("portfolio")}
             onSelectProject={openProject}
           />
         {:else if activeTab === "resume"}
           <!-- Render CV/Timeline -->
           <div class="flex flex-col gap-16 animate-fade-in">
-            {#each [{ title: "Ma formation", items: education }, { title: "Mes expériences", items: experiences }] as group}
+            {#each [{ title: "Ma formation", items: education, icon: "GraduationHat", cloud: ["GraduationHat", "Paper", "Calendar", "Pen"] }, { title: "Mes expériences", items: experiences, icon: "Tasks", cloud: ["Tasks", "Clock", "TrendingUp", "Gears"] }] as group}
               <section class="flex flex-col gap-8">
-                <h3 class="title-xl">{group.title}</h3>
-                <ol class="timeline">
+                <h3 class="cloud-host title-xl"><IconCloud icons={group.cloud} />{group.title}</h3>
+                <ol class="tl">
                   {#each group.items as item, i}
-                    <li class="timeline-row" use:reveal={{ delay: staggerDelay(i) }}>
-                      <span class="timeline-date eyebrow">{item.date}</span>
-                      <div class="timeline-body mt-1.5 md:mt-0">
-                        <h4 class="text-xl font-display font-semibold text-ink leading-snug">{item.title}</h4>
-                        <p class="flex items-center gap-2 text-sm font-medium text-ink-muted mt-1">{#if item.logo && screenshotMap[item.logo]}<img src={screenshotMap[item.logo]} alt="" class="w-4 h-4 aspect-square object-contain shrink-0 rounded-xs" />{/if}<span>{item.subtitle}</span></p>
-                        <p class="text-[0.95rem] text-ink-muted mt-3 leading-relaxed max-w-prose">{item.description}</p>
+                    <li class="tl-item" use:reveal={{ delay: staggerDelay(i) }}>
+                      <span class="tl-logo">
+                        {#if item.logo && screenshotMap[item.logo]}
+                          <img src={screenshotMap[item.logo]} alt="" />
+                        {:else}
+                          <Papicon icon={group.icon} size={20} />
+                        {/if}
+                      </span>
+                      <div class="min-w-0">
+                        <div class="tl-head">
+                          <div class="min-w-0">
+                            <h4 class="text-lg md:text-xl font-display font-semibold text-ink leading-snug">{item.title}</h4>
+                            <p class="text-sm font-medium text-ink-muted-strong mt-0.5">{item.subtitle}</p>
+                          </div>
+                          <span class="tl-date">
+                            {item.date}
+                          </span>
+                        </div>
+                        <p class="text-[0.95rem] text-ink-muted mt-3 leading-relaxed max-w-prose"><Marked text={item.description} /></p>
                         {#if item.url}
-                          <a href={item.url} target="_blank" rel="noopener noreferrer" class="text-link mt-3">
-                            {item.urlLabel || "Lien"} <Papicon icon="ArrowRight" size={12} />
+                          <a href={item.url} target="_blank" rel="noopener noreferrer" class="chip mt-3">
+                            <span>{item.urlLabel || "Lien"}</span>
+                            <Papicon icon="ArrowRightUp" size={11} />
                           </a>
                         {/if}
                       </div>
@@ -296,7 +365,7 @@
             <!-- Key competencies — compact interactive rows façon Tom Things & Vince Linise -->
             <section class="flex flex-col gap-6">
               <div class="flex flex-col gap-1">
-                <h3 class="title-xl">Compétences <span class="title-mark">clés</span></h3>
+                <h3 class="cloud-host title-xl"><IconCloud icons={["Grades", "Crown", "Zap", "Check"]} />Compétences <span class="title-mark">clés</span></h3>
                 <p class="text-sm text-ink-muted">Référentiel BUT Informatique · Parcours A (Développement web & applicatif)</p>
               </div>
 
@@ -304,7 +373,7 @@
                 {#each keyCompetences as competence, i}
                   {@const domain = domainColors[competence.domain]}
                   <li
-                    class="competence-row card-interactive"
+                    class="competence-row"
                     use:reveal={{ delay: staggerDelay(i) }}
                   >
                     <div class="flex items-start md:items-center gap-3.5 min-w-0 flex-1">
@@ -359,24 +428,7 @@
           <!-- Render Projects Catalog -->
           <div class="flex flex-col gap-6 animate-fade-in">
             <div class="flex flex-col gap-3">
-              <h3 class="text-2xl font-display font-semibold text-ink">Tous mes <span class="title-mark">projets</span></h3>
-            </div>
-
-            <!-- Category filter segmented pill bar façon Tafac & Papillon -->
-            <div class="filter-bar" role="group" aria-label="Filtrer par catégorie">
-              {#each filters as filter}
-                {@const count = filter.id === "all" ? projects.length : projects.filter(p => p.category === filter.id).length}
-                <button
-                  type="button"
-                  onclick={() => projectFilter = filter.id}
-                  class="filter-pill"
-                  aria-pressed={projectFilter === filter.id}
-                >
-                  <Papicon icon={filter.icon} size={14} />
-                  <span>{filter.label}</span>
-                  <span class="filter-count">{count}</span>
-                </button>
-              {/each}
+              <h3 class="cloud-host text-2xl font-display font-semibold text-ink"><IconCloud icons={["Grid", "Gallery", "Bookmark", "Code"]} />Tous mes <span class="title-mark">projets</span></h3>
             </div>
 
             {#if filteredProjects.length === 0}
@@ -395,7 +447,7 @@
         {:else if activeTab === "contact"}
           <!-- Render Contact Page -->
           <div class="contact-block animate-fade-in">
-            <h3 class="contact-title">Une alternance, un projet ?<br /><em>Parlons-en.</em></h3>
+            <h3 class="cloud-host contact-title"><IconCloud icons={["Mail", "Phone", "MessageCircle", "MapPin"]} />Une alternance, un projet ?<br /><em>Parlons-en.</em></h3>
 
             <div class="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-12 mt-10 relative">
               <form onsubmit={handleFormSubmit} class="flex flex-col gap-6">
@@ -461,7 +513,7 @@
     <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-border flex items-center justify-around py-2 px-2">
       {#each tabs as tab}
         <button
-          onclick={() => activeTab = tab.id}
+          onclick={() => goToTab(tab.id)}
           class="flex flex-col items-center gap-1 py-1.5 rounded-2xl transition-colors flex-1 text-center {activeTab === tab.id ? 'text-ink' : 'text-ink-muted'}"
         >
           <span class="w-9 h-9 rounded-full flex items-center justify-center {activeTab === tab.id ? 'bg-surface-muted' : ''}">
