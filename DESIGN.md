@@ -233,20 +233,15 @@ plus tard). Trois changements, dials ENERGY 2 / RHYTHM 2 / MOTION 2 inchangés :
   scrollée (sinon ce serait un bouton sans effet, R-26), même style `pill-icon` que le reste du
   site plutôt qu'un composant à part, décalé au-dessus de la barre de navigation mobile.
 
-## Registre éditorial : sommaire, filtres, parcours, contact (ajout)
+## Élimination des marqueurs « IA générique » et alignement DA (vincelinise.com, tomthings.fr, tafac.fr, papillon.bzh)
 
-Le propriétaire a demandé de rapprocher ces quatre zones de tomthings.fr et vincelinise.com.
-Le motif « tout en pilule beige » y cède la place à un registre éditorial ; les pilules restent
-pour les boutons d'action, les tags et la barre d'onglets principale.
+Après inspection des captures et retour explicite du propriétaire (« ça fait très IA ») sur les cartes à bordures colorées, les pilules à badges circulaires imbriqués et la barre de filtres surdimensionnée, la DA a été épurée selon les principes antislop (rejet des techniques sans fonction) :
 
-- **Sommaire de l'onglet À propos** (`.index-nav`) : numéro mono en accent + libellé, entre deux
-  filets, soulignement au survol. Les numéros existaient déjà dans les données sans être affichés.
-- **Filtres du portfolio** (`.filter-tabs`) : onglets texte avec leur compteur en mono ; l'onglet
-  actif porte un trait de 2 px à la couleur de son domaine (`--tab-color`), ink pour « Tout ».
-- **Parcours** : grands titres Fraunces en graisse 400 (`.title-xl`, écho aux titres légers de
-  Vince et serif de Tom), frise date | contenu dont le rail passe entre les deux colonnes sur grand
-  écran et à gauche sur mobile, liens en texte souligné (`.text-link`). Les compétences clés
-  deviennent une liste numérotée entre filets au lieu de cartes de pilules.
+- **Compétences clés** : passage des blocs lourds encombrants à des lignes interactives compactes façon Tom Things et Vince Linise (`.competence-row`). Chaque ligne réunit le badge numéroté dans sa teinte de domaine (`.competence-num-badge`), le titre et sa description concise, et les preuves en pilules (`.chip` cliquable avec flèche ↗ ou `.chip-static` avec coche) alignées sur la droite, garantissant un scan fluide sans surcharge visuelle.
+- **Sommaire de l'onglet À propos** (`.index-bar`) : abandon des filets horizontaux austères au profit d'une barre de pilules segmentée douce façon Papillon et Tafac (`.index-pill`), avec pastille numérotée `tabular-nums` (`.index-pill-badge`), icône fine et survol tactile blanc surélevé.
+- **Filtres du portfolio** (`.filter-bar`) : compactage et affinement façon contrôle segmenté `tafac.fr` & `papillon.bzh`. Les compteurs ne sont plus enfermés dans des doubles cercles épais, mais intégrés élégamment en texte `tabular-nums` discret (`opacity: 0.6`). L'état actif est une pilule encre `#17151d` nette avec ombre subtile, sans couleurs arc-en-ciel superflues.
+- **Compétences de l'accueil** : suppression des bordures supérieures colorées `border-t-[3px]`, remplacées par une pastille de couleur de 8px en coin de carte, discrète et fonctionnelle.
+- **Recommandations** : suppression des dégradés verticaux et des boîtes d'icônes violettes répétitives, au profit de cartes de citation mates, lisibles et authentiques.
 - **Contact** (`.contact-block`) : bloc encre plein, titre géant « Parlons-en. » (Tom), liens
   directs en icônes et nom géant rogné en pied de bloc (Vince), champs soulignés sur fond sombre.
   La carte Google Maps est retirée : iframe tierce, et la localisation tient en une ligne.
